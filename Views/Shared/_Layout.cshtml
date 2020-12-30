@@ -26,7 +26,7 @@
     <link href="~/lib/Website/css/responsive.css" rel="stylesheet" media="only screen and (max-width: 1200px)" />
     <link href="~/lib/fotorama/fotorama.min.css" rel="stylesheet" />
 
-
+    @RenderSection("CSS", required: false)
 
 </head>
 <body>
@@ -42,6 +42,6 @@
 
 
     <script src="~/lib/fotorama/fotorama.min.js"></script>
-
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

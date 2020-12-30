@@ -12,10 +12,10 @@ namespace ShopBanHang.Models
 
         public int ID { get; set; }
 
-        [Required(ErrorMessage = "Bắt Buộc Nhập")]
+        [Required(ErrorMessage = "Please enter product name")]
         public string ProductName { get; set; }
 
-        [Required(ErrorMessage = "Bắt Buộc Nhập")]
+        [Required(ErrorMessage = "Please enter product code")]
         public string Code { get; set; }
 
         public string ShortDecription { get; set; }
@@ -24,12 +24,10 @@ namespace ShopBanHang.Models
 
         public string ImagePath { get; set; }
 
-        [Required(ErrorMessage = "Bắt Buộc Nhập số")]
         [Range(0, 10000000, ErrorMessage = "Enter number between 0 to 10.000.000")]
         public double? UnitPrice { get; set; }
 
 
-        [Required(ErrorMessage = "Bắt Buộc Nhập số")]
         [Range(0, 10000000, ErrorMessage = "Enter number between 0 to 10.000.000")]
         public double? UnitPriceNew { get; set; }
 

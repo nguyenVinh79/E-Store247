@@ -12,13 +12,14 @@
     <title>@ViewData["Title"]- Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" type="text/css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="~/lib/startbootstrap-sb-admin-2/css/sb-admin-2.css" rel="stylesheet" />
-
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    @RenderSection("CSS", required: false)
 </head>
 
 <body id="page-top">
@@ -74,7 +75,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="true" aria-controls="collapseUser">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Quản lý User</span>
+                    <span>User management</span>
                 </a>
                 <div id="collapseUser" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -322,6 +323,7 @@
     <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" />
     <script src="~/lib/summernote/summernote-bs4.js"></script>
     <script src="~/js/site-admin.js"></script>
+    @RenderSection("Scripts", required: false)
 
 </body>
 

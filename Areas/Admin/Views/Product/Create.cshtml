@@ -4,14 +4,14 @@
 }
 
 <h1 class="h3 mb-2 text-gray-800">
-    Danh sách sản phẩm  -  1111 222
+    
     @if (Model.ID > 0)
     {
-        <span> Sửa sản phẩm  </span>
+        <span> Edit product infomation  </span>
     }
     else
     {
-        <span> Thêm sản phẩm</span>
+        <span> Create a new product</span>
     }
 
 </h1>
@@ -20,87 +20,119 @@
 {
     @Html.HiddenFor(m => m.ID)
     @Html.HiddenFor(m => m.ImagePath)
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Submit</button>
+        <a href="/admin/product/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Return</a>
+        <a href="#" class="btn btn-danger"><i class="fas fa-mouse-pointer"></i>
+         Select related blogs
+        </a>
+    </div>
+    <hr/>
+    <div class="tab">
 
-    <div class="form-group">
-        <label>Name</label>
-        @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "validate" })
+        <a class="btn btn-outline-dark tablinks" onclick="openCity(event, 'InfoTab')" id="defaultOpen">Information</a>
+        <a class="btn btn-outline-dark tablinks" onclick="openCity(event, 'ImageTab')">Images</a>
+        <a class="btn btn-outline-dark tablinks" onclick="openCity(event, 'PropertyTab')">Property</a>
+    </div>
+    <br />
+
+    <div id="InfoTab" class="tabcontent">
+
+        <div class="form-group">
+            <label>Name</label>
+            @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "validate" })
+
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            @Html.DropDownListFor(m => m.CategoryID, Model.CategoryList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CategoryID, null, new { @class = "validate" })
+            @*@Html.DropDownListFor(m => m.CategoryID, ViewBag.lstcategory as IEnumerable<SelectListItem>, new { @class = "form-control" })*@
+
+        </div>
+        <div class="form-group">
+            <label>Product code</label>
+            @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @maxlength = 6 })
+            @Html.ValidationMessageFor(model => model.Code, null, new { @class = "validate" })
+
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="exampleInputPassword1">Product Avatar</label>
+            <input name="avata" type="file" />
+
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+    <img height="100" src="~/Image/Products/@Model.ImagePath" />}
+
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputPassword1">Hình chi tiết sản phẩm</label>
+            <input name="hinhchitiet" type="file" multiple />
+
+        </div>
+
+        <div class="form-group">
+            <label>Giá cũ</label>
+            @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validate" })
+
+        </div>
+
+
+        <div class="form-group">
+            <label>Giá mới</label>
+            @Html.TextBoxFor(m => m.UnitPriceNew, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
+
+        </div>
+
+
+        <div class="form-group">
+            <label>Mô tả</label>
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
+            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
+        </div>
+    </div>
+
+    <div id="ImageTab" class="tabcontent">
+      
 
     </div>
-    <div class="form-group">
-        <label>Loại sản phẩm</label>
-        @Html.DropDownListFor(m => m.CategoryID, Model.CategoryList, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.CategoryID, null, new { @class = "validate" })
-        @*@Html.DropDownListFor(m => m.CategoryID, ViewBag.lstcategory as IEnumerable<SelectListItem>, new { @class = "form-control" })*@
 
-    </div>
-    <div class="form-group">
-        <label>Mã sản phẩm</label>
-        @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @maxlength = 3 })
-        @Html.ValidationMessageFor(model => model.Code, null, new { @class = "validate" })
-
-    </div>
-
-
-
-    <div class="form-group">
-        <label for="exampleInputPassword1">Hình sản phẩm</label>
-        <input name="avata" type="file" />
-
-        @if (!string.IsNullOrEmpty(Model.ImagePath))
-        {
-            <img height="100" src="~/Image/@Model.ImagePath" />
-        }
-
-    </div>
-
-    <div class="form-group">
-        <label for="exampleInputPassword1">Hình chi tiết sản phẩm</label>
-        <input name="hinhchitiet" type="file" multiple />
-
-    </div>
-
-    <div class="form-group">
-        <label>Giá cũ</label>
-        @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validate" })
-
-    </div>
-
-
-    <div class="form-group">
-        <label>Giá mới</label>
-        @Html.TextBoxFor(m => m.UnitPriceNew, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
-
-    </div>
-
-
-    <div class="form-group">
-        <label>Mô tả</label>
-        @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
-        @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
-    </div>
-
-
-    <pre>
-        
-      @Model.Description
-    </pre>
-
-    <pre>
-        @Html.Raw(Model.Description)
+    <div id="PropertyTab" class="tabcontent">
      
-    </pre>
-    <div class="form-group">
-        <label>Mô tả</label>
-        <textarea class="summernote"></textarea>
+
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    
 
+    
 
 }
+@section Scripts{ 
+<script>
+    document.getElementById("defaultOpen").click();
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
 
 
 
+</script>
+
+}
