@@ -36,8 +36,6 @@ namespace ShopBanHang.Controllers
                 var listIDCate = categoryChild.Select(x => x.ID).ToList();
                 //x.CategoryID có thể null do int?, .value để không bị null
                 datamodel.DataList = _db.Products.Where( x => ( listIDCate.Contains(x.CategoryID.Value)|| x.CategoryID == id) && x.Published == true && x.IsDeleted != true).ToList();
-
-
             }
             else
             {
