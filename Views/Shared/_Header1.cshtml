@@ -1,0 +1,76 @@
+﻿@{  //hiển thị số item trong icon giỏ hàng
+    var data = Context.Session.GetString("cart");
+    int countCart = 0;
+
+    if (data == null) //has data in cart
+    {
+        countCart = 0;
+    }
+    else
+    {
+        var data2 = Context.Session.GetString("cart");
+        List<CartModel> dataCart = JsonConvert.DeserializeObject<List<CartModel>>(data2);
+
+        countCart = dataCart.Sum(x => x.Quantity); 
+        
+        //linQ
+        //cách 2
+        //foreach(var item in dataCart)
+        //{
+        //    countCart += item.Quantity;
+        //}
+    }
+}
+
+
+<header class="section-header">
+
+    <section class="header-main border-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-4">
+                    <a href="/" class="brand-wrap">
+                        <img class="logo" src="~/lib/Website/images/logo.png">
+
+                    </a> <!-- brand-wrap.// -->
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <form action="#" class="search">
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> <!-- search-wrap .end// -->
+                </div> <!-- col.// -->
+                <div class="col-lg-4 col-sm-6 col-12">
+                    <div class="widgets-wrap float-md-right">
+                        <div class="widget-header  mr-3">
+                            <a href="/product/ListCart" class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></a>
+                            <span class="badge badge-pill badge-danger notify">
+                                @countCart
+                            </span>
+                        </div>
+                        @*<div class="widget-header icontext">
+                            <a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
+                            <div class="text">
+                                <span class="text-muted">Welcome!</span>
+                                <div>
+                                    <a href="#">Sign in</a> |
+                                    <a href="#"> Register</a>
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="widget-header icontext">
+                            @Html.Partial("_LoginPartial")
+                        </div>
+
+                    </div> <!-- widgets-wrap.// -->
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- container.// -->
+    </section> <!-- header-main .// -->
+</header> <!-- section-header.// -->

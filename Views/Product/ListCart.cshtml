@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewData["Title"] = "ListCart";
+}
+
+<h1>ListCart</h1>
+@{
+    var listCart = ViewBag.carts != null ? (List<CartModel>)ViewBag.carts : new List<CartModel>() ;
+}
+<div class="list-cart">
+    <table class="cart" border="1">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Image</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Price</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+        @{
+            int STT = 0;
+            foreach (var item in listCart)
+            {
+                string txt_class = "quantity_" + item.Product.ID;
+                STT++;
+                double total = item.Product.UnitPriceNew * item.Quantity;
+                <tr>
+                    <td>@STT</td>
+                    <td>@item.Product.ProductName</td>
+                    <td><img src="~/Image/Products/@item.Product.ImagePath" width="100" height="100" /></td>
+                    <td><input type="number" class="@txt_class" value="@item.Quantity" /></td>
+                    <td>@item.Product.UnitPriceNew.ToString("#,###") đ</td>
+                    <td id="txt_class_total">@total.ToString("#,###") đ</td>
+                    <td><a href="" data-id="@item.Product.ID" class="updateCart">Update</a></td>
+                    <td><a asp-controller="Product" asp-action="deleteCart" asp-route-id="@item.Product.ID">Delete</a></td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        
+        // tag html has class attribute ".updateCart"
+        $(".updateCart").click(function (event) {
+            //chặn thực thi default action of the event
+            //debugger;
+            //chặn thẻ a load sang action khác
+            event.preventDefault();
+            var quantity = $(".quantity_" + $(this).attr("data-id")).val();
+
+            $.ajax({
+                type: "POST",
+                url:"@Url.Action("updateCart","Product")",
+                data:
+                {
+                    Id: $(this).attr("data-id"),
+                    Quantity: quantity
+                },
+                success: function (result) {
+                    //debugger;
+                    window.location.href = '@Url.Action("ListCart","Product")';
+                }
+
+            });
+        });
+    })
+</script>

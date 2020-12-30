@@ -1,0 +1,59 @@
+﻿@model List<ShopBanHang.Models.Product>
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+}
+<h1>
+    @TempData["StatusMessage"]
+</h1>
+<h1 class="h3 mb-2 text-gray-800">Danh sách sản phẩm</h1>
+
+
+ 
+    <a class="btn btn-success float-right margin-bottom-20 btn-sm"  href="/admin/product/create">  <i class="fa fa-plus"></i> Tạo mới</a>
+
+ 
+
+
+<table class="table table-bordered table-striped table-light table-hover">
+    <thead>
+        <tr class="center-x">
+            <th>#</th>
+            <th>Tên</th>
+            <th>Hình</th>
+            <th>Public</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td class="center-x">@(i+1)</td>
+                <td>@Model[i].ProductName</td>
+                <td>
+                    <img height="50" src="~/Image/@Model[i].ImagePath" />
+                </td>
+                <td>
+                    @if (Model[i].Published == true)
+                    {
+                        <i class="fa fa-check"></i>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-info" href="/admin/product/create?id=@Model[i].ID">  <i class="fa fa-edit"></i></a>
+                    <a class="btn btn-danger" href="/admin/product/delete?id=@Model[i].ID">  <i class="fa fa-recycle"></i></a>
+                </td>
+
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+@foreach (var item in Model)
+{
+
+
+}
+

@@ -1,0 +1,39 @@
+﻿@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@*//Microsoft.AspNetCore.Authentication.Cookies*@
+
+@if (SignInManager.IsSignedIn(User))
+{
+<form asp-area="" asp-controller="Account" asp-action="Logoff" method="post" id="logoutForm" class="navbar-right">
+    <div class="text">
+        <span class="text-muted">Welcome!</span>
+        <div>
+            <button asp-area="" asp-controller="Manage" asp-action="Index" title="Manage"
+                class="btn-link btn text-decoration-none p-0"> @UserManager.GetUserName(User)</button> |
+            <button type="submit" class="btn-link btn text-decoration-none p-0">Log out</button>
+        </div>
+    </div>
+    @*<ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+            </li>
+        </ul>*@
+</form> }
+else
+{
+                <div class="text">
+                    
+                    <div>
+                        <a asp-area="" asp-controller="Account" asp-action="Register">Register</a>  |
+                        
+                        <a asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+                    </div>
+                </div>
+                @*<ul class="nav navbar-nav navbar-right">
+                    <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+                </ul>*@
+}

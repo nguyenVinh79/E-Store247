@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+@model Product
+
+@using (Html.BeginForm("DeleteCofirm", "Product", FormMethod.Post))
+ {
+    @Html.HiddenFor(model=>model.ID)
+    <p>
+        @(
+          $"Bạn có chắc chắn xóa product {Model.ProductName} này không ?"
+        )
+
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a class="btn btn-info" href="/admin/product/index">Bỏ qua</a>
+    </p>
+
+}
