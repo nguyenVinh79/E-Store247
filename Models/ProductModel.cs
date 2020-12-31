@@ -42,9 +42,9 @@ namespace ShopBanHang.Models
 
         public string MetaTitle { get; set; }
 
-        public bool? Published { get; set; }
+        public bool Published { get; set; }
 
-        public bool? IsNew { get; set; }
+        public bool IsNew { get; set; }
 
         public int? Rating { get; set; }
 

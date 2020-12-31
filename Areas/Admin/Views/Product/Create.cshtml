@@ -2,7 +2,16 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+@section CSS{ 
+ <style>
+     input.form-check-input {
+         width: 20px;
+         height: 20px;
+         background-color: #4cff00;
+    
+     } 
+    </style> 
+}
 <h1 class="h3 mb-2 text-gray-800">
     
     @if (Model.ID > 0)
@@ -16,7 +25,7 @@
 
 </h1>
 
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" , @id = "form"}))
 {
     @Html.HiddenFor(m => m.ID)
     @Html.HiddenFor(m => m.ImagePath)
@@ -29,10 +38,9 @@
     </div>
     <hr/>
     <div class="tab">
-
-        <a class="btn btn-outline-dark tablinks" onclick="openCity(event, 'InfoTab')" id="defaultOpen">Information</a>
-        <a class="btn btn-outline-dark tablinks" onclick="openCity(event, 'ImageTab')">Images</a>
-        <a class="btn btn-outline-dark tablinks" onclick="openCity(event, 'PropertyTab')">Property</a>
+        <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'InfoTab')" id="infoTab">Information</a>
+        <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'ImageTab')" id="imageTab">Images</a>
+        <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'PropertyTab')" id="propertyTab">Property</a>
     </div>
     <br />
 
@@ -58,15 +66,49 @@
 
         </div>
 
+        <div class="form-check form-check-inline my-2">
+            <label class="form-check-label">Publish</label>
+            @Html.CheckBoxFor(m => m.Published, new { @class = "form-check-input ml-2", @checked = true })
+            @Html.ValidationMessageFor(model => model.Published, null, new { @class = "validate" })
+        </div>
+
+        <div class="form-check form-check-inline my-2">
+            <label class="form-check-label">Is New</label>
+            @Html.CheckBoxFor(m => m.IsNew, new { @class = "form-check-input ml-2" })
+            @Html.ValidationMessageFor(model => model.IsNew, null, new { @class = "validate" })
+        </div>
+
+        <div class="form-group">
+            <label>Old Price</label>
+            @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validate" })
+
+        </div>
 
 
+        <div class="form-group">
+            <label>New Price</label>
+            @Html.TextBoxFor(m => m.UnitPriceNew, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
+
+        </div>
+
+
+        <div class="form-group">
+            <label>Description</label>
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
+            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
+        </div>
+    </div>
+
+    <div id="ImageTab" class="tabcontent">
         <div class="form-group">
             <label for="exampleInputPassword1">Product Avatar</label>
             <input name="avata" type="file" />
 
             @if (!string.IsNullOrEmpty(Model.ImagePath))
             {
-    <img height="100" src="~/Image/Products/@Model.ImagePath" />}
+            <img height="100" src="~/Image/Products/@Model.ImagePath" />}
 
         </div>
 
@@ -75,32 +117,6 @@
             <input name="hinhchitiet" type="file" multiple />
 
         </div>
-
-        <div class="form-group">
-            <label>Giá cũ</label>
-            @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validate" })
-
-        </div>
-
-
-        <div class="form-group">
-            <label>Giá mới</label>
-            @Html.TextBoxFor(m => m.UnitPriceNew, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
-
-        </div>
-
-
-        <div class="form-group">
-            <label>Mô tả</label>
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
-            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
-        </div>
-    </div>
-
-    <div id="ImageTab" class="tabcontent">
-      
 
     </div>
 
@@ -116,8 +132,39 @@
 }
 @section Scripts{ 
 <script>
-    document.getElementById("defaultOpen").click();
-    function openCity(evt, cityName) {
+    $(document).ready(function () {
+        
+
+    });
+    function changeTab(evt, targetTab) {
+        debugger;
+        var currentTab = $('div.tab').find('.btn.btn-outline-dark.tablinks.active').attr('id');
+        if (currentTab == "infoTab") {
+           
+
+                if ($('#form').valid()) {
+                    openTab(evt, targetTab);
+                    return 0;
+                }
+                else {
+                    return 0;
+                }
+        
+
+   
+        }
+        if (currentTab == 'imageTab') {
+
+        }
+        if (currentTab == 'propertyTab') {
+
+        }
+        openTab(evt,"InfoTab")
+
+    }
+    document.getElementById("infoTab").click();
+    function openTab(evt, tabName) {
+        debugger;
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
@@ -127,7 +174,7 @@
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-        document.getElementById(cityName).style.display = "block";
+        document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
     }
 

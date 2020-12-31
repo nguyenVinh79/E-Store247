@@ -25,9 +25,8 @@ namespace ShopBanHang.Controllers
 
         public IActionResult Detail(int id)
         {
-            var dataProduct = getDetailProduct(id);
 
-            
+            var dataProduct = getDetailProduct(id);
             if (dataProduct != null)
             {
                 var lstProductSize = _db.ProductColorSizes.Where(x => x.ProductID == dataProduct.ID).ToList();
@@ -42,14 +41,9 @@ namespace ShopBanHang.Controllers
                     PropertyList = lstProductSize
                 };
 
-
                 return View(model);
-
             }
-
-
             //gán vào 1 model --> ProductViewModel
-
 
             return View();
         }
