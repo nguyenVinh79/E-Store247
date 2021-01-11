@@ -1,56 +1,55 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Areas.Admin.Models;
 using ShopBanHang.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ColorController : Controller
+    public class WarrantyController : Controller
     {
         private readonly IMapper _mapper;
         private DataShopContext db;
         private readonly IConfiguration Configuration;
 
-        public ColorController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext)
+        public WarrantyController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext)
         {
             this._mapper = mapper;
             db = dbcontext;
             Configuration = configuration;
         }
-
         public IActionResult Index()
         {
-            var colorList = new List<CT_Color>();
+            var warrantyList = new List<CT_WarrantyTime>();
             try
             {
-                colorList = db.CT_Colors.ToList();
+                warrantyList = db.CT_WarrantyTimes.ToList();
             }
             catch (Exception ex)
             {
-                TempData["StatusMessage"] = "Error in loanding color list";
+                TempData["StatusMessage"] = "Error in loanding warranty list";
             }
-            return View(colorList);
+            return View(warrantyList);
         }
-
         public IActionResult Create(int id = 0)
         {
-            var model = new ColorModel();
+            var model = new WarrantyModel();
 
             if (id > 0)
             {
-                var colorData = db.CT_Colors.Where(x => x.ID == id).FirstOrDefault();
-                model = _mapper.Map(colorData, model);
+                var warrantyData = db.CT_WarrantyTimes.Where(x => x.ID == id).FirstOrDefault();
+                model = _mapper.Map(warrantyData, model);
             }
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(ColorModel model)
+        public IActionResult Create(WarrantyModel model)
         {
             try
             {
@@ -60,8 +59,8 @@ namespace ShopBanHang.Areas.Admin.Controllers
                     {
                         #region For Create
 
-                        var color = _mapper.Map<CT_Color>(model);
-                        db.CT_Colors.Add(color);
+                        var warranty = _mapper.Map<CT_WarrantyTime>(model);
+                        db.CT_WarrantyTimes.Add(warranty);
                         db.SaveChanges();
 
                         #endregion For Create
@@ -70,9 +69,9 @@ namespace ShopBanHang.Areas.Admin.Controllers
                     {
                         #region for edit
 
-                        var colorEdit = _mapper.Map<CT_Color>(model);
+                        var warrantyEdit = _mapper.Map<CT_WarrantyTime>(model);
 
-                        db.Update(colorEdit);
+                        db.Update(warrantyEdit);
                         db.SaveChanges();
 
                         #endregion for edit
@@ -92,21 +91,21 @@ namespace ShopBanHang.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            var color = db.CT_Colors.Find(id);
-            if (color != null)
+            var warranty = db.CT_WarrantyTimes.Find(Convert.ToInt64(id));
+            if (warranty != null)
             {
-                var productsOwnColor = db.ProductColorSizes.Where(x=>x.CodeColor == color.Code).ToList();
-                if (productsOwnColor.Count > 0)
+                var productsOwnWarranty = db.Products.Where(x => x.CT_WarrantyTimeID == id).ToList();
+                if (productsOwnWarranty.Count > 0)
                 {
                     return Json(new
                     {
                         status = false,
-                        message = "One or more product has been used this color!"
+                        message = "One or more product has been used this warranty time!"
                     });
                 }
                 else
                 {
-                    db.CT_Colors.Remove(color);
+                    db.CT_WarrantyTimes.Remove(warranty);
                     try
                     {
                         db.SaveChanges();

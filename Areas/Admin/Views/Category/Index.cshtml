@@ -1,0 +1,109 @@
+﻿@model List<Category>
+@{ ViewData["Title"] = "Category list"; }
+<h1>
+    @TempData["StatusMessage"]
+</h1>
+@{ 
+   var ParentList= Model.Where(x => x.ParentCategoryID == 0).ToList();
+}
+<h1 class="h3 mb-2 text-gray-800">Category List</h1>
+
+<a class="btn btn-success float-md-right my-lg-2" href="/admin/Category/create">  <i class="fa fa-plus"></i> Create</a>
+
+<table class="table table-bordered table-striped table-light table-hover">
+    <thead class="thead-dark">
+        <tr class="center-x">
+            <th>Name</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ParentList)
+        {
+            var childrenList = Model.Where(x => x.ParentCategoryID == item.ID).ToList();
+            <tr>
+
+                <td><b>@item.CategoryName</b></td>
+                <td>
+                    <img height="50" src="~/Image/Categories/@item.Image" />
+                </td>
+                <td>
+                    <a class="btn btn-info" href="/admin/category/create?id=@item.ID"><i class="fa fa-edit"></i></a>
+                    <a class="btn btn-danger del-category" data-id="@item.ID"><i class="fa fa-recycle"></i></a>
+                </td>
+
+            </tr>
+            if (childrenList != null & childrenList.Count > 0)
+            {
+                foreach (var childItem in childrenList)
+                {
+                    <tr>
+
+                        <td>@childItem.CategoryName</td>
+                        <td>
+                            <img height="50" src="~/Image/Categories/@childItem.Image" />
+                        </td>
+                        <td>
+                            <a class="btn btn-info" href="/admin/category/create?id=@childItem.ID"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-danger del-category" data-id="@childItem.ID"><i class="fa fa-recycle"></i></a>
+                        </td>
+
+                    </tr>
+                }
+            }
+        }
+
+    </tbody>
+</table>
+@section Scripts{ 
+<script>
+    $(document).ready(function () {
+        $('.del-category').click(function () {
+            var deleteBtn = $(this);
+            var id = $(this).data('id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this category!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/category/Delete',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status == true) {
+                                    debugger;
+                                    $(deleteBtn).parents("tr").remove();
+                                    
+                                    swal("The category has been deleted!", {
+                                        icon: "success",
+                                    });
+                                }
+                                else {
+                                    swal(response.message, {
+                                        icon: "error",
+                                    });
+
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+        });
+
+    });
+
+</script>
+
+}

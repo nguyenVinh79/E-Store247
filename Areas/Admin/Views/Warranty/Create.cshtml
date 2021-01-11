@@ -1,0 +1,43 @@
+﻿@model WarrantyModel
+@{ ViewData["Title"] = "Warranty time section"; }
+<h1 class="h3 mb-2 text-gray-800">
+
+    @if (Model.ID > 0)
+    {
+        <span> Edit warranty time infomation  </span> }
+    else
+    {
+        <span> Create a new warranty time</span>
+    }
+</h1>
+
+@using (Html.BeginForm("Create", "Warranty", FormMethod.Post, new { @id = "form" }))
+{
+    @Html.HiddenFor(m => m.ID)
+
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Submit</button>
+                <a href="/admin/warranty/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Back to list</a>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, null, new { @class = "validate" })
+            </div>
+
+            <div class="form-group">
+                <label>Code</label>
+                @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Code, null, new { @class = "validate" })
+            </div>
+
+            <div class="form-check form-check-inline my-2">
+                <label class="form-check-label">Active</label>
+                @Html.CheckBoxFor(m => m.Active, new { @class = "form-check-input ml-2", @checked = true })
+                @Html.ValidationMessageFor(model => model.Active, null, new { @class = "validate" })
+            </div>
+        </div>
+    </div>
+}

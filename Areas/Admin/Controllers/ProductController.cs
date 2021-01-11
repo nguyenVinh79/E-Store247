@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
+using Newtonsoft.Json;
+
 namespace ShopBanHang.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -55,69 +58,43 @@ namespace ShopBanHang.Areas.Admin.Controllers
         {
 
             var model = new ProductModel();
-
+            ViewBag.ColorList = db.CT_Colors.Where(x => x.Active == true).ToList();            
             List<Category> lstData = db.Categories.ToList();
-
-
-
-            //List<Category> lstData = db.Categories.ToList();
-            //var lstcategory = new List<SelectListItem>();
-            //var tempItemdf = new SelectListItem();
-            //tempItemdf.Value = "".ToString();
-            //tempItemdf.Text = "-- Bạn hãy chọn danh mục";
-            //lstcategory.Add(tempItemdf);
-
-            //foreach (var item in lstData)
-            //{
-            //    var tempItem = new SelectListItem();
-            //    tempItem.Value = item.CategoryID.ToString();
-            //    tempItem.Text = item.CategoryName;
-
-            //    lstcategory.Add(tempItem);
-            //}
-
-            //ViewBag.lstcategory = lstcategory;
-
-
+            model.DetailImageList = new List<Image>();
 
             if (id > 0)
             {
-
-
-
+                ViewBag.PropertyList = db.ProductColorSizes.Where(x => x.ProductID == id).ToList();
                 var dataProduct = db.Products.Where(x => x.ID == id && x.IsDeleted != true).FirstOrDefault();
 
-                // model.CategoryID = dataProduct.CategoryID != null ? dataProduct.CategoryID.Value : 0;
-                //model.ProductID = dataProduct.ProductID;
-                //model.ProductName = dataProduct.ProductName;
                 model = _mapper.Map<ProductModel>(dataProduct);
-
-                model.CategoryList = new List<SelectListItem>();
-
-                var tempItemdf = new SelectListItem();
-                tempItemdf.Value = "".ToString();
-                tempItemdf.Text = "-- Bạn hãy chọn danh mục";
-                model.CategoryList.Add(tempItemdf);
-
-                foreach (var item in lstData)
-                {
-                    var tempItem = new SelectListItem();
-                    tempItem.Value = item.ID.ToString();
-                    tempItem.Text = item.CategoryName;
-
-                    model.CategoryList.Add(tempItem);
-                }
-
-
-
+                model.DetailImageList = db.Images.Where(x => x.ReferenceId == id).ToList();
+                
             }
+            model.CategoryList = new List<SelectListItem>();
+
+            var initItem = new SelectListItem();
+            initItem.Value = "".ToString();
+            initItem.Text = "-- Choose specified category of product--";
+            model.CategoryList.Add(initItem);
+
+            foreach (var item in lstData)
+            {
+                var tempItem = new SelectListItem();
+                tempItem.Value = item.ID.ToString();
+                tempItem.Text = item.CategoryName;
+
+                model.CategoryList.Add(tempItem);
+            }
+
+
 
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(ProductModel model, IFormFile avata, List<IFormFile> hinhchitiet)
+        public IActionResult Create(ProductModel model, IFormFile Avatar, List<IFormFile> DetailImages, string PropertyJsonString)
         {
 
             try
@@ -125,36 +102,30 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 string wwwPath = _env.WebRootPath;
                 string contentPath = _env.ContentRootPath;
 
-                string path = Path.Combine(this._env.WebRootPath, "Image");//lưu vào 1 Foder =  ~/Images/Product
+                string AvatarPath = Path.Combine(this._env.WebRootPath, "Image", "Products");
+                string DetailImagePath = Path.Combine(this._env.WebRootPath, "Image", "Products", "Details");
 
-
-                if (!Directory.Exists(path))
+                if (!Directory.Exists(DetailImagePath))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(DetailImagePath);
 
                 }
-
-                foreach (var item in hinhchitiet)
+                if (!Directory.Exists(AvatarPath))
                 {
-                    var fileNameTemp = Path.GetFileName(item.FileName);
-                    using (FileStream stream = new FileStream(Path.Combine(path, fileNameTemp), FileMode.Create))
-                    {
-                        item.CopyTo(stream);
-                    }
+                    Directory.CreateDirectory(AvatarPath);
 
-                    //lưu vào 1 Foder =  ~/Images/Product/ProductDetail
                 }
+                List<ProductColorSize> PropertyList = JsonConvert.DeserializeObject<List<ProductColorSize>>(PropertyJsonString);
 
                 if (ModelState.IsValid)
                 {
                     string fileNameAvata = "";
-                    if (avata != null)
+                    if (Avatar != null)
                     {
-                        fileNameAvata = Path.GetFileName(avata.FileName);
-                        using (FileStream stream = new FileStream(Path.Combine(path, fileNameAvata), FileMode.Create))
+                        fileNameAvata = Path.GetFileName(Avatar.FileName);
+                        using (FileStream stream = new FileStream(Path.Combine(AvatarPath, fileNameAvata), FileMode.Create))
                         {
-                            avata.CopyTo(stream);
-
+                            Avatar.CopyTo(stream);
 
                         }
                     }
@@ -164,13 +135,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
                     {
 
                         #region For Create
-                        //var product = new Product
-                        //{
-                        //    CategoryID = model.CategoryID,
-                        //    ProductID = model.ProductID,
-                        //    ProductName = model.ProductName,
-
-                        //};
+                         
 
                         var product = _mapper.Map<Product>(model);
 
@@ -180,6 +145,15 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         }
                         db.Products.Add(product);
                         db.SaveChanges();
+                        if (PropertyList != null)
+                        {
+                            foreach(var item in PropertyList)
+                            {
+                                db.ProductColorSizes.Add(item);
+                            }
+                            db.SaveChanges();
+                        }
+
                         #endregion
 
                     }
@@ -188,9 +162,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
                         #region for edit
                         var product = db.Products.Find(model.ID);
-                        //product.CategoryID = model.CategoryID;
-                        //product.ProductID = model.ProductID;
-                        //product.ProductName = model.ProductName;
+                  
 
                         product = _mapper.Map(model, product);
 
@@ -201,10 +173,47 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
                         db.Update(product);
                         db.SaveChanges();
+                        if (PropertyList != null)
+                        {
+                            foreach (var item in PropertyList)
+                            {
+                                item.ProductID = model.ID;
+                                item.ProductName = db.Products.Find(model.ID).ProductName;
+                                item.NameColor = db.CT_Colors.SingleOrDefault(x => x.Code == item.CodeColor).Name;
+                                if (item.Id == 0)
+                                {
+                                    
+                                    db.ProductColorSizes.Add(item);
+                                }
+                                else
+                                {
+                                    
+                                    db.ProductColorSizes.Update(item);
+                                }    
+                            }
+                            db.SaveChanges();
+                        }
                         #endregion
 
                     }
-
+                    var DetailImage = new Image();
+                    foreach (var item in DetailImages)
+                    {
+                        var fileNameTemp = Path.GetFileName(item.FileName);
+                        using (FileStream stream = new FileStream(Path.Combine(DetailImagePath, fileNameTemp), FileMode.Create))
+                        {
+                            item.CopyTo(stream);
+                        }
+                        if (!string.IsNullOrEmpty(item.FileName))
+                        {
+                            DetailImage.ImagePath = item.FileName;
+                            DetailImage.ReferenceId = model.ID;
+                            DetailImage.Type = "Product";
+                            DetailImage.IsShow = true;
+                            db.Images.Add(DetailImage);
+                        }
+                    }
+                    db.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
@@ -291,16 +300,67 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 throw ex;
             }
 
-
-
-
-
-
-
-
         }
-
-
+        [HttpPost]
+        public JsonResult ImageDelete(int id)
+        {
+            var image = db.Images.Find(id);
+            if (image != null)
+            {
+                db.Images.Remove(image);
+                try
+                {
+                    db.SaveChanges();
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new
+                    {
+                        status = false,
+                        message = ex.Message
+                    });
+                }
+            }
+            return Json(new
+            {
+                status = false,
+                message = "Delete failed!"
+            });
+        }
+        [HttpPost]
+        public JsonResult PropertyDelete(int id)
+        {
+            var property = db.ProductColorSizes.Find(Convert.ToInt64(id));
+            if (property != null)
+            {
+                db.ProductColorSizes.Remove(property);
+                try
+                {
+                    db.SaveChanges();
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new
+                    {
+                        status = false,
+                        message = ex.Message
+                    });
+                }
+            }
+            return Json(new
+            {
+                status = false,
+                message = "Delete failed!"
+            });
+        }
 
 
     }

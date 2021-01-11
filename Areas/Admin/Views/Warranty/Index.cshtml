@@ -1,0 +1,96 @@
+﻿@model List<CT_WarrantyTime>
+@{ ViewData["Title"] = "Warranty Time list"; }
+<h2>
+    @TempData["StatusMessage"]
+</h2>
+
+<h1 class="h3 mb-2 text-gray-800">Warranty time List</h1>
+
+<a class="btn btn-success float-md-right my-lg-2" href="/admin/warranty/create">  <i class="fa fa-plus"></i> Create</a>
+<table class="table table-bordered table-striped table-light table-hover">
+    <thead class="thead-dark">
+        <tr class="center-x">
+            <th>Name</th>
+            <th>Code</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td><b>@item.Name</b></td>
+                <td>
+                    @item.Code
+                </td>
+                <td>
+                    @if (item.Active)
+                    {
+                        <i class="fa fa-check"></i>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-info" href="/admin/warranty/create?id=@item.ID"><i class="fa fa-edit"></i></a> 
+                    <a class="btn btn-danger del-warranty" data-id="@item.ID"><i class="fa fa-recycle"></i></a>
+                </td>
+
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        $('.del-warranty').click(function () {
+            var deleteBtn = $(this);
+            var id = $(this).data('id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this warranty time!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/warranty/Delete',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status == true) {
+                                    debugger;
+                                    $(deleteBtn).parents("tr").remove();
+
+                                    swal("The warranty time has been deleted!", {
+                                        icon: "success",
+                                    });
+                                }
+                                else {
+                                    swal(response.message, {
+                                        icon: "error",
+                                    });
+
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+        });
+
+    });
+
+    </script>
+
+}

@@ -2,6 +2,25 @@
 @{
     ViewData["Title"] = "Create";
 }
+@{ 
+    List<ProductColorSize> propertyList = (List<ProductColorSize>)ViewBag.PropertyList;
+    var colorList = (List<CT_Color>)ViewBag.ColorList;
+    string ColorOption ="<select class='form-control input-md color-option'>";
+    int i = 0;
+    foreach( var item in colorList)
+    {
+        if(i==0)
+        {
+            ColorOption += "<option value='" + item.Code + "' selected>" + item.Name + "</option >";
+        }
+        else
+        {
+            ColorOption += "<option value='" + item.Code + "'>" + item.Name + "</option >";
+        }
+        i++;
+    }
+    ColorOption += "</select>";
+}
 @section CSS{ 
  <style>
      input.form-check-input {
@@ -29,15 +48,17 @@
 {
     @Html.HiddenFor(m => m.ID)
     @Html.HiddenFor(m => m.ImagePath)
+    <input type="hidden" id="ColorList" value="@ColorOption"/>
+    <input type="hidden" name="PropertyJsonString" id="PropertyString" value="@ColorOption"/>
     <div class="text-center">
-        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="Save()"><i class="far fa-save"></i> Submit</button>
         <a href="/admin/product/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Return</a>
-        <a href="#" class="btn btn-danger"><i class="fas fa-mouse-pointer"></i>
+        <a href="#" class="btn btn-danger" ><i class="fas fa-mouse-pointer"></i>
          Select related blogs
         </a>
     </div>
     <hr/>
-    <div class="tab">
+    <div class="tab" style="text-align:center">
         <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'InfoTab')" id="infoTab">Information</a>
         <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'ImageTab')" id="imageTab">Images</a>
         <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'PropertyTab')" id="propertyTab">Property</a>
@@ -97,50 +118,243 @@
         <div class="form-group">
             <label>Description</label>
             @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
-            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
+            @Html.ValidationMessageFor(model => model.Description, null, new { @class = "validate" })
         </div>
     </div>
 
     <div id="ImageTab" class="tabcontent">
-        <div class="form-group">
-            <label for="exampleInputPassword1">Product Avatar</label>
-            <input name="avata" type="file" />
+        
 
-            @if (!string.IsNullOrEmpty(Model.ImagePath))
-            {
-            <img height="100" src="~/Image/Products/@Model.ImagePath" />}
+        
+
+        <div class="container-fluid">
+            <table class="table table-bordered table-gray">
+                <thead class="thead-light">
+                    <tr class="row m-0">
+                        <th class="d-inline-block col-3">Avatar</th>
+                        <th class="d-inline-block col-9">Detail Images</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row m-0">
+                        <td class="d-inline-block col-3">
+                            <div class="form-group">
+                                
+                                <input name="Avatar" type="file"  class="py-2"/>
+
+                                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                                {
+                                    <div class="text-center">
+                                        <img height="200" src="~/Image/Products/@Model.ImagePath" />
+                                    </div>
+                                }
+
+                            </div>
+                        </td>
+                        <td class="d-inline-block col-9">
+                            <div class="form-group">
+                                <input name="DetailImages" type="file" multiple />
+
+                            </div>
+                            <div class="container">
+                            <div class="row pt-2">
+                                @if (Model.DetailImageList != null)
+                                {
+                                
+                                     foreach (var item in Model.DetailImageList)
+                                    {
+                                        <div class="col-md-3 m-4 img-frame">
+                                            <img height="200px" src="~/Image/Products/Details/@item.ImagePath" />
+                                            <div class="text-center mt-2">
+                                                <a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="@item.Id"><i class="fa fa-times"></i></a>
+                                            </div>
+                                        </div>
+                                       
+                                     }
+                                 }
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
         </div>
-
-        <div class="form-group">
-            <label for="exampleInputPassword1">Hình chi tiết sản phẩm</label>
-            <input name="hinhchitiet" type="file" multiple />
-
-        </div>
-
     </div>
 
     <div id="PropertyTab" class="tabcontent">
-     
+        <table class="table table-bordered" id="PropertyTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Color</th>
+                    <th>Old Price</th>
+                    <th>New Price</th>
+                    <th>Quantity</th>
+                    <th>Qty. Sold</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int PropertyIndex = 1; } 
+               @if (propertyList != null)
+               {
+                   
+                   foreach(var item in propertyList)
+                   {
+                       <tr class="rowData"> <td class="index">@PropertyIndex</td> 
+                        <td><select class="form-control input-md color-option" >
+                            @foreach( var color in colorList)
+                            {
+                                if (color.Code == item.CodeColor)
+                                {
+                                    <option value="@color.Code" selected>@color.Name</option >
+                                }
+                                else
+                                {
+                                    <option value="@color.Code">@color.Name</option >
+                                }
+                            }
+                            </select></td>
+                        <td><input class="form-control input-md" maxlength="10" value="@item.UnitPrice"/></td>
+                        <td><input class="form-control input-md" maxlength="10" value="@item.UnitPriceNew"/></td>
+                        <td><input class="form-control input-md" maxlength="10" value="@item.Quantity"/></td>
+                        <td><input class="form-control input-md" maxlength="10" value="@item.Quantity_Saled"/></td>
+                        <td><a class="btn btn-danger btn-circle btn-md text-center del-property" data-id="@item.Id">
+                            <i class="fa fa-times"></i></a></td>
+                        </tr>
+                       PropertyIndex++;
+                   }
+               }
+            </tbody>
+        </table>
+        <a id="AddRow" class="btn btn-success text-white"><i class="fa fa-plus"></i> Add new row</a>
 
     </div>
-
-    
-
-    
 
 }
 @section Scripts{ 
 <script>
     $(document).ready(function () {
+        var stringColorList = $('#ColorList').val();
+        $('.del-property').click(function () {
+            debugger;
+            var deleteBtn = $(this);
+            var id = $(this).data('id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this product property!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/product/PropertyDelete',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status == true) {
+                                    debugger;
+                                    $(deleteBtn).parents("tr").remove();
+                                    IndexUpdate();
+                                    swal("The property has been deleted!", {
+                                        icon: "success",
+                                    });
+                                }
+                                else {
+                                    swal(response.message, {
+                                        icon: "error",
+                                    });
+
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                        }
+                        });
+        });
+        $('.del-img').click(function () {
+            debugger;
+            var deleteBtn = $(this);
+            var id = $(this).data('id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this image!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/product/ImageDelete',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status == true) {
+                                    deleteBtn.parent('div.img-frame').remove();
+                                    swal("The image has been deleted!", {
+                                        icon: "success",
+                                    });
+                                }
+                                else {
+                                    swal(response.message, {
+                                        icon: "error",
+                                    });
+
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+        });
+        $('#AddRow').click(function () {
+            $('#PropertyTable').append(
+                '<tr class="rowData">' + '<td class="index">' + '</td>' +
+                '<td>' + stringColorList + '</td>' +
+                '<td>' +'<input class="form-control input-md" maxlength="10"/>' +'</td>' +
+                '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
+                '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
+                '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
+                '<td><a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="0" onclick="FieldDelete(this)">'+
+                '<i class="fa fa-times"></i></a></td>' +
+                '</tr>'
+
+            );
+            IndexUpdate();
+        });
         
 
-    });
+        });
+
+    function IndexUpdate() {
+        $('#PropertyTable .rowData').each(function () {
+            var index = this.rowIndex;
+            $(this).find('.index').html(index);
+        });
+
+    }
+    function FieldDelete(element) {
+        document.getElementById("PropertyTable").deleteRow(element.parentNode.parentNode.rowIndex);
+        IndexUpdate();
+    }
     function changeTab(evt, targetTab) {
         debugger;
         var currentTab = $('div.tab').find('.btn.btn-outline-dark.tablinks.active').attr('id');
         if (currentTab == "infoTab") {
-           
 
                 if ($('#form').valid()) {
                     openTab(evt, targetTab);
@@ -149,15 +363,25 @@
                 else {
                     return 0;
                 }
-        
 
-   
         }
         if (currentTab == 'imageTab') {
-
+            if ($('#form').valid()) {
+                openTab(evt, targetTab);
+                return 0;
+            }
+            else {
+                return 0;
+            }
         }
         if (currentTab == 'propertyTab') {
-
+            if ($('#form').valid()) {
+                openTab(evt, targetTab);
+                return 0;
+            }
+            else {
+                return 0;
+            }
         }
         openTab(evt,"InfoTab")
 
@@ -177,8 +401,64 @@
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
     }
+    function Save() {
+        debugger;
+        jsonObj = [];
+        count = 0;
+        $('#PropertyTable .rowData').each(function () {
+            item = {};
+            item["CodeColor"] = $(this).find('td select,input:text')[0].value;
+            item["UnitPrice"] = $(this).find('td select,input:text')[1].value;
+            item["UnitPriceNew"] = $(this).find('td select,input:text')[2].value;
+            item["Quantity"] = $(this).find('td select,input:text')[3].value;
+            item["Quantity_Saled"] = $(this).find('td select,input:text')[4].value;
+            item["Id"] = $(this).find('td a').data('id');
+            if (!$(this).find('td select,input:text')[1].value) {
+                swal("Please enter all price field!", {
+                    icon: "warning",
+                });
+                event.preventDefault();
+                $(this).find('td select,input:text')[1].focus();
+                return false;
+            }
+            if (!$(this).find('td select,input:text')[2].value) {
+                swal("Please enter all price field!", {
+                    icon: "warning",
+                });
+                event.preventDefault();
+                $(this).find('td select,input:text')[2].focus();
+                return false;
+            }
+            jsonObj.push(item);
+            count++;
+        });
+        if (count==0) {
+            swal("Please enter all price field!", {
+                icon: "warning",
+            });
+            event.preventDefault();
+            return false;
+        }
+        var PropertyJsonString = JSON.stringify(jsonObj);
+        $('#PropertyString').val(PropertyJsonString);
 
-
+    }
+    $("select.color-option").change(function () {
+        debugger;
+        var count = 0;
+        var colorItem = $(this).children("option:selected").val();
+        $('#PropertyTable .rowData').each(function () {
+            debugger;
+            if (colorItem == $(this).find("td select.color-option").children("option:selected").val()) {
+                count++;
+            }
+        });
+        if (count >= 2) {
+            swal("Duplicate color!", {
+                icon: "warning",
+            });
+        }
+    });
 
 </script>
 

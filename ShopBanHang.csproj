@@ -7,25 +7,21 @@
   <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
     <Compile Remove="Areas\Admin\Models\Custom\**" />
-    <Compile Remove="wwwroot\Image\NewFolder\**" />
     <Content Remove="Areas\Admin\Data\**" />
     <Content Remove="Areas\Admin\Models\Custom\**" />
-    <Content Remove="wwwroot\Image\NewFolder\**" />
     <EmbeddedResource Remove="Areas\Admin\Data\**" />
     <EmbeddedResource Remove="Areas\Admin\Models\Custom\**" />
-    <EmbeddedResource Remove="wwwroot\Image\NewFolder\**" />
     <None Remove="Areas\Admin\Data\**" />
     <None Remove="Areas\Admin\Models\Custom\**" />
-    <None Remove="wwwroot\Image\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Areas\Admin\Models\Custom\CategoryModel.cs" />
     <Compile Include="Areas\Admin\Models\Custom\ProductModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Service\" />
+    <Folder Include="wwwroot\Image\Categories\" />
   </ItemGroup>
 
   <ItemGroup>

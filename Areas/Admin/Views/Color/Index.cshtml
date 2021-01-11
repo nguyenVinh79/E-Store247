@@ -1,0 +1,109 @@
+﻿@model List<CT_Color>
+@{ ViewData["Title"] = "Color list"; }
+<h1>
+    @TempData["StatusMessage"]
+</h1>
+@section CSS{
+    <style>
+        .dot {
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+}
+<h1 class="h3 mb-2 text-gray-800">Color List</h1>
+
+<a class="btn btn-success float-md-right my-lg-2" href="/admin/color/create">  <i class="fa fa-plus"></i> Create</a>
+<table class="table table-bordered table-striped table-light table-hover">
+    <thead class="thead-dark">
+        <tr class="center-x">
+            <th>Name</th>
+            <th>Code</th>
+            <th>Active</th>
+            <th>CSS</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td><b>@item.Name</b></td>
+                <td>
+                    @item.Code
+                </td>
+                <td>
+                    @if (item.Active)
+                    {
+                        <i class="fa fa-check"></i>
+                    }
+                </td>
+                <td>
+                    <span class="dot" style="background-color: @item.CSS"></span>
+                </td>
+                <td>
+                    <a class="btn btn-info" href="/admin/color/create?id=@item.ID"><i class="fa fa-edit"></i></a>
+                    <a class="btn btn-danger del-color" data-id="@item.ID"><i class="fa fa-recycle"></i></a>
+                </td>
+
+            </tr>
+
+        }
+
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        $('.del-color').click(function () {
+            var deleteBtn = $(this);
+            var id = $(this).data('id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this color!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/admin/color/Delete',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.status == true) {
+                                    debugger;
+                                    $(deleteBtn).parents("tr").remove();
+
+                                    swal("The color has been deleted!", {
+                                        icon: "success",
+                                    });
+                                }
+                                else {
+                                    swal(response.message, {
+                                        icon: "error",
+                                    });
+
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+        });
+
+    });
+
+    </script>
+
+}

@@ -1,90 +1,118 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Areas.Admin.Models;
+using ShopBanHang.Helper;
 using ShopBanHang.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ColorController : Controller
+    public class SupplierController : Controller
     {
         private readonly IMapper _mapper;
         private DataShopContext db;
         private readonly IConfiguration Configuration;
-
-        public ColorController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext)
+        public SupplierController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext)
         {
             this._mapper = mapper;
             db = dbcontext;
             Configuration = configuration;
         }
-
         public IActionResult Index()
         {
-            var colorList = new List<CT_Color>();
+            var supplierList = new List<Supplier>();
             try
             {
-                colorList = db.CT_Colors.ToList();
+                supplierList = db.Suppliers.ToList();
             }
             catch (Exception ex)
             {
-                TempData["StatusMessage"] = "Error in loanding color list";
+                TempData["StatusMessage"] = "Error in loanding category list";
             }
-            return View(colorList);
+            return View(supplierList);
+            
         }
-
         public IActionResult Create(int id = 0)
         {
-            var model = new ColorModel();
+            var model = new SupplierVM();
+
 
             if (id > 0)
             {
-                var colorData = db.CT_Colors.Where(x => x.ID == id).FirstOrDefault();
-                model = _mapper.Map(colorData, model);
+                var supplierData = db.Suppliers.Where(x => x.ID == id).FirstOrDefault();
+                model = _mapper.Map(supplierData, model);
+                
             }
             return View(model);
         }
-
         [HttpPost]
-        public IActionResult Create(ColorModel model)
+        public IActionResult Create(SupplierVM model, IFormFile Logo)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+
+
                     if (model.ID == 0)
                     {
+
                         #region For Create
 
-                        var color = _mapper.Map<CT_Color>(model);
-                        db.CT_Colors.Add(color);
+
+                        var supplier = _mapper.Map<Supplier>(model);
+                        if (Logo != null)
+                        {
+                            string urlImage = MyTool.UploadImage(Logo, "wwwroot", "Image", "Suppliers");
+                            if (!string.IsNullOrEmpty(urlImage))
+                            {
+                                supplier.Logo = urlImage;
+                            }
+                        }
+
+                        db.Suppliers.Add(supplier);
                         db.SaveChanges();
 
-                        #endregion For Create
+                        #endregion
+
                     }
                     else
                     {
+
                         #region for edit
+                        
+                        var supplierEdit = _mapper.Map<Supplier>(model);
+                      
+                        if (Logo != null)
+                        {
+                            string urlImage = MyTool.UploadImage(Logo, "wwwroot", "Image", "Suppliers");
+                            if (!string.IsNullOrEmpty(urlImage))
+                            {
+                                supplierEdit.Logo = urlImage;
+                            }
+                        }
 
-                        var colorEdit = _mapper.Map<CT_Color>(model);
-
-                        db.Update(colorEdit);
+                        db.Update(supplierEdit);
                         db.SaveChanges();
 
-                        #endregion for edit
+                        #endregion
+
                     }
 
                     return RedirectToAction("Index");
                 }
+
             }
             catch (Exception ex)
             {
                 TempData["StatusMessage"] = ex.Message;
-
+                
                 return View(model);
             }
             return View(model);
@@ -92,21 +120,21 @@ namespace ShopBanHang.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            var color = db.CT_Colors.Find(id);
-            if (color != null)
+            var supplier = db.Suppliers.Find(id);
+            if (supplier != null)
             {
-                var productsOwnColor = db.ProductColorSizes.Where(x=>x.CodeColor == color.Code).ToList();
-                if (productsOwnColor.Count > 0)
+                var productsOfSupplier = db.Products.Where(x => x.SupplierID == id).ToList();
+                if (productsOfSupplier.Count > 0)
                 {
                     return Json(new
                     {
                         status = false,
-                        message = "One or more product has been used this color!"
+                        message = "One or more product has been used this supplier!"
                     });
                 }
                 else
                 {
-                    db.CT_Colors.Remove(color);
+                    db.Suppliers.Remove(supplier);
                     try
                     {
                         db.SaveChanges();

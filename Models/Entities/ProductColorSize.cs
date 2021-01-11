@@ -14,8 +14,8 @@ namespace ShopBanHang.Models
         public string NameSize { get; set; } // size large,...
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> Quantity_Saled { get; set; }
-        public Nullable<double> UnitPrice { get; set; } // giá ban đầu
-        public Nullable<double> UnitPriceNew { get; set; } // giá hiện tại
+        public double UnitPrice { get; set; } // giá ban đầu
+        public double UnitPriceNew { get; set; } // giá hiện tại
         public Nullable<double> UnitPriceNewOld { get; set; } // giá hiện tại trước khi km
         public Nullable<int> ProductID { get; set; } 
         public string ProductName { get; set; }

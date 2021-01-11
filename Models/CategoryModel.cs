@@ -7,28 +7,28 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LayoutLesson2.Areas.Admin.Models
+namespace ShopBanHang.Models
 {
     public class CategoryModel
     {
         private readonly DataShopContext _db;
-        public int CategoryID { get; set; }
+        public int ID { get; set; }
         [Required(ErrorMessage = "This field is required")]
         [StringLength(100, ErrorMessage = "Can't enter exceed 100 characters")]
         public string CategoryName { get; set;}
         public string Description { get; set; }
         [Required(ErrorMessage = "Please select it's parent category")]
-        public Nullable<int> ParenCategoryID { get; set; }
+        public Nullable<int> ParentCategoryID { get; set; }
         public string MetaKeywords { get; set; }
         public string MetaDescription { get; set; }
         public string MetaTitle { get; set; }
         public string Class { get; set; }
         public string Image { get; set; }
-        public Nullable<bool> IsDelete { get; set; }
+        public bool IsDeleted { get; set; }
         public string LanguageID { get; set; }
         public Nullable<int> Number { get; set; }
         public Nullable<bool> ShowIndex { get; set; }
-        public Nullable<int> OrderBy { get; set; }
+        public Nullable<int> Order { get; set; }
         public List<SelectListItem> LstParentCategory { get; set; }
 
         public CategoryModel(DataShopContext dbcontext)
@@ -37,17 +37,16 @@ namespace LayoutLesson2.Areas.Admin.Models
         }
         public CategoryModel()
         {
-            //gọi xuống db lấy data
             
-                List<Category> lstData = _db.Categories.ToList();
-                //khởi tạo List<>  khai báo dữ liệu
-                this.LstParentCategory = new List<SelectListItem>();
+                //List<Category> lstData = _db.Categories.ToList();
+              
+                //this.LstParentCategory = new List<SelectListItem>();
 
-                var temp = new SelectListItem();
-                //thêm data rỗng để mặc định chọn là rỗng
-                temp.Text = "----assign parent category role----";
-                temp.Value = "0";
-                this.LstParentCategory.Add(temp);
+                //var temp = new SelectListItem();
+             
+                //temp.Text = "----assign parent category role----";
+                //temp.Value = "0";
+                //this.LstParentCategory.Add(temp);
                 //int i = 1;
                 //foreach (var item in lstData)
                 //{
@@ -59,7 +58,7 @@ namespace LayoutLesson2.Areas.Admin.Models
                 //    this.LstParentCategory.Add(temp1);
                 //    i++;
                 //}
-                BindTree(lstData, null , this.LstParentCategory);
+                //BindTree(lstData, null , this.LstParentCategory);
             
         }
         private void BindTree(IEnumerable<Category> list, SelectListItem parentItem, List<SelectListItem> listParent)

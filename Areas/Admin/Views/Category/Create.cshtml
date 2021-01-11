@@ -1,0 +1,61 @@
+﻿@model CategoryModel
+@{ ViewData["Title"] = "Category section"; }
+<h1 class="h3 mb-2 text-gray-800">
+
+    @if (Model.ID > 0)
+    {
+        <span> Edit category infomation  </span> }
+    else
+    {
+        <span> Create a new category</span>
+    }
+</h1>
+@section CSS{
+    <style>
+        input.form-check-input {
+            width: 20px;
+            height: 20px;
+            background-color: #4cff00;
+        }
+    </style>
+}
+@using (Html.BeginForm("Create", "Category", FormMethod.Post, new { enctype = "multipart/form-data", @id = "form" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.Image)
+    <div class="text-center">
+    <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Submit</button>
+    <a href="/admin/category/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Return</a>
+    </div>
+    <div class="form-group">
+        <label>Name</label>
+        @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CategoryName, null, new { @class = "validate" })
+
+    </div>
+    <div class="form-group">
+        <label>Category Parent</label>
+        @Html.DropDownListFor(m => m.ParentCategoryID, Model.LstParentCategory, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ParentCategoryID, null, new { @class = "validate" })
+    </div>
+    <div class="form-check form-check-inline my-2">
+        <label class="form-check-label">Delete</label>
+        @Html.CheckBoxFor(m => m.IsDeleted, new { @class = "form-check-input ml-2", @checked = false })
+        @Html.ValidationMessageFor(model => model.IsDeleted, null, new { @class = "validate" })
+    </div>
+    <div class="form-group">
+        <input name="image" type="file" class="py-2" />
+
+         @if (!string.IsNullOrEmpty(Model.Image))
+         {
+           <div class="text-center">
+           <img height="50px" src="~/Image/Categories/@Model.Image" />
+           </div>
+         }
+     </div>
+    <div class="form-group">
+          <label>Description</label>
+           @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
+           @Html.ValidationMessageFor(model => model.Description, null, new { @class = "validate" })
+    </div>
+}

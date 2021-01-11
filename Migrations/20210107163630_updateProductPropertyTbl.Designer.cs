@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopBanHang.Models;
 
 namespace ShopBanHang.Migrations
 {
     [DbContext(typeof(DataShopContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20210107163630_updateProductPropertyTbl")]
+    partial class updateProductPropertyTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

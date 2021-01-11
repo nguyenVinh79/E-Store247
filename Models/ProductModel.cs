@@ -81,6 +81,8 @@ namespace ShopBanHang.Models
         public string CreateBy { get; set; }
         public string UpdateLBy { get; set; }
         public List<SelectListItem> CategoryList { get; set; }
+        public List<Image> DetailImageList { get; set; }
+
 
     }
 }
