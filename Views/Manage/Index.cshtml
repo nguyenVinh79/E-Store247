@@ -1,7 +1,6 @@
 ﻿@model IndexViewModel
 @{ ViewData["Title"] = "Manage your account"; }
 @{ Layout = "_LayoutLogin"; }
-
 <h1>@ViewData["Title"].</h1>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
@@ -13,10 +12,12 @@
         <dd>
             @if (Model.HasPassword)
             {
-<text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ChangePassword">Change</a>&nbsp;&nbsp;]</text> }
+                <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ChangePassword">Change</a>&nbsp;&nbsp;]</text> 
+            }
             else
             {
-<text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="SetPassword">Create</a>&nbsp;&nbsp;]</text>            }
+                <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="SetPassword">Create</a>&nbsp;&nbsp;]</text>            
+            }
         </dd>
         <!--<dt>External Logins:</dt>
         <dd>

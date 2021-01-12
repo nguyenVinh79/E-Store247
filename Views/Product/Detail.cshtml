@@ -12,17 +12,27 @@
             <aside class="col-md-6">
                 <div class="card">
                     <article class="gallery-wrap">
-                        <div class="img-big-wrap">
+                        <!--<div class="img-big-wrap">
                             <div> <a href="#"><img src="images/items/15.jpg"></a></div>
-                        </div> <!-- slider-product.// -->
-                        <div class="thumbs-wrap">
+                        </div>--> <!-- slider-product.// -->
+                        <!--<div class="thumbs-wrap">
                             @foreach (var item in Model.ImageList)
                             {
-                                <a href="#" class="item-thumb"> <img src="/Image/Products/Detail/@item.ImagePath"></a>
+                                <a href="#" class="item-thumb"> <img src="/Image/Products/Details/@item.ImagePath"></a>
 
                             }
 
-                        </div> <!-- slider-nav.// -->
+                        </div>--> <!-- slider-nav.// -->
+                        <div class="fotorama" data-loop="true" data-autoplay="true" data-shuffle="true" data-nav="thumbs">
+
+                            @foreach (var item in Model.ImageList)
+                            {
+                                <img src="~/Image/Products/Details/@item.ImagePath" />
+ 
+                             }
+
+
+                        </div>
                     </article> <!-- gallery-wrap .end// -->
                 </div> <!-- card.// -->
             </aside>
@@ -65,7 +75,7 @@
                                 <tr>
 
                                     <td>@item.NameColor</td>
-                                    <td> @item.UnitPriceNew </td>
+                                    <td> @item.UnitPriceNew.ToString("#,##0") <sup>VND</sup></td>
                                     <td>
                                         @if (item.Quantity > 0)
                                         {
@@ -104,8 +114,9 @@
                             {
                                 <text>
                                     <label class="pdsa-radiobutton btn btn-default">
-                                        <input title="@item.UnitPriceNew" type="radio" checked data-hethang="@IsAvailable" name="sizeChoose" value="@item.Id">
-                                        @item.NameColor @*-  @item.NameSize*@
+                                        <input title="@item.UnitPriceNew.ToString("#,##0")" type="radio" checked data-hethang="@IsAvailable" 
+                                               data-oldprice="@item.UnitPrice.ToString("#,##0")" name="sizeChoose" value="@item.Id">
+                                        @item.NameColor
                                     </label>
                                 </text>
 
@@ -114,8 +125,9 @@
                             {
                                 <text>
                                     <label class="pdsa-radiobutton btn btn-default">
-                                        <input title="@item.UnitPriceNew" type="radio" data-hethang="@IsAvailable" name="sizeChoose" value="@item.Id">
-                                        @item.NameColor @*-  @item.NameSize*@
+                                        <input title="@item.UnitPriceNew.ToString("#,##0")" type="radio" data-hethang="@IsAvailable" 
+                                               data-oldprice="@item.UnitPrice.ToString("#,##0")" name="sizeChoose" value="@item.Id">
+                                        @item.NameColor
                                     </label>
                                 </text>
 
@@ -134,8 +146,8 @@
 
 
                     <div class="mb-3">
-                        <var class="price h4">@DisplayPrice.UnitPriceNew</var>
-                        <span class="text-muted">@DisplayPrice.UnitPrice</span>
+                        <var class="price h4">@DisplayPrice.UnitPriceNew.ToString("#,##0")</var><sup><b>vnd</b></sup>
+                        <s class="text-muted"><span class="text-muted">@DisplayPrice.UnitPrice.ToString("#,##0")</span></s><sup class="text-muted">vnd</sup>
                     </div> <!-- price-detail-wrap .// -->
 
                     <p>
@@ -175,7 +187,7 @@
                                 <div class="input-group-prepend">
                                     <button class="btn btn-light" type="button" id="button-plus"> + </button>
                                 </div>
-                                <input type="text" class="form-control" value="1">
+                                <input type="text" class="form-control" value="1" min="0" name="quantity">
                                 <div class="input-group-append">
                                     <button class="btn btn-light" type="button" id="button-minus"> − </button>
                                 </div>
@@ -259,3 +271,31 @@
     </div> <!-- container .//  -->
 </section>
 
+@section Scripts{ 
+<script>
+    $(document).ready(function () {
+        $('input[name="sizeChoose"]').click(function () {
+            debugger;
+            var newPrice = $('input[name="sizeChoose"]:checked').attr("title");
+            var oldPrice = $('input[name="sizeChoose"]:checked').data("oldprice");
+            $('var').html(newPrice);
+            $('span.text-muted').html(oldPrice);
+        });
+        $('#button-plus').click(function () {
+            var currentQuantity = $("input[name='quantity']").val();
+            currentQuantity = parseInt(currentQuantity) + 1;
+            $("input[name='quantity']").val(currentQuantity);
+        });
+        $('#button-minus').click(function () {
+            var currentQuantity = $("input[name='quantity']").val();
+            if (parseInt(currentQuantity) > 1) {
+                currentQuantity = parseInt(currentQuantity) - 1;
+                $("input[name='quantity']").val(currentQuantity);
+            }
+            return false;
+        });
+    });
+
+</script>
+
+}
