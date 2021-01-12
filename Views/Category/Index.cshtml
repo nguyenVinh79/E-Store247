@@ -35,52 +35,8 @@
 
                 @foreach (var item in Model.DataList)
                 {
-                    <div class="col-md-3">
-                        <figure class="card card-product-grid">
-                            <div class="img-wrap">
-                                @*<span class="badge badge-danger"> NEW </span>*@
-
-                                <a href="/product/detail?id=@item.ID">
-                                    <img src="~/Image/Products/@item.ImagePath" alt="@item.ProductName" />
-
-                                </a>
-                            </div> <!-- img-wrap.// -->
-                            <figcaption class="info-wrap">
-                                <a href="#" class="title mb-2">@item.ShortDecription</a>
-                                <div class="price-wrap">
-                                    <span class="price">@item.UnitPriceNew.ToString("#,###") đ</span>
-                                    @*<small class="text-muted">/per item</small>*@
-                                </div> <!-- price-wrap.// -->
-                                @*<p class="mb-2"> 2 Pieces  <small class="text-muted">(Min Order)</small></p>*@
-
-                                <a href="/product/detail?id=@item.ID">
-                                    <p class="text-muted ">@item.ProductName</p>
-                                </a>
-
-                                <hr>
-
-                                @*<p class="mb-3">
-                                <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                                <span class="tag"> 2 Years </span>
-                                <span class="tag"> 23 reviews </span>
-                                <span class="tag"> Japan </span>
-                            </p>*@
-
-                                <a asp-controller="Product" asp-action="addCart" asp-route-id="@item.ID" class="addProduct">
-                                    <i class="fa fa-plus"></i> Add to Cart</a>
-
-                                @*<label class="custom-control mb-3 custom-checkbox">
-                                <input type="checkbox" class="custom-control-input">
-                                <div class="custom-control-label">
-                                    Add to compare
-                                </div>
-                            </label>*@
-
-
-
-                            </figcaption>
-                        </figure>
-                    </div> <!-- col.// -->
+                    @Html.Partial("_ProductItem",item)
+                    
                 }
 
 

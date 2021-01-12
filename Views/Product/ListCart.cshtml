@@ -28,7 +28,7 @@
         <td>@item.Product.ProductName</td>
         <td><img src="~/Image/Products/@item.Product.ImagePath" width="100" height="100" /></td>
         <td><input type="number" class="@txt_class" value="@item.Quantity" /></td>
-        <td>@item.Product.UnitPriceNew.ToString("#,###") đ</td>
+        <td>@item.Product.UnitPriceNew.ToString("#,###") vnd</td>
         <td id="txt_class_total">@total.ToString("#,###") đ</td>
         <td><a href="" data-id="@item.Product.ID" class="updateCart">Update</a></td>
         <td><a asp-controller="Product" asp-action="deleteCart" asp-route-id="@item.Product.ID">Delete</a></td>
@@ -36,7 +36,7 @@
  } }
         </table>
     </div>
-    <section class="section-content padding-y">
+    <section class="section-content padding-y bg-white">
         <div class="container">
 
             <div class="row">
@@ -44,107 +44,52 @@
                     <div class="card">
 
                         <table class="table table-borderless table-shopping-cart">
-                            <thead class="text-muted">
+                            <thead class="text-muted thead-dark" >
                                 <tr class="small text-uppercase">
-                                    <th scope="col">Product</th>
+                                    <th scope="col" width="350">Product</th>
                                     <th scope="col" width="120">Quantity</th>
-                                    <th scope="col" width="120">Price</th>
+                                    <th scope="col" width="220">Price</th>
                                     <th scope="col" class="text-right" width="200"> </th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach (var item in listCart)
+                                {
+                                    string txt_class = "quantity_" + item.DetailProduct.Id;
+                                    STT++;
+                                    double total = item.DetailProduct.UnitPriceNew * item.Quantity;
                                 <tr>
                                     <td>
                                         <figure class="itemside">
-                                            <div class="aside"><img src="images/items/1.jpg" class="img-sm"></div>
+                                            <div class="aside"><img src="~/Image/Products/@item.Product.ImagePath" class="img-sm"></div>
                                             <figcaption class="info">
-                                                <a href="#" class="title text-dark">Some name of item goes here nice</a>
-                                                <p class="text-muted small">Size: XL, Color: blue, <br> Brand: Gucci</p>
+                                                <a href="#" class="title text-dark">@item.Product.ProductName</a>
+                                                <p class="text-muted small">Color: @item.DetailProduct.NameColor@*, <br> Brand:@item.Product.SupplierName*@</p>
                                             </figcaption>
                                         </figure>
                                     </td>
                                     <td>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                        </select>
+                                        <input type="number" class="@txt_class form-control" min="1" value="@item.Quantity" />
                                     </td>
                                     <td>
                                         <div class="price-wrap">
-                                            <var class="price">$1156.00</var>
-                                            <small class="text-muted"> $315.20 each </small>
+                                            <var class="price" id="txt_class_total">@total.ToString("#,###")</var><br/>
+                                            <small class="text-muted"> @item.DetailProduct.UnitPriceNew.ToString("#,###") <sup>vnd</sup> each </small>
                                         </div> <!-- price-wrap .// -->
                                     </td>
                                     <td class="text-right">
-                                        <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
-                                        <a href="" class="btn btn-light"> Remove</a>
+                                        <a data-original-title="Update" title="" href="" class="btn btn-light updateCart" data-toggle="tooltip" data-id="@item.DetailProduct.Id">
+                                        <i class="fas fa-sync-alt"></i></a>
+                                        <a class="btn btn-light" asp-controller="Product" asp-action="deleteCart" asp-route-id="@item.DetailProduct.Id"> Remove</a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <figure class="itemside">
-                                            <div class="aside"><img src="images/items/2.jpg" class="img-sm"></div>
-                                            <figcaption class="info">
-                                                <a href="#" class="title text-dark">Product name  goes here nice</a>
-                                                <p class="text-muted small">Size: XL, Color: blue, <br> Brand: Gucci</p>
-                                            </figcaption>
-                                        </figure>
-                                    </td>
-                                    <td>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="price-wrap">
-                                            <var class="price">$149.97</var>
-                                            <small class="text-muted"> $75.00 each </small>
-                                        </div> <!-- price-wrap .// -->
-                                    </td>
-                                    <td class="text-right">
-                                        <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
-                                        <a href="" class="btn btn-light btn-round"> Remove</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <figure class="itemside">
-                                            <div class="aside"><img src="images/items/3.jpg" class="img-sm"></div>
-                                            <figcaption class="info">
-                                                <a href="#" class="title text-dark">Another name of some product goes just here</a>
-                                                <p class="small text-muted">Size: XL, Color: blue,  Brand: Tissot</p>
-                                            </figcaption>
-                                        </figure>
-                                    </td>
-                                    <td>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="price-wrap">
-                                            <var class="price">$98.00</var>
-                                            <small class="text-muted"> $578.00 each</small>
-                                        </div> <!-- price-wrap .// -->
-                                    </td>
-                                    <td class="text-right">
-                                        <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
-                                        <a href="" class="btn btn-light btn-round"> Remove</a>
-                                    </td>
-                                </tr>
+                                            }
                             </tbody>
                         </table>
 
                         <div class="card-body border-top">
                             <a href="#" class="btn btn-primary float-md-right"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
-                            <a href="#" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
+                            <a href="/" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
                         </div>
                     </div> <!-- card.// -->
 
@@ -204,23 +149,23 @@
             //chặn thực thi default action of the event
             //debugger;
             //chặn thẻ a load sang action khác
-            event.preventDefault();
+                                        event.preventDefault();
             var quantity = $(".quantity_" + $(this).attr("data-id")).val();
 
             $.ajax({
-                type: "POST",
+                                            type: "POST",
                 url:"@Url.Action("updateCart","Product")",
                 data:
-                {
-                    Id: $(this).attr("data-id"),
+                                            {
+                                                Id: $(this).attr("data-id"),
                     Quantity: quantity
                 },
                 success: function (result) {
-                    //debugger;
-                    window.location.href = '@Url.Action("ListCart","Product")';
-                }
+                                                //debugger;
+                                                window.location.href = '@Url.Action("ListCart","Product")';
+                                            }
 
-            });
+                                        });
         });
     })
 </script>

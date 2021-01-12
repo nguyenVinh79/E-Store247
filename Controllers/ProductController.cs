@@ -72,19 +72,21 @@ namespace ShopBanHang.Controllers
 
         }
         //Khi thêm vào check sp có tồn tại chưa, có thì tăng số lượng, thêm mới
-        public IActionResult addCart(int id) //id product
+        public IActionResult addCart(int id, int quantity) //id product
         {
             var cart = HttpContext.Session.GetString("cart"); //get key cart
             if(cart == null)
             {
                 //giỏ hàng chưa có sp
-                var product = getDetailProduct(id);
+                var DetailProduct = _db.ProductColorSizes.Find(Convert.ToInt64(id));
+                var MainProduct = _db.Products.SingleOrDefault(x => x.ID == DetailProduct.ProductID);
                 List<CartModel> listCart = new List<CartModel>()
                 {
                     new CartModel
                     {
-                        Product = product,
-                        Quantity = 1
+                        Product = MainProduct,
+                        DetailProduct = DetailProduct,
+                        Quantity = quantity
 
                     }
                 };
@@ -97,9 +99,9 @@ namespace ShopBanHang.Controllers
                 bool checkBit = true;
                 for (int i = 0; i < dataCart.Count; i++)
                 {
-                    if (dataCart[i].Product.ID == id)
+                    if (dataCart[i].DetailProduct.Id == id)
                     {
-                        dataCart[i].Quantity++;
+                        dataCart[i].Quantity+=quantity ;
                         checkBit = false;
                         //phát hiện sp vừa add tăng 1 cho product đó rồi break out of loop
                         break;
@@ -109,10 +111,13 @@ namespace ShopBanHang.Controllers
                 //product is'nt exist in cart
                 if(checkBit == true)
                 {
+                    var DetailProduct = _db.ProductColorSizes.Find(Convert.ToInt64(id));
+                    var MainProduct = _db.Products.SingleOrDefault(x => x.ID == DetailProduct.ProductID);
                     dataCart.Add(new CartModel
                     {
-                        Product = getDetailProduct(id),
-                        Quantity = 1
+                        Product = MainProduct,
+                        DetailProduct = DetailProduct,
+                        Quantity = quantity
                     });
                 }
                 HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(dataCart));

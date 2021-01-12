@@ -113,6 +113,11 @@ namespace ShopBanHang
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                  name: "product-detail",
+                  template: "{title}-{id}",
+                  defaults: new { controller = "Product", action = "Detail" }
+              );
+                routes.MapRoute(
                   name: "areas",
                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );

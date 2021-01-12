@@ -6,13 +6,16 @@
 <div class="col-md-3">
     <figure class="card card-product-grid">
         <div class="img-wrap">
-            @*<span class="badge badge-danger"> NEW </span>*@
-
+        @if (Model.IsNew == true)
+        {
+            <span class="badge badge-danger"> NEW </span>
+        }
             <a href="@link">
-                <img src="~/Image/Products/@Model.ImagePath" alt="@Model.ProductName" />
+                <img src="~/Image/Products/@Model.ImagePath" alt="@Model.ProductName" class="pt-2" />
 
             </a>
         </div> <!-- img-wrap.// -->
+
         <figcaption class="info-wrap">
             <a href="@link" class="title mb-2">@Model.ShortDecription </a>
             <div class="price-wrap">
@@ -25,24 +28,22 @@
                 <p class="text-muted ">@Model.ProductName</p>
             </a>
 
-            @*<hr>*@
+            <hr>
 
-            @*<p class="mb-3">
+            <p class="mb-3">
                     <span class="tag"> <i class="fa fa-check"></i> Verified</span>
-                    <span class="tag"> 2 Years </span>
-                    <span class="tag"> 23 reviews </span>
-                    <span class="tag"> Japan </span>
-                </p>*@
-            @*<a asp-controller="Product" asp-action="addCart" asp-route-id="@Model.ID" class="addProduct">Add order</a>*@
+                    <span class="tag">
+                    @if(!string.IsNullOrEmpty(Model.CT_WarrantyTimeName))
+                    { 
+                        <text> @Model.CT_WarrantyTimeName </text>
+                    }
+                    2 Years </span>
+                    @*<span class="tag"> 23 reviews </span>*@
+                    @*<span class="tag"> Japan </span>*@
+                </p>
+            <a asp-controller="Product" asp-action="addCart" asp-route-id="@Model.ID" class="addProduct">Add order</a>
 
-            @*<label class="custom-control mb-3 custom-checkbox">
-                    <input type="checkbox" class="custom-control-input">
-                    <div class="custom-control-label">
-                        Add to compare
-                    </div>
-                </label>*@
-
-
+            
 
         </figcaption>
     </figure>

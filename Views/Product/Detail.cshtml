@@ -115,7 +115,7 @@
                                 <text>
                                     <label class="pdsa-radiobutton btn btn-default">
                                         <input title="@item.UnitPriceNew.ToString("#,##0")" type="radio" checked data-hethang="@IsAvailable" 
-                                               data-oldprice="@item.UnitPrice.ToString("#,##0")" name="sizeChoose" value="@item.Id">
+                                               data-oldprice="@item.UnitPrice.ToString("#,##0")" data-quantity="@item.Quantity" name="sizeChoose" value="@item.Id">
                                         @item.NameColor
                                     </label>
                                 </text>
@@ -126,7 +126,7 @@
                                 <text>
                                     <label class="pdsa-radiobutton btn btn-default">
                                         <input title="@item.UnitPriceNew.ToString("#,##0")" type="radio" data-hethang="@IsAvailable" 
-                                               data-oldprice="@item.UnitPrice.ToString("#,##0")" name="sizeChoose" value="@item.Id">
+                                               data-oldprice="@item.UnitPrice.ToString("#,##0")" data-quantity="@item.Quantity" name="sizeChoose" value="@item.Id">
                                         @item.NameColor
                                     </label>
                                 </text>
@@ -156,15 +156,15 @@
 
 
                     <dl class="row">
-                        <dt class="col-sm-3">Manufacturer</dt>
-                        <dd class="col-sm-9">
+                        <dt class="col-md-3">Manufacturer</dt>
+                        <dd class="col-md-9"> 
                                 @if (!string.IsNullOrEmpty(Model.ProductInfo.SupplierName))
                                 {
                                     <a href="#"> @Model.ProductInfo.SupplierName </a>
                                 }
                                 else
                                 {
-                                    <text>Updating</text>
+                                    <text> Updating</text>
                                 }
                         </dd>
 
@@ -185,16 +185,17 @@
                         <div class="form-group col-md flex-grow-0">
                             <div class="input-group mb-3 input-spinner">
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-light" type="button" id="button-plus"> + </button>
-                                </div>
-                                <input type="text" class="form-control" value="1" min="0" name="quantity">
-                                <div class="input-group-append">
                                     <button class="btn btn-light" type="button" id="button-minus"> − </button>
                                 </div>
+                                <input type="text" class="form-control" value="1" min="0" name="quantity" onchange="QtyChange(this)">
+                                <div class="input-group-append">
+                                    <button class="btn btn-light" type="button" id="button-plus"> + </button>
+                                </div>
+
                             </div>
                         </div> <!-- col.// -->
                         <div class="form-group col-md">
-                            <a href="#" class="btn  btn-primary">
+                            <a href="#" class="btn  btn-primary add-cart-btn">
                                 <i class="fas fa-shopping-cart"></i> <span class="text">Add to cart</span>
                             </a>
                             <a href="#" class="btn btn-light">
@@ -275,27 +276,87 @@
 <script>
     $(document).ready(function () {
         $('input[name="sizeChoose"]').click(function () {
-            debugger;
+ 
             var newPrice = $('input[name="sizeChoose"]:checked').attr("title");
             var oldPrice = $('input[name="sizeChoose"]:checked').data("oldprice");
             $('var').html(newPrice);
             $('span.text-muted').html(oldPrice);
+
+            var currentQuantity = $('input[name="sizeChoose"]:checked').data("quantity")
+            $("input[name='quantity']").val(1);
+            var InputQuantity = $("input[name='quantity']").val();
+            var ProductID = $('input[name="sizeChoose"]:checked').val();
+           
+      
+            $(".add-cart-btn").attr("href", "/product/addcart/?id=" + ProductID + "&quantity=" + InputQuantity);
         });
+        //#region Modify product quantity
         $('#button-plus').click(function () {
+            var productQuantity = $('input[name="sizeChoose"]:checked').data("quantity");
             var currentQuantity = $("input[name='quantity']").val();
-            currentQuantity = parseInt(currentQuantity) + 1;
-            $("input[name='quantity']").val(currentQuantity);
+            if (parseInt(currentQuantity) < parseInt(productQuantity)) {
+                currentQuantity = parseInt(currentQuantity) + 1;
+                $("input[name='quantity']").val(currentQuantity);
+                var InputQuantity = $("input[name='quantity']").val();
+                var ProductID = $('input[name="sizeChoose"]:checked').val();
+                $(".add-cart-btn").attr("href", "/product/addcart/?id=" + ProductID + "&quantity=" + InputQuantity);
+            }
+            return false;
         });
+        
         $('#button-minus').click(function () {
             var currentQuantity = $("input[name='quantity']").val();
             if (parseInt(currentQuantity) > 1) {
                 currentQuantity = parseInt(currentQuantity) - 1;
                 $("input[name='quantity']").val(currentQuantity);
+                var InputQuantity = $("input[name='quantity']").val();
+                var ProductID = $('input[name="sizeChoose"]:checked').val();
+                $(".add-cart-btn").attr("href", "/product/addcart/?id=" + ProductID + "&quantity=" + InputQuantity);
             }
             return false;
         });
-    });
+        //#endregion
 
+        //#region End Typing Event
+        //setup before functions
+        var typingTimer;                //timer identifier
+        var doneTypingInterval = 600;  //time in ms
+        var $input = $('input[name="quantity"]');
+
+        //on keyup, start the countdown
+        $input.on('keyup', function () {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        });
+
+        //on keydown, clear the countdown 
+        $input.on('keydown', function () {
+            clearTimeout(typingTimer);
+        });
+
+        //user "finished typing," do something
+        function doneTyping() {
+            var quantityInput = $('input[name="quantity"]').val();
+            var productQuantity = $('input[name="sizeChoose"]:checked').data("quantity");
+            if (parseInt(productQuantity) < parseInt(quantityInput)) {
+                $('input[name="quantity"]').val(productQuantity);
+            }
+            return false;
+        }
+        //#endregion
+        var initInputQuantity = $("input[name='quantity']").val();
+        var initProductID = $('input[name="sizeChoose"]:checked').val();
+        $(".add-cart-btn").attr("href", "/product/addcart/?id=" + initProductID + "&quantity=" + initInputQuantity);
+        
+    });
+    function QtyChange(obj) {
+        debugger;
+        var InputQuantity = $("input[name='quantity']").val();
+        var ProductID = $('input[name="sizeChoose"]:checked').val();
+        $(".add-cart-btn").attr("href", "/product/addcart/?id=" + ProductID + "&quantity=" + InputQuantity);
+
+    }
+   
 </script>
 
 }
