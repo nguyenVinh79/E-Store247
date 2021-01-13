@@ -147,15 +147,38 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         db.SaveChanges();
                         if (PropertyList != null)
                         {
+
                             foreach(var item in PropertyList)
                             {
+                                item.ProductID = product.ID;
+                                item.ProductName = db.Products.Find(product.ID).ProductName;
+                                item.NameColor = db.CT_Colors.SingleOrDefault(x => x.Code == item.CodeColor).Name;
                                 db.ProductColorSizes.Add(item);
                             }
                             db.SaveChanges();
                         }
 
                         #endregion
-
+                        #region Upload detail image and save to db
+                        foreach (var item in DetailImages)
+                        {
+                            var fileNameTemp = Path.GetFileName(item.FileName);
+                            using (FileStream stream = new FileStream(Path.Combine(DetailImagePath, fileNameTemp), FileMode.Create))
+                            {
+                                item.CopyTo(stream);
+                            }
+                            if (!string.IsNullOrEmpty(item.FileName))
+                            {
+                                Image DetailImage = new Image();
+                                DetailImage.ImagePath = item.FileName;
+                                DetailImage.ReferenceId = product.ID;
+                                DetailImage.Type = "Product";
+                                DetailImage.IsShow = true;
+                                db.Images.Add(DetailImage);
+                                db.SaveChanges();
+                            }
+                        }
+                        #endregion
                     }
                     else
                     {
@@ -194,26 +217,28 @@ namespace ShopBanHang.Areas.Admin.Controllers
                             db.SaveChanges();
                         }
                         #endregion
+                        #region Upload detail image and save to db
+                        foreach (var item in DetailImages)
+                        {
+                            var fileNameTemp = Path.GetFileName(item.FileName);
+                            using (FileStream stream = new FileStream(Path.Combine(DetailImagePath, fileNameTemp), FileMode.Create))
+                            {
+                                item.CopyTo(stream);
+                            }
+                            if (!string.IsNullOrEmpty(item.FileName))
+                            {
+                                Image DetailImage = new Image();
+                                DetailImage.ImagePath = item.FileName;
+                                DetailImage.ReferenceId = product.ID;
+                                DetailImage.Type = "Product";
+                                DetailImage.IsShow = true;
+                                db.Images.Add(DetailImage);
+                                db.SaveChanges();
+                            }
+                        }
+                        #endregion
+                    }
 
-                    }
-                    var DetailImage = new Image();
-                    foreach (var item in DetailImages)
-                    {
-                        var fileNameTemp = Path.GetFileName(item.FileName);
-                        using (FileStream stream = new FileStream(Path.Combine(DetailImagePath, fileNameTemp), FileMode.Create))
-                        {
-                            item.CopyTo(stream);
-                        }
-                        if (!string.IsNullOrEmpty(item.FileName))
-                        {
-                            DetailImage.ImagePath = item.FileName;
-                            DetailImage.ReferenceId = model.ID;
-                            DetailImage.Type = "Product";
-                            DetailImage.IsShow = true;
-                            db.Images.Add(DetailImage);
-                        }
-                    }
-                    db.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
@@ -223,6 +248,22 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.ColorList = db.CT_Colors.Where(x => x.Active == true).ToList();
+                model.CategoryList = new List<SelectListItem>();
+                List<Category> lstData = db.Categories.ToList();
+                var initItem = new SelectListItem();
+                initItem.Value = "".ToString();
+                initItem.Text = "-- Choose specified category of product--";
+                model.CategoryList.Add(initItem);
+
+                foreach (var item in lstData)
+                {
+                    var tempItem = new SelectListItem();
+                    tempItem.Value = item.ID.ToString();
+                    tempItem.Text = item.CategoryName;
+
+                    model.CategoryList.Add(tempItem);
+                }
                 TempData["StatusMessage"] = ex.Message;
                 return View(model);
             }
@@ -304,7 +345,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult ImageDelete(int id)
         {
-            var image = db.Images.Find(id);
+            var image = db.Images.Find(Convert.ToInt64(id));
             if (image != null)
             {
                 db.Images.Remove(image);

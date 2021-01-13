@@ -35,7 +35,7 @@
     
     @if (Model.ID > 0)
     {
-        <span> Edit product infomation  </span>
+        <span> Edit product infomation: <i>@Model.ProductName</i>  </span>
     }
     else
     {
@@ -302,7 +302,7 @@
                             dataType: 'json',
                             success: function (response) {
                                 if (response.status == true) {
-                                    deleteBtn.parent('div.img-frame').remove();
+                                    deleteBtn.parents('div.col-md-3.m-4.img-frame').remove();
                                     swal("The image has been deleted!", {
                                         icon: "success",
                                     });
@@ -352,39 +352,40 @@
         IndexUpdate();
     }
     function changeTab(evt, targetTab) {
-        debugger;
+        
         var currentTab = $('div.tab').find('.btn.btn-outline-dark.tablinks.active').attr('id');
         if (currentTab == "infoTab") {
 
-                if ($('#form').valid()) {
-                    openTab(evt, targetTab);
-                    return 0;
-                }
-                else {
-                    return 0;
-                }
-
-        }
-        if (currentTab == 'imageTab') {
             if ($('#form').valid()) {
                 openTab(evt, targetTab);
-                return 0;
+                return false;
             }
             else {
-                return 0;
+                return false;
             }
+
         }
-        if (currentTab == 'propertyTab') {
+        else if (currentTab == 'imageTab') {
             if ($('#form').valid()) {
                 openTab(evt, targetTab);
-                return 0;
+                return false;
             }
             else {
-                return 0;
+                return false;
             }
         }
-        openTab(evt,"InfoTab")
-
+        else if (currentTab == 'propertyTab') {
+            if ($('#form').valid()) {
+                openTab(evt, targetTab);
+                return false;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            openTab(evt, "InfoTab")
+        }
     }
     document.getElementById("infoTab").click();
     function openTab(evt, tabName) {

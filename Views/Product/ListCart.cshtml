@@ -144,28 +144,24 @@
 <script>
     $(document).ready(function () {
 
-        // tag html has class attribute ".updateCart"
+       
         $(".updateCart").click(function (event) {
-            //chặn thực thi default action of the event
-            //debugger;
-            //chặn thẻ a load sang action khác
-                                        event.preventDefault();
+            
+            event.preventDefault();
             var quantity = $(".quantity_" + $(this).attr("data-id")).val();
 
             $.ajax({
-                                            type: "POST",
+                type: "POST",
                 url:"@Url.Action("updateCart","Product")",
                 data:
-                                            {
-                                                Id: $(this).attr("data-id"),
+                {
+                    Id: $(this).attr("data-id"),
                     Quantity: quantity
                 },
                 success: function (result) {
-                                                //debugger;
-                                                window.location.href = '@Url.Action("ListCart","Product")';
-                                            }
-
-                                        });
+                window.location.href = '@Url.Action("ListCart","Product")';
+                }
+                });
         });
     })
 </script>

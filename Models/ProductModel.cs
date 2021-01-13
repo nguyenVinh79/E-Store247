@@ -24,11 +24,11 @@ namespace ShopBanHang.Models
 
         public string ImagePath { get; set; }
 
-        [Range(0, 10000000, ErrorMessage = "Enter number between 0 to 10.000.000")]
+        [Range(0, 100000000, ErrorMessage = "Enter number between 0 to 100.000.000")]
         public double? UnitPrice { get; set; }
 
 
-        [Range(0, 10000000, ErrorMessage = "Enter number between 0 to 10.000.000")]
+        [Range(0, 100000000, ErrorMessage = "Enter number between 0 to 100.000.000")]
         public double? UnitPriceNew { get; set; }
 
         [Required(ErrorMessage = "Bắt Buộc Nhập")]

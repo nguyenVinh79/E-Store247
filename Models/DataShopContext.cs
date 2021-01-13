@@ -40,7 +40,9 @@ namespace ShopBanHang.Models
         public DbSet<Relate> Relatives { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<ProductColorSize> ProductColorSizes { get; set; }
-
+        public DbSet<CT_Province> CT_Provinces { get; set; }
+        public DbSet<CT_District> CT_Districts { get; set; }
+        public DbSet<CT_Ward> CT_Wards { get; set; }
 
 
 
