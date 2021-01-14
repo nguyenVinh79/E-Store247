@@ -16,11 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210114043657_updateOrderTable.cs" />
+    <Compile Remove="Migrations\20210114043657_updateOrderTable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Areas\Admin\Models\Custom\ProductModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Service\" />
     <Folder Include="wwwroot\Image\Categories\" />
   </ItemGroup>
 
@@ -55,6 +59,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="MailKit" Version="2.10.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
@@ -63,6 +68,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="MimeKit" Version="2.10.1" />
   </ItemGroup>
 
   <ItemGroup>

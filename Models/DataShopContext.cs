@@ -10,18 +10,11 @@ namespace ShopBanHang.Models
 {
     public class DataShopContext: IdentityDbContext<AppUser>
     {
-        //===== Cach 000
         public DataShopContext(DbContextOptions options) : base(options)
         {
 
         }
 
-        //doc them https://www.tektutorialshub.com/entity-framework-core/ef-core-database-connection-string/
-
-     
-     
-
-        //Danh muc dung chung
         public DbSet<CT_Color> CT_Colors { get; set; }
         public DbSet<CT_Size> CT_Sizes { get; set; }
         public DbSet<CT_Material> CT_Materials { get; set; }
@@ -43,9 +36,10 @@ namespace ShopBanHang.Models
         public DbSet<CT_Province> CT_Provinces { get; set; }
         public DbSet<CT_District> CT_Districts { get; set; }
         public DbSet<CT_Ward> CT_Wards { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
-
-
+        public DbSet<CustomerInfo> CustomerInfos { get; set; }
 
         //===== Cach 001
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

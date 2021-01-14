@@ -4,8 +4,10 @@
 
 @{ var listCart = ViewBag.carts != null ? (List<CartModel>)ViewBag.carts : new List<CartModel>(); }
 <div class="container">
-    <h1>Shopping Cart</h1>
-    <div class="list-cart">
+    <div class="text-center py-2">
+        <h1>Shopping Cart</h1>
+    </div>
+    @*<div class="list-cart">
         <table class="cart" border="1">
             <tr>
                 <th>#</th>
@@ -35,12 +37,12 @@
     </tr>
  } }
         </table>
-    </div>
+    </div>*@
     <section class="section-content padding-y bg-white">
         <div class="container">
 
             <div class="row">
-                <main class="col-md-9">
+                <main class="col-md-12">
                     <div class="card">
 
                         <table class="table table-borderless table-shopping-cart">
@@ -56,7 +58,7 @@
                                 @foreach (var item in listCart)
                                 {
                                     string txt_class = "quantity_" + item.DetailProduct.Id;
-                                    STT++;
+                                    
                                     double total = item.DetailProduct.UnitPriceNew * item.Quantity;
                                 <tr>
                                     <td>
@@ -88,7 +90,7 @@
                         </table>
 
                         <div class="card-body border-top">
-                            <a href="#" class="btn btn-primary float-md-right"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
+                            <a href="/checkout" class="btn btn-primary float-md-right"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
                             <a href="/" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
                         </div>
                     </div> <!-- card.// -->
@@ -98,7 +100,7 @@
                     </div>
 
                 </main> <!-- col.// -->
-                <aside class="col-md-3">
+                <!--<aside class="col-md-3">
                     <div class="card mb-3">
                         <div class="card-body">
                             <form>
@@ -112,9 +114,9 @@
                                     </div>
                                 </div>
                             </form>
-                        </div> <!-- card-body.// -->
-                    </div>  <!-- card .// -->
-                    <div class="card">
+                        </div>--> <!-- card-body.// -->
+                    <!--</div>-->  <!-- card .// -->
+                    <!--<div class="card">
                         <div class="card-body">
                             <dl class="dlist-align">
                                 <dt>Total price:</dt>
@@ -133,9 +135,9 @@
                                 <img src="images/misc/payments.png" height="26">
                             </p>
 
-                        </div> <!-- card-body.// -->
-                    </div>  <!-- card .// -->
-                </aside> <!-- col.// -->
+                        </div>--> <!-- card-body.// -->
+                    <!--</div>-->  <!-- card .// -->
+                <!--</aside>--> <!-- col.// -->
             </div>
 
         </div> <!-- container .//  -->

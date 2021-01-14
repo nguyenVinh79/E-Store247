@@ -10,11 +10,11 @@ namespace ShopBanHang
         {
             CreateMap<ProductModel, Product>();
             CreateMap<Product, ProductModel>();
-            CreateMap<Category, CategoryModel>();
-            CreateMap<CategoryModel, Category>();
+            CreateMap<Category, CategoryModel>().ReverseMap();
             CreateMap<Supplier, SupplierVM>().ReverseMap();
             CreateMap<CT_Color, ColorModel>().ReverseMap();
             CreateMap<CT_WarrantyTime, WarrantyModel>().ReverseMap();
+            CreateMap<CustomerInfo, CustomerInfoModel>().ReverseMap();
         }
     }
 }

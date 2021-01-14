@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShopBanHang.Models;
+using ShopBanHang.Service;
+using ShopBanHang.Settings;
 
 namespace ShopBanHang
 {
@@ -38,7 +40,7 @@ namespace ShopBanHang
                 options => options.UseSqlServer(connectionString)
             );
 
-            #region Session cấu hình với option thời gian tồn tại trên server
+            #region Session configuration
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -79,6 +81,10 @@ namespace ShopBanHang
             });
 
             #endregion
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
+            services.AddTransient<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
