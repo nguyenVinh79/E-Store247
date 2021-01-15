@@ -1,0 +1,42 @@
+﻿<div class="seach-content">
+    @using (Html.BeginForm("Search", "Product", FormMethod.Get))
+    {
+
+        <div class="row pb-4">
+
+            <div class="col-md-4">
+                <input style="margin-top:0px" name="ProductName" id="ProductName" value="@ViewBag.ProductName" placeholder="-- Enter code/product name --" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                @Html.DropDownList("CategoryID", null, "-- Choose Category --", new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-2">
+                <select class="form-control" id="OrderBy" name="OrderBy">
+                    <option value="">-- Sort -- </option>
+                    @if (ViewBag.OrderBy == "GiaTang")
+                    {
+                        <option value="GiaTang" selected>Price Increase</option>
+                        <option value="GiaGiam">Price Decrease</option>
+                    }
+                    else if (ViewBag.OrderBy == "GiaGiam")
+                    {
+                        <option value="GiaTang">Price Increase</option>
+                        <option value="GiaGiam" selected>Price Decrease</option>
+                    }
+                    else
+                    {
+                        <option value="GiaTang">Price Increase</option>
+                        <option value="GiaGiam" >Price Decrease</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-1" style="text-align: center;padding: 0px 0 0 0;">
+                <button style="margin:0 auto" type="submit" class="btn btn-success">Searching</button>
+            </div>
+        </div>
+
+    }
+</div>

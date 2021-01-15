@@ -1,0 +1,117 @@
+﻿@model List<SearchProduct_Result>
+@{
+    ViewData["Title"] = "Search";
+}
+
+
+@section CSS{ 
+<style>
+    .myButton {
+        box-shadow: inset 0px 0px 0px 0px #97c4fe;
+        background: linear-gradient(to bottom, #3d94f6 5%, #1e62d0 100%);
+        background-color: #3d94f6;
+        border-radius: 3px;
+        border: 1px solid #337fed;
+        display: inline-block;
+        cursor: pointer;
+        color: white;
+        font-family: Arial;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 10px 29px;
+        text-decoration: none;
+        text-shadow: 0px 1px 0px #1570cd;
+    }
+
+        .myButton:hover {
+            background: linear-gradient(to bottom, #1e62d0 5%, #3d94f6 100%);
+            background-color: #1e62d0;
+        }
+
+        .myButton:active {
+            position: relative;
+            top: 1px;
+        }
+</style>
+}
+<div class="container">
+    <h1>Search</h1>
+    @*  Loading searching bar *@
+    @Html.Partial("_Search")
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div id="bookListDiv">
+                @{Html.RenderPartial("ProductList", Model);}
+            </div>
+
+            @if (Model != null && Model.Count > 0 && ViewBag.MoreData == true)
+            {
+        <div class="text-center mb-2">
+            <div class="loadingDiv" style="text-align: center; display: none; margin-bottom:0px; clear:both" onclick="CategoryLoadMore();">
+                <span class="spinner-grow spinner-grow-sm text-success" role="status" aria-hidden="true"></span>
+                <span class="spinner-grow spinner-grow-sm text-success" role="status" aria-hidden="true"></span>
+                <span class="spinner-grow spinner-grow-sm text-success" role="status" aria-hidden="true"></span>
+                <strong class="icondown"></strong>
+            </div>
+           
+            <a id="morelist" class="morelist btn myButton text-white" onclick="CategoryLoadMore();">
+
+                Load more
+            </a>
+        </div>
+            }
+
+            @*<div id="loadingDiv" style="text-align: center; display: none; margin-bottom: 20px; clear:both" onclick="CategoryLoadMore();">
+                    <img src="~/Image/ajax-loader.gif" />
+
+                </div>*@
+        </div>
+
+
+    </div>
+
+</div>
+@section scripts{
+    <script>
+        var BlockNumber = 2;  //Infinate Scroll starts from second block
+        var MoreData = false;
+        var inProgress = false;
+        var CategoryID = $("#CategoryID").val();
+        var ProductName = $("#ProductName").val()
+        var OrderBy = $('#OrderBy').val();
+
+        function CategoryLoadMore() {
+            inProgress = true;
+            $(".loadingDiv").show();
+            //$("#morelist").hide();
+
+            $.post("@Url.Action("InfinateScrollSearch", "Product")", {
+                "BlockNumber": BlockNumber, "CategoryID": CategoryID,
+                "ProductName": ProductName, "OrderBy": OrderBy
+            },
+                function (data) {
+                    BlockNumber = BlockNumber + 1;
+                    MoreData = data.moreData;
+                    debugger
+
+                    $("#bookListDiv").append(data.htmlString);
+
+
+                    inProgress = false;
+                    $(".loadingDiv").hide();
+                    if (MoreData == false) {
+                        $("#morelist").remove();
+                    }
+                    else {
+                        $("#morelist").show();
+
+                    }
+
+                   
+                });
+        }
+
+    </script>
+}

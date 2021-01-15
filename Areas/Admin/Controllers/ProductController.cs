@@ -71,25 +71,18 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 model.DetailImageList = db.Images.Where(x => x.ReferenceId == id).ToList();
                 
             }
+            #region Load category for dropdownlist
+            List<Category> categoryList = db.Categories.ToList();
             model.CategoryList = new List<SelectListItem>();
 
-            var initItem = new SelectListItem();
-            initItem.Value = "".ToString();
-            initItem.Text = "-- Choose specified category of product--";
-            model.CategoryList.Add(initItem);
+            var temp = new SelectListItem();
 
-            foreach (var item in lstData)
-            {
-                var tempItem = new SelectListItem();
-                tempItem.Value = item.ID.ToString();
-                tempItem.Text = item.CategoryName;
+            temp.Text = "----Assign category of product----";
+            temp.Value = "0";
+            model.CategoryList.Add(temp);
+            BindTree(categoryList, null, model.CategoryList);
 
-                model.CategoryList.Add(tempItem);
-            }
-
-
-
-
+            #endregion
             return View(model);
         }
 
@@ -249,21 +242,17 @@ namespace ShopBanHang.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 ViewBag.ColorList = db.CT_Colors.Where(x => x.Active == true).ToList();
+                #region Load category for dropdownlist
+                List<Category> categoryList = db.Categories.ToList();
                 model.CategoryList = new List<SelectListItem>();
-                List<Category> lstData = db.Categories.ToList();
-                var initItem = new SelectListItem();
-                initItem.Value = "".ToString();
-                initItem.Text = "-- Choose specified category of product--";
-                model.CategoryList.Add(initItem);
 
-                foreach (var item in lstData)
-                {
-                    var tempItem = new SelectListItem();
-                    tempItem.Value = item.ID.ToString();
-                    tempItem.Text = item.CategoryName;
+                var temp = new SelectListItem();
 
-                    model.CategoryList.Add(tempItem);
-                }
+                temp.Text = "----Assign category of product----";
+                temp.Value = "0";
+                model.CategoryList.Add(temp);
+                BindTree(categoryList, null, model.CategoryList);
+                #endregion
                 TempData["StatusMessage"] = ex.Message;
                 return View(model);
             }
@@ -287,13 +276,9 @@ namespace ShopBanHang.Areas.Admin.Controllers
             if (id == null)
             {
                 return RedirectToAction("NotFound");
-
-
             }
 
-
             var product = db.Products.Find(id);
-
 
             if (product == null)
             {
@@ -302,11 +287,6 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
 
             return View(product);
-
-
-
-
-
         }
 
 
@@ -401,6 +381,33 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 status = false,
                 message = "Delete failed!"
             });
+        }
+        public void BindTree(IEnumerable<Category> list, SelectListItem parentItem, List<SelectListItem> listParent)
+        {
+            string i = "";
+            i = i + "--";
+            var nodes = list.Where(x => parentItem == null ? x.ParentCategoryID == 0 : x.ParentCategoryID == int.Parse(parentItem.Value)).ToList();
+
+            foreach (var node in nodes)
+            {
+                if (node.Equals(nodes[nodes.Count - 1]) && node.ParentCategoryID != 0)
+                {
+                    i = i + "--";
+                }
+                SelectListItem newNode = new SelectListItem(node.CategoryName, node.ID.ToString());
+                if (parentItem == null)
+                {
+                    listParent.Add(newNode);
+                }
+                else
+                {
+                    listParent.Add(new SelectListItem($"{i} {newNode.Text}", newNode.Value));
+                }
+
+                BindTree(list, newNode, listParent);
+
+
+            }
         }
 
 

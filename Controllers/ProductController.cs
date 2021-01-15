@@ -3,14 +3,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using Newtonsoft.Json;
+using ShopBanHang.Helper;
 using ShopBanHang.Models;
 using ShopBanHang.Service;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopBanHang.Controllers
 {
@@ -20,12 +26,17 @@ namespace ShopBanHang.Controllers
         private readonly IMapper _mapper;
         private readonly IMailService mailService;
         private readonly IWebHostEnvironment _env;
-        public ProductController(DataShopContext dbcontext, IMapper mapper, IMailService mailService, IWebHostEnvironment env)
+        private readonly IConfiguration _configuration;
+        private readonly IViewRenderService _viewRenderService;
+        public ProductController(DataShopContext dbcontext, IMapper mapper, IMailService mailService, IWebHostEnvironment env,
+            IConfiguration conf, IViewRenderService renderService)
         {
             _db = dbcontext;
             _mapper = mapper;
             this.mailService = mailService;
             _env = env;
+            _configuration = conf;
+            _viewRenderService = renderService;
         }
 
         public IActionResult Index()
@@ -58,10 +69,6 @@ namespace ShopBanHang.Controllers
             return View();
         }
 
-        public IActionResult Search()
-        {
-            return View();
-        }
 
         #region Cart
 
@@ -397,7 +404,301 @@ namespace ShopBanHang.Controllers
         }
 
         #endregion Address
+        #region Search product
 
+        public ActionResult Search(int? CategoryID, string colorId, string sizeId, string giaTu, string giaDen, string ProductName = "", string OrderBy = "ID")
+        {
+
+            int BlockSize = 3; //pagesize
+            ViewBag.ProductName = ProductName;
+            ViewBag.OrderBy = OrderBy;
+
+
+            //Get data from db
+            List<SearchProduct_Result> lstProduct = GetProductSearch(1, BlockSize, CategoryID, ProductName, OrderBy);
+
+            //Tạo data cho combobox search
+
+            DropdownCategory(null, null);
+
+            //xử lý data
+            ViewBag.MoreData = false; //Còn data chưa lấy ra hết
+            if (lstProduct != null && lstProduct.Count > 0)
+            {
+                ViewBag.MoreData = lstProduct[0].TotalCount > BlockSize;
+            }
+
+
+            return View(lstProduct);
+        }
+
+        public List<Category> GetCategories()
+        {
+            List<Category> result = new List<Category>();
+            try
+            {
+                result = _db.Categories.AsNoTracking().OrderBy(p => p.Order).Where(m => m.IsDeleted == false || m.IsDeleted == null).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return result;
+        }
+
+        public void DropdownCategory(string title, int? CategoryID = 0)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            var category = GetCategories();
+
+            var idCateCurrent = 0;
+
+            if (CategoryID != null)
+            {
+                if (CategoryID == 0)
+                {
+                    //foreach (var cate in category)
+                    //{
+                    //    if (HelperSEO.ToSeoUrl(cate.CategoryName) == title)
+                    //    {
+                    //        idCateCurrent = cate.CategoryID;
+                    //        break;
+                    //    }
+                    //}
+                }
+                else
+                {
+                    idCateCurrent = CategoryID.Value;
+                }
+            }
+
+            foreach (var c in category)
+            {
+                if (c.ParentCategoryID == 0)
+                {
+                    list.Add(new SelectListItem
+                    {
+                        Selected = c.ID == idCateCurrent ? true : false,
+                        Text = c.CategoryName,
+                        Value = c.ID.ToString()
+                    });
+                    foreach (var cc in category)
+                    {
+                        if (cc.ParentCategoryID == c.ID)
+                        {
+                            list.Add(new SelectListItem
+                            {
+                                Selected = cc.ID == idCateCurrent ? true : false,
+                                Text = "---" + cc.CategoryName,
+                                Value = cc.ID.ToString()
+                            });
+                            foreach (var c3 in category)
+                            {
+                                if (c3.ParentCategoryID == cc.ID)
+                                {
+                                    list.Add(new SelectListItem
+                                    {
+                                        Selected = c3.ID == idCateCurrent ? true : false,
+
+                                        Text = "------" + c3.CategoryName,
+                                        Value = c3.ID.ToString()
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            ViewBag.CategoryID = list;
+        }
+
+        public List<SearchProduct_Result> GetProductSearch(int BlockNumber, int BlockSize, int? CategoryID = 0, string ProducName = "", string Order = "")
+        {
+            //var products = ProductManager.GetProduct(1, BlockSize);
+            List<SearchProduct_Result> productlist = new List<SearchProduct_Result>();
+            Category category = null;
+            int startIndex = (BlockNumber - 1) * BlockSize;
+
+            List<int> lstcateID = new List<int>();
+            if (CategoryID != 0)
+            {
+                var categorylist = _db.Categories.Where(m => m.IsDeleted == null || m.IsDeleted == false).ToList();
+
+                var cateRoot = categorylist.Where(x => x.ParentCategoryID == 0).ToList();
+
+                foreach (var cate in categorylist)
+                {
+                    if (cate.ID == CategoryID)
+                    {
+                        category = cate;
+                        break;
+                    }
+                }
+
+                //neu ton tai category thi get list danh sach san pham theo category
+                if (category != null)
+                {
+                    lstcateID = GetListChild(category.ID).Select(x => x.ID).ToList();
+                }
+            }
+
+            string listCategoryStr = string.Join(",", lstcateID);
+
+
+
+            List<SqlParameter> lstParas = new List<SqlParameter>();
+            SqlParameter para1 = new SqlParameter();
+            para1.ParameterName = "CategoryID";
+            para1.Value = listCategoryStr;
+            lstParas.Add(para1);
+
+            SqlParameter paraBlockNumber = new SqlParameter();
+            paraBlockNumber.ParameterName = "PageNum";
+            paraBlockNumber.Value = BlockNumber;
+            lstParas.Add(paraBlockNumber);
+
+            SqlParameter paraBlockSize = new SqlParameter();
+            paraBlockSize.ParameterName = "PageSize";
+            paraBlockSize.Value = BlockSize;
+            lstParas.Add(paraBlockSize);
+
+            SqlParameter paraOrder = new SqlParameter();
+            paraOrder.ParameterName = "OrderBy";
+            paraOrder.Value = Order;
+            lstParas.Add(paraOrder);
+
+            SqlParameter paraProducName = new SqlParameter();
+            paraProducName.ParameterName = "TenSP";
+            paraProducName.Value = ProducName;
+            lstParas.Add(paraProducName);
+
+            var storeName = "SearchProduct";
+            var dt = GetDataTableByStore(storeName, lstParas.ToArray());
+
+            List<SearchProduct_Result> dataResult = new List<SearchProduct_Result>();
+            dataResult = MyTool.ConvertDataTable<SearchProduct_Result>(dt);
+
+            return dataResult;
+        }
+
+        
+
+        public DataTable GetDataTableByStore(string storeName, SqlParameter[] parameters)
+        {
+            try
+            {
+                DataTable dataTable = new DataTable();
+
+                using (SqlConnection connection = new SqlConnection(_db.Database.GetDbConnection().ConnectionString))
+                {
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand(storeName, connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    if (parameters != null)
+                        cmd.Parameters.AddRange(parameters);
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                    dataAdapter.Fill(dataTable);
+                    connection.Close();
+                }
+
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public List<Category> GetListChild(long rootID)
+        {
+            var result = new List<Category>();
+            try
+            {
+
+
+                var lstAll = _db.Categories.AsNoTracking().Where(m => m.IsDeleted != true).ToList();
+
+                result.Add(lstAll.Where(x => x.ID == rootID).First());
+
+                var lstAll1 = lstAll.Where(p => p.ParentCategoryID == rootID && p.IsDeleted != true).ToList();
+                result.AddRange(lstAll1);
+
+                if (lstAll1 != null && lstAll1.Count > 0)
+                {
+                    foreach (var mp in lstAll1)
+                    {
+                        result.Add(mp);
+
+                        var temp = RenderMenuItem(lstAll, mp).ToList();
+                        if (temp != null && temp.Count > 0)
+                        {
+                            result.AddRange(temp);
+                        }
+                    }
+                }
+
+            }
+            catch (System.Exception ee)
+            {
+                return new List<Category>();
+                throw ee;
+            }
+
+            return result;
+        }
+
+        public static List<Category> RenderMenuItem(List<Category> menuList, Category mi)
+        {
+            var result = new List<Category>();
+
+            var list = menuList.Where(p => p.ParentCategoryID == mi.ID).ToList();
+
+            if (list != null && list.Count > 0)
+            {
+                foreach (var cp in menuList.Where(p => p.ParentCategoryID == mi.ID))
+                {
+                    result.Add(cp);
+                    result.AddRange(RenderMenuItem(menuList, cp));
+                }
+            }
+
+            return result;
+        }
+
+
+        //InfinateScrollSearch
+
+        public async Task<IActionResult> InfinateScrollSearch(int BlockNumber, int? CategoryID, string ProductName = "", string OrderBy = "ID")
+        {
+            System.Threading.Thread.Sleep(900);
+
+            var jsonModel = new JsonModel();
+            int BlockSize = int.Parse(this._configuration["BlockSize_Product"]);
+            List<SearchProduct_Result> lstProduct = GetProductSearch(BlockNumber, BlockSize, CategoryID, ProductName, OrderBy);
+
+            jsonModel.MoreData = false;
+
+            if (lstProduct != null && lstProduct.Count > 0)
+            {
+                jsonModel.MoreData = lstProduct[0].TotalCount > BlockSize * BlockNumber;
+            }
+
+            jsonModel.HTMLString = await _viewRenderService.RenderToStringAsync("Product/ProductList", lstProduct);
+            return Json(jsonModel);
+
+
+        }
+
+        public class JsonModel
+        {
+            public string HTMLString { get; set; }
+
+            public bool MoreData { get; set; }
+        }
+        #endregion Search product
         public string CreatOderDetailHTML(List<OrderDetail> lstorderdetail, double? total, double? ship)
         {
             double sumorder = total.Value + ship.Value;
@@ -406,10 +707,10 @@ namespace ShopBanHang.Controllers
             string body = "<table width='650' cellspacing='0' cellpadding='0' border='0' style='border: 1px solid #eaeaea'>";
             body += "<thead>";
             body += "<tr>";
-            body += "<th bgcolor='#CE4646' align='left' style='font-size: 13px; color:#fff; padding: 3px 9px'>Product</th>";
-            body += " <th bgcolor='#CE4646' align='left' style='font-size:13px;padding:3px 9px'></th>";
-            body += "<th bgcolor='#CE4646' align='center' style='font-size: 13px; color:#fff; padding: 3px 9px'>Quantity</th>";
-            body += " <th bgcolor='#CE4646' align='right' style='font-size: 13px; color:#fff; padding: 3px 9px'>Total</th>";
+            body += "<th bgcolor='#261b4f' align='left' style='font-size: 13px; color:#fff; padding: 3px 9px'>Product</th>";
+            body += " <th bgcolor='#261b4f' align='left' style='font-size:13px;padding:3px 9px'></th>";
+            body += "<th bgcolor='#261b4f' align='center' style='font-size: 13px; color:#fff; padding: 3px 9px'>Quantity</th>";
+            body += " <th bgcolor='#261b4f' align='right' style='font-size: 13px; color:#fff; padding: 3px 9px'>Subtotal</th>";
             body += "</tr>";
             body += "</thead>";
             foreach (var item in lstorderdetail)
@@ -422,9 +723,9 @@ namespace ShopBanHang.Controllers
                 body += " <td valign='top' align='left' style='font-size: 11px; padding: 3px 9px; border-bottom: 1px dotted #cccccc'>";
                 body += "<strong style='font-size: 11px'>" + product.ProductName + "</strong>";
                 body += "<dl style='margin: 0; padding: 0'>";
-                body += "<dt><strong><em>Color</em></strong></dt>";
+                body += "<dt><strong><em>Color:</em></strong></dt>";
 
-                body += "<dd style='margin: 0; padding: 0 0 0 9px'>" + item.ColorSize + "</dd>";
+                body += "<dd style='margin: 0; padding: 0 0 0 15px'>" + item.ColorSize + "</dd>";
 
                 body += "</dl>";
                 body += "</td>";
@@ -436,7 +737,7 @@ namespace ShopBanHang.Controllers
                 body += "</tr>";
             }
             body += "<tr>";
-            body += "<td align='right' style='padding: 3px 9px' colspan='3'>Total</td>";
+            body += "<td align='right' style='padding: 3px 9px' colspan='3'>Total Payment</td>";
             body += "<td align='right' style='padding: 3px 9px'>";
             body += "<span>" + string.Format("{0:0,0 vnd}", total) + "</span></td>";
             body += "</tr>";
@@ -447,7 +748,7 @@ namespace ShopBanHang.Controllers
             //body += "</tr>";
             //body += "<tr>";
             //body += "<td align='right' style='padding: 3px 9px' colspan='3'>";
-            //body += "<strong>Total</strong>";
+            //body += "<strong>Total Payment</strong>";
             //body += "</td>";
             //body += "<td align='right' style='padding: 3px 9px'>";
             //body += "<strong><span>" + string.Format("{0:0,0 vnd}", sumorder) + "</span></strong>";
