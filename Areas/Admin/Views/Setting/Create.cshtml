@@ -1,0 +1,62 @@
+﻿@model SettingModel
+@{
+    ViewData["Title"] = "Create setting";
+}
+
+<h1 class="h3 mb-2 text-gray-800">
+    Setting list  /
+    @if (Model.ID > 0)
+    {
+        <span> Edit   </span>
+    }
+    else
+    {
+        <span> Create</span>
+    }
+</h1>
+
+@using (Html.BeginForm("Create", "Setting", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.ID)
+
+    <div class="form-group">
+        <label>Code</label>
+        @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @maxlength = 50 })
+        @Html.ValidationMessageFor(model => model.Code, null, new { @class = "validate" })
+    </div>
+
+    @*<div class="form-group">
+        <label>Is HTML</label>
+        @Html.CheckBoxFor(m => m.IsHTML, new { @class = "form-control", @maxlength = 3 })
+        @Html.ValidationMessageFor(model => model.IsHTML, null, new { @class = "validate" })
+    </div>*@
+
+    <div class="form-group">
+        <label>Type</label>
+        @Html.DropDownListFor(m => m.SettingType, Html.GetEnumSelectList<Enums.SettingTypeData>())
+        @Html.ValidationMessageFor(model => model.SettingType, null, new { @class = "validate" })
+    </div>
+
+
+@if (Model.SettingType == 1)
+{
+    <div class="form-group">
+        <label>Nội dung</label>
+
+
+        @Html.TextAreaFor(m => m.Value, new { @class = "form-control summernote", })
+        @Html.ValidationMessageFor(model => model.Value, null, new { @class = "validate" })
+    </div>
+}
+else
+{
+    <div class="form-group">
+        <label>Content</label>
+        @Html.TextBoxFor(m => m.Value, Model.Value, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Value, null, new { @class = "validate" })
+    </div>
+}
+
+<button type="submit" class="btn btn-primary">Submit</button>
+
+}

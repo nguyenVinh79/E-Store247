@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using ShopBanHang.Helper;
 using ShopBanHang.Models;
 
 namespace ShopBanHang.Controllers
@@ -33,7 +34,7 @@ namespace ShopBanHang.Controllers
             //var defaultLogLevel = _configuration["Logging:LogLevel:Default"];
             //int pagesize = int.Parse(_configuration["pagesize"]);
 
-            var Slider = _db.Banners.Where(x => x.IsShow == true && x.Type == "Slider").ToList();
+            var Slider = _db.Banners.Where(x => x.IsShow == true && x.Type == 1).ToList();
             var Categories = _db.Categories.Where(x => x.IsDeleted != true).ToList();
 
             ViewBag.Slider = Slider;
@@ -41,11 +42,23 @@ namespace ShopBanHang.Controllers
 
             #region GetData Product
 
-            var lstproduct = _db.Products.Where(x => x.IsDeleted != true).ToList();
+            var lstproduct = _db.Products.Where(x => x.IsDeleted != true && x.IsNew == true).Select(m=> 
+            new Product {
+                ID = m.ID,
+                ProductName = m.ProductName,
+                ImagePath = m.ImagePath,
+                IsNew = m.IsNew,
+                ShortDecription = m.ShortDecription,
+                UnitPriceNew = m.UnitPriceNew,
+                CT_WarrantyTimeName = m.CT_WarrantyTimeName,
+
+
+
+            }).ToList();
 
             #endregion
 
-            return View();
+            return View(lstproduct);
         }
 
         public IActionResult Privacy()

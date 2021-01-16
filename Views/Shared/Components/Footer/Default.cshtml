@@ -1,15 +1,34 @@
-﻿<!-- ========================= FOOTER ========================= -->
+﻿@model IEnumerable<ShopBanHang.Models.Setting>
+
+<!-- ========================= FOOTER ========================= -->
 <footer class="section-footer border-top">
     <div class="container">
+ 
         <section class="footer-top padding-y">
             <div class="row">
                 <aside class="col-md col-6">
                     <h6 class="title">Brands</h6>
                     <ul class="list-unstyled">
-                        <li> <a href="#">Apple</a></li>
-                        <li> <a href="#">Samsung</a></li>
-                        <li> <a href="#">Asus</a></li>
-                        <li> <a href="#">HP</a></li>
+                        @foreach (var item in Model)
+                        {
+                            if (item.Code == "Apple")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                            if (item.Code == "Samsung")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                            if (item.Code == "Asus")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                            if (item.Code == "HP")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                        }
+
                     </ul>
                 </aside>
                 <aside class="col-md col-6">
@@ -35,9 +54,22 @@
                 <aside class="col-md col-6">
                     <h6 class="title">Account</h6>
                     <ul class="list-unstyled">
-                        <li> <a href="#"> User Login </a></li>
-                        <li> <a href="#"> User register </a></li>
-                        <li> <a href="#"> Account Setting </a></li>
+                        @foreach (var item in Model)
+                        {
+                            if (item.Code == "User Login")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                            if (item.Code == "User register")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                            if (item.Code == "Account Settings")
+                            {
+                                <li> <a href="#">@Html.Raw(item.Value)</a></li>
+                            }
+                        }                        
+                       
                         <li> <a href="#"> My Orders </a></li>
                     </ul>
                 </aside>
@@ -55,12 +87,31 @@
 
         <section class="footer-bottom border-top row">
             <div class="col-md-2">
-                <p class="text-muted"> &copy 2019 Company name </p>
+                <p class="text-muted"> &copy 2020 Store-247 </p>
             </div>
             <div class="col-md-8 text-md-center">
-                <span class="px-2">info@pixsellz.io</span>
-                <span class="px-2">+879-332-9375</span>
-                <span class="px-2">Street name 123, Avanue abc</span>
+                @foreach (var item in Model)
+                {
+                    if (item.Code == "Store Email")
+                    {
+                        <span class="px-2">@Html.Raw(item.Value)</span>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    if (item.Code == "Hotline")
+                    {
+                        <span class="px-2">@Html.Raw(item.Value)</span>
+                    }
+                }
+                @foreach (var item in Model)
+                {
+                    if (item.Code == "Store Address")
+                    {
+                        <span class="px-2">@Html.Raw(item.Value)</span>
+                    }
+                }
+
             </div>
             <div class="col-md-2 text-md-right text-muted">
                 <i class="fab fa-lg fa-cc-visa"></i>

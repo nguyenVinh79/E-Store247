@@ -3,24 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Models
+namespace ShopBanHang.Areas.Admin.Models
 {
-    
-    public class Banner
+    public class BannerModel
     {
-       
-     
         public long ID { get; set; }
-        
         public string ImagePath { get; set; }     
         
-        public int Type { get; set; }
+        public int Type { get; set; } 
         
-        public bool? IsShow { get; set; }
+        public bool IsShow { get; set; }
         
         public string Title { get; set; }
-
-        public string Description { get; set; }
 
         public string LinkTo { get; set; }
     
@@ -30,10 +24,6 @@ namespace ShopBanHang.Models
 
         public DateTime? UpdateDate { get; set; }
         public DateTime? CreateDate { get; set; }
-        public string CreateBy { get; set; }
-        public string UpdateBy { get; set; }
-
-
     }
 
 }

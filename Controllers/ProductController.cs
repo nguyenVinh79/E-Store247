@@ -405,7 +405,6 @@ namespace ShopBanHang.Controllers
 
         #endregion Address
         #region Search product
-
         public ActionResult Search(int? CategoryID, string colorId, string sizeId, string giaTu, string giaDen, string ProductName = "", string OrderBy = "ID")
         {
 

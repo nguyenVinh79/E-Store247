@@ -38,8 +38,7 @@ namespace ShopBanHang.Models
         public DbSet<CT_Ward> CT_Wards { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-
-        public DbSet<CustomerInfo> CustomerInfos { get; set; }
+        public DbSet<CustomerInfo> CustomerInfos { get; set;}
 
         //===== Cach 001
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

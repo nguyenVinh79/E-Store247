@@ -34,6 +34,10 @@
     <None Include="Areas\Admin\Views\Product\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Product\Index.cshtml" />
     <None Include="Areas\Admin\Views\Product\NOTFOUND.cshtml" />
+    <None Include="Areas\Admin\Views\Setting\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Setting\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\Setting\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Setting\NOTFOUND.cshtml" />
     <None Include="Views\Account\ConfirmEmail.cshtml" />
     <None Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <None Include="Views\Account\ExternalLoginFailure.cshtml" />

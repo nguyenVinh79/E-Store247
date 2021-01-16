@@ -347,6 +347,18 @@
         var initInputQuantity = $("input[name='quantity']").val();
         var initProductID = $('input[name="sizeChoose"]:checked').val();
         $(".add-cart-btn").attr("href", "/product/addcart/?id=" + initProductID + "&quantity=" + initInputQuantity);
+
+        $(".add-cart-btn").click(function () {
+            debugger;
+            var available = $('input[name="sizeChoose"]:checked').data("hethang");
+            if (available == false) {
+                event.preventDefault();
+                swal("This product is out of stock, please choose another product!", {
+                    icon: "warning",
+                });
+                
+            }
+        });
         
     });
     function QtyChange(obj) {

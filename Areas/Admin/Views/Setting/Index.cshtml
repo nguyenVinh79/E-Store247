@@ -1,0 +1,51 @@
+﻿@model List<ShopBanHang.Models.Setting>
+@{
+    ViewData["Title"] = "setting list";
+}
+<h1>
+    @*@TempData["StatusMessage"]*@
+</h1>
+
+<h1 class="h3 mb-2 text-gray-800">Setting List</h1>
+
+<a class="btn btn-success float-right margin-bottom-20 btn-sm mb-2" href="/admin/Setting/create">  <i class="fa fa-plus"></i> Create</a>
+ 
+<table class="table table-bordered">
+    <thead>
+        <tr>
+          
+            <th>Code</th>
+            <th>Value</th>
+            
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="loadlist">
+        @foreach (var item in Model)
+        {
+            
+            <tr>
+            
+            <th>@item.Code</th>
+            <th>
+                @if (item.SettingType == 1)
+                {
+                    @Html.Raw(item.Value)
+                }
+                else {
+
+                    @item.Value
+                        }
+            </th>
+            <th>
+
+                <a class="btn btn-primary" asp-controller="Setting" asp-action="Create" asp-route-Id="@item.ID">Edit</a>
+                <a class="btn btn-danger" asp-controller="Setting" asp-action="Delete" asp-route-Id="@item.ID">Delete</a>
+
+            </th>
+        </tr>
+
+        }
+    </tbody>
+</table>
+ 

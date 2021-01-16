@@ -15,6 +15,8 @@ namespace ShopBanHang
             CreateMap<CT_Color, ColorModel>().ReverseMap();
             CreateMap<CT_WarrantyTime, WarrantyModel>().ReverseMap();
             CreateMap<CustomerInfo, CustomerInfoModel>().ReverseMap();
+            CreateMap<Setting, SettingModel>().ReverseMap();
+            CreateMap<Banner, BannerModel>().ReverseMap();
         }
     }
 }

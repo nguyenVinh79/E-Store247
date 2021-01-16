@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Product>
+@{
     ViewData["Title"] = "Hompage";
 
  
@@ -12,19 +13,20 @@
 
         <header class="section-heading">
             <a href="#" class="btn btn-outline-primary float-right">See all</a>
-            <h3 class="section-title">Popular products</h3>
+            <h3 class="section-title">New Smartphones</h3>
         </header><!-- sect-heading -->
 
 
         <div class="row">
 
-            @for (int i = 0; i < 10; i++)
+            @for (int i = 0; i < Model.Count; i++)
             {
-                 
-                @*@Html.PartialAsync("_ProductItem",)*@
-                
-            }
-           
+             
+                await Html.RenderPartialAsync("_ProductItem", Model[i]);
+                        
+
+             }
+
         </div> <!-- row.// -->
 
     </div><!-- container // -->
