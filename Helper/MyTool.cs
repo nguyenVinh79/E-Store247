@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace ECommerce.Project.Helper
 {
-    public class MyTool
+    public static class MyTool
     {
         public static string UploadImage(IFormFile myFile, params string[] path)
         {
@@ -61,6 +62,23 @@ namespace ECommerce.Project.Helper
                 }
             }
             return obj;
+        }
+        public static string ToUrlFriendly(this string url)
+        {
+            var result = url.ToLower().Trim();
+            result = Regex.Replace(result, " ", "-");
+            result = Regex.Replace(result, "áàạảãâấầậẩẫăắằặẳẵ", "a");
+            result = Regex.Replace(result, "éèẹẻẽêếềệểễ", "e");
+            result = Regex.Replace(result, "óòọỏõôốồộổỗơớờợởỡ", "o");
+            result = Regex.Replace(result, "úùụủũưứừựửữ", "u");
+            result = Regex.Replace(result, "íìịỉĩ", "i");
+            result = Regex.Replace(result, "ýỳỵỷỹ", "y");
+            result = Regex.Replace(result, "đ", "d");
+            result = Regex.Replace(result, "[^a-z0-9-]", "");
+            result = Regex.Replace(result, "(-)+", "-");
+            
+
+            return result;
         }
     }
 }

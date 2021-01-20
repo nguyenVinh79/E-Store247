@@ -1,7 +1,8 @@
 ﻿@model Product
 
 @{
-    var link = $"{Shop.Common.HelperSEO.ToSeoUrl(Model.ProductName)}-{Model.ID}";
+    //var link = $"{Shop.Common.HelperSEO.ToSeoUrl(Model.ProductName)}-{Model.ID}";
+    var link = $"{Model.ProductName.ToUrlFriendly()}-{Model.ID}";
 }
 <div class="col-md-3">
     <figure class="card card-product-grid">

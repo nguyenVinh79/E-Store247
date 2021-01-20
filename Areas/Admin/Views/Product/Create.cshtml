@@ -126,16 +126,19 @@ else
                      <tr class="row m-0">
                          <td class="d-inline-block col-3">
                              <div class="form-group">
-
-                                 <input name="Avatar" type="file" class="py-2" />
-
-                                 @if (!string.IsNullOrEmpty(Model.ImagePath))
-                                 {
-                                <div class="text-center">
-                                <img height="200" src="~/Image/Products/@Model.ImagePath" />
-                                </div>}
-
+                                 <input name="Avatar" type="file" id="AvatarUpload"  style="white-space: nowrap; overflow: hidden;
+                                        text-overflow: ellipsis; width: 280px;" />
+                             </div>
+                             @if (!string.IsNullOrEmpty(Model.ImagePath))
+                             {
+                                <div class="col-md-3 m-4 img-frame pt-4">
+                                    <div class="text-center">
+                                        <img height="200px" src="~/Image/Products/@Model.ImagePath"/>
+                                    </div>
                                 </div>
+                             }
+
+                         
                          </td>
                          <td class="d-inline-block col-9">
                              <div class="form-group">
@@ -484,7 +487,7 @@ else
 
     </script>
     <script type="text/javascript">
-     
+       
         // AutoNumeric initialisation
         const anElement = new AutoNumeric('.price-input ', {
             currencySymbolPlacement: "s",
