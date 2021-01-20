@@ -1,4 +1,4 @@
-﻿namespace ShopBanHang.Settings
+﻿namespace ECommerce.Project.Settings
 {
     public class MailSettings
     {

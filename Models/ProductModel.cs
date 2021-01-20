@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class ProductModel
     {

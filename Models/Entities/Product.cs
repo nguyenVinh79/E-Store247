@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class Product
     {

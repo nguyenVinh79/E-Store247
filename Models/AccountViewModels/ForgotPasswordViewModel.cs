@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Models.AccountViewModels
+namespace ECommerce.Project.Models.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {

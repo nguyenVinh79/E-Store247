@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ShopBanHang.Models.ManageViewModels
+namespace ECommerce.Project.Models.ManageViewModels
 {
     public class DisplayRecoveryCodesViewModel
     {

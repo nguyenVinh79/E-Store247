@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public partial class Supplier
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShopBanHang.Models;
+using ECommerce.Project.Models;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.ViewComponents
+namespace ECommerce.Project.ViewComponents
 {
     public class FooterViewComponent : ViewComponent
     {

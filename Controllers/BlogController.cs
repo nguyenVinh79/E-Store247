@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ShopBanHang.Controllers
+namespace ECommerce.Project.Controllers
 {
     public class BlogController : BaseController
     {

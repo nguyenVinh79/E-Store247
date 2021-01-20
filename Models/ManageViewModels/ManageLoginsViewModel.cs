@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace ShopBanHang.Models.ManageViewModels
+namespace ECommerce.Project.Models.ManageViewModels
 {
     public class ManageLoginsViewModel
     {

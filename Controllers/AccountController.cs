@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using ShopBanHang.Models;
-using ShopBanHang.Models.AccountViewModels;
+using ECommerce.Project.Models;
+using ECommerce.Project.Models.AccountViewModels;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Controllers
+namespace ECommerce.Project.Controllers
 {
     [Authorize]
     public class AccountController : Controller

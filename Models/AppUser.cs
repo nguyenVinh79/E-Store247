@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class AppUser: IdentityUser
     {

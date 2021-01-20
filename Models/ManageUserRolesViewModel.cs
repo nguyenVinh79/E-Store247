@@ -1,4 +1,4 @@
-﻿namespace ShopBanHang.Models
+﻿namespace ECommerce.Project.Models
 {
     public class ManageUserRolesViewModel
     {

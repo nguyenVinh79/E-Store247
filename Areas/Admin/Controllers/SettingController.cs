@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using ShopBanHang.Areas.Admin.Models;
-using ShopBanHang.Models;
+using ECommerce.Project.Areas.Admin.Models;
+using ECommerce.Project.Models;
 using System;
 using System.Linq;
 
-namespace ShopBanHang.Areas.Admin.Controllers
+namespace ECommerce.Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize]

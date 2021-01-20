@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class CategoryModel
     {

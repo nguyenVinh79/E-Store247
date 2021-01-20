@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class MailRequest
     {

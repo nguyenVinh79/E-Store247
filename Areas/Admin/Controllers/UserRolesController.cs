@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShopBanHang.Models;
+using ECommerce.Project.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Areas.Admin.Controllers
+namespace ECommerce.Project.Areas.Admin.Controllers
 {
     [Authorize]
     [Area("Admin")]

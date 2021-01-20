@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using ShopBanHang.Models;
-using ShopBanHang.Models.ManageViewModels;
+using ECommerce.Project.Models;
+using ECommerce.Project.Models.ManageViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 

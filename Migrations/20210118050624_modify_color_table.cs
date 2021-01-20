@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ShopBanHang.Migrations
+namespace ECommerce.Project.Migrations
 {
     public partial class modify_color_table : Migration
     {

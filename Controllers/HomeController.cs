@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using ShopBanHang.Models;
+using ECommerce.Project.Models;
 using System.Diagnostics;
 using System.Linq;
 
-namespace ShopBanHang.Controllers
+namespace ECommerce.Project.Controllers
 {
     public class HomeController : BaseController
     {

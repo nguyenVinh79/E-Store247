@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ShopBanHang.Models.ManageViewModels
+namespace ECommerce.Project.Models.ManageViewModels
 {
     public class ConfigureTwoFactorViewModel
     {

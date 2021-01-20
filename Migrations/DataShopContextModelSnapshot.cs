@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ShopBanHang.Models;
+using ECommerce.Project.Models;
 
-namespace ShopBanHang.Migrations
+namespace ECommerce.Project.Migrations
 {
     [DbContext(typeof(DataShopContext))]
     partial class DataShopContextModelSnapshot : ModelSnapshot
@@ -150,7 +150,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.AppUser", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -215,7 +215,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Banner", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Banner", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -263,7 +263,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Banners");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_Color", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_Color", b =>
                 {
                     b.Property<int>("ColorId")
                         .ValueGeneratedOnAdd()
@@ -299,7 +299,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Colors");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_District", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_District", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -320,7 +320,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Districts");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_Material", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_Material", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -353,7 +353,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Materials");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_Province", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_Province", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -371,7 +371,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Provinces");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_Size", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_Size", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -401,7 +401,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Sizes");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_Ward", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_Ward", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -422,7 +422,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Wards");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CT_WarrantyTime", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CT_WarrantyTime", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -455,7 +455,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_WarrantyTimes");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Category", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Category", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -509,7 +509,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.CustomerInfo", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.CustomerInfo", b =>
                 {
                     b.Property<long>("CustomerInfoID")
                         .ValueGeneratedOnAdd()
@@ -563,7 +563,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CustomerInfos");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Image", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Image", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -599,7 +599,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Order", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Order", b =>
                 {
                     b.Property<long>("OrderId")
                         .ValueGeneratedOnAdd()
@@ -653,7 +653,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.OrderDetail", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.OrderDetail", b =>
                 {
                     b.Property<long>("OrderDetailId")
                         .ValueGeneratedOnAdd()
@@ -699,7 +699,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Product", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Product", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -808,7 +808,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.ProductColorSize", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.ProductColorSize", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -860,7 +860,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("ProductColorSizes");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Relate", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Relate", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -887,7 +887,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Relatives");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Setting", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Setting", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -920,7 +920,7 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Supplier", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Supplier", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -979,7 +979,7 @@ namespace ShopBanHang.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ShopBanHang.Models.AppUser", null)
+                    b.HasOne("ECommerce.Project.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -988,7 +988,7 @@ namespace ShopBanHang.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ShopBanHang.Models.AppUser", null)
+                    b.HasOne("ECommerce.Project.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1003,7 +1003,7 @@ namespace ShopBanHang.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopBanHang.Models.AppUser", null)
+                    b.HasOne("ECommerce.Project.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1012,48 +1012,48 @@ namespace ShopBanHang.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ShopBanHang.Models.AppUser", null)
+                    b.HasOne("ECommerce.Project.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.OrderDetail", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.OrderDetail", b =>
                 {
-                    b.HasOne("ShopBanHang.Models.Order", "Order")
+                    b.HasOne("ECommerce.Project.Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopBanHang.Models.Product", "Product")
+                    b.HasOne("ECommerce.Project.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.Product", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.Product", b =>
                 {
-                    b.HasOne("ShopBanHang.Models.Category", "Category")
+                    b.HasOne("ECommerce.Project.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryID");
 
-                    b.HasOne("ShopBanHang.Models.Supplier", null)
+                    b.HasOne("ECommerce.Project.Models.Supplier", null)
                         .WithMany("Products")
                         .HasForeignKey("SupplierID");
                 });
 
-            modelBuilder.Entity("ShopBanHang.Models.ProductColorSize", b =>
+            modelBuilder.Entity("ECommerce.Project.Models.ProductColorSize", b =>
                 {
-                    b.HasOne("ShopBanHang.Models.CT_Color", "CT_Color")
+                    b.HasOne("ECommerce.Project.Models.CT_Color", "CT_Color")
                         .WithMany("ProductColorSizes")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopBanHang.Models.Product", "Product")
+                    b.HasOne("ECommerce.Project.Models.Product", "Product")
                         .WithMany("ProductColorSizes")
                         .HasForeignKey("ProductID");
                 });

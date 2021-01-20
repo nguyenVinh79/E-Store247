@@ -5,7 +5,7 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 
-namespace ShopBanHang.Helper
+namespace ECommerce.Project.Helper
 {
     public class MyTool
     {

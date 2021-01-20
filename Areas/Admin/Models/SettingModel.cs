@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ShopBanHang.Areas.Admin.Models
+namespace ECommerce.Project.Areas.Admin.Models
 {
     public class SettingModel
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Models.ManageViewModels
+namespace ECommerce.Project.Models.ManageViewModels
 {
     public class FactorViewModel
     {

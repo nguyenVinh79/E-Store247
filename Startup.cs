@@ -7,12 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using ShopBanHang.Models;
-using ShopBanHang.Service;
-using ShopBanHang.Settings;
+using ECommerce.Project.Models;
+using ECommerce.Project.Service;
+using ECommerce.Project.Settings;
 using System;
 
-namespace ShopBanHang
+namespace ECommerce.Project
 {
     public class Startup
     {

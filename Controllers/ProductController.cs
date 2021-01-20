@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using Newtonsoft.Json;
-using ShopBanHang.Helper;
-using ShopBanHang.Models;
-using ShopBanHang.Service;
+using ECommerce.Project.Helper;
+using ECommerce.Project.Models;
+using ECommerce.Project.Service;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,7 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Controllers
+namespace ECommerce.Project.Controllers
 {
     public class ProductController : BaseController
     {

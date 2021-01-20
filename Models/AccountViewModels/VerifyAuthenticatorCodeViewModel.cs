@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ShopBanHang.Models.AccountViewModels
+namespace ECommerce.Project.Models.AccountViewModels
 {
     public class VerifyAuthenticatorCodeViewModel
     {

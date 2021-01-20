@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ShopBanHang.Controllers
+namespace ECommerce.Project.Controllers
 {
     public class BaseController : Controller
     {

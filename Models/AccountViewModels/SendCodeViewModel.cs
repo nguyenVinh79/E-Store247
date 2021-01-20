@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ShopBanHang.Models.AccountViewModels
+namespace ECommerce.Project.Models.AccountViewModels
 {
     public class SendCodeViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ShopBanHang.Migrations
+namespace ECommerce.Project.Migrations
 {
     public partial class addcolumn_propertyTable : Migration
     {

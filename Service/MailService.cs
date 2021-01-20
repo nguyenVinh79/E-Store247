@@ -2,12 +2,12 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using ShopBanHang.Models;
-using ShopBanHang.Settings;
+using ECommerce.Project.Models;
+using ECommerce.Project.Settings;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Service
+namespace ECommerce.Project.Service
 {
     public class MailService : IMailService
     {

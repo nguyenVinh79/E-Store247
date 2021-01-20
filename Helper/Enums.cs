@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ShopBanHang.Helper
+namespace ECommerce.Project.Helper
 {
     public class Enums
     {

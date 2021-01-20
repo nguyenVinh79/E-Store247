@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ShopBanHang.Models;
+using ECommerce.Project.Models;
 
-namespace ShopBanHang.Service
+namespace ECommerce.Project.Service
 {
     public interface IMailService
     {

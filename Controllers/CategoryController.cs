@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShopBanHang.Models;
+using ECommerce.Project.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShopBanHang.Controllers
+namespace ECommerce.Project.Controllers
 {
     public class CategoryController : BaseController
     {

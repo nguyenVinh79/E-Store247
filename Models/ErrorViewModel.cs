@@ -1,6 +1,6 @@
 using System;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class ErrorViewModel
     {

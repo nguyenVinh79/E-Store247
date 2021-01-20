@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using ShopBanHang.Areas.Admin.Models;
-using ShopBanHang.Models;
+using ECommerce.Project.Areas.Admin.Models;
+using ECommerce.Project.Models;
 
-namespace ShopBanHang
+namespace ECommerce.Project
 {
     internal class AutoMapperProfile : Profile
     {

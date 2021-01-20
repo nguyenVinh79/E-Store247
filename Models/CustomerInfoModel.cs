@@ -1,11 +1,11 @@
-﻿using ShopBanHang.Models;
+﻿using ECommerce.Project.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopBanHang.Models
+namespace ECommerce.Project.Models
 {
     public class CustomerInfoModel
     {
