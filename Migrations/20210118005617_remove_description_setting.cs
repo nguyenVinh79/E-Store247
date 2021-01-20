@@ -2,7 +2,7 @@
 
 namespace ShopBanHang.Migrations
 {
-    public partial class shopdata001_9 : Migration
+    public partial class remove_description_setting : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

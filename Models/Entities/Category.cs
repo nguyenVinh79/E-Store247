@@ -33,12 +33,15 @@ namespace ShopBanHang.Models
 
         public int? Order { get; set; }
 
-
         public DateTime? UpdateDate { get; set; }
         public DateTime? CreateDate { get; set; }
         public string CreateBy { get; set; }
         public string UpdateBy { get; set; }
-
+        public virtual ICollection<Product> Products { get; set; }
+        public Category()
+        {
+            Products = new HashSet<Product>(); 
+        }
 
     }
 

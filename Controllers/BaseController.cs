@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace ShopBanHang.Controllers
 {
@@ -10,10 +6,6 @@ namespace ShopBanHang.Controllers
     {
         public BaseController()
         {
-             //get menu
-             //get session user info
-             //get lst category
-             //get somme data common : slider/setting
         }
     }
 }

@@ -1,15 +1,14 @@
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using ShopBanHang.Models;
-using ShopBanHang.Models.AccountViewModels;
-//using TTF.Common.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
- 
+using ShopBanHang.Models;
+using ShopBanHang.Models.AccountViewModels;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ShopBanHang.Controllers
 {
@@ -22,18 +21,22 @@ namespace ShopBanHang.Controllers
         //private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+        private DataShopContext _context;
+
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             //IEmailSender emailSender,
             //ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            DataShopContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             //_emailSender = emailSender;
             //_smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = context;
         }
 
         //
@@ -62,6 +65,28 @@ namespace ShopBanHang.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+
+                    CustomerInfo customerInfo = _context.CustomerInfos.FirstOrDefault(x => x.UserName == model.UserName);
+                    if (customerInfo == null)
+                    {
+                        var transaction = _context.Database.BeginTransaction();
+                        try
+                        {
+                            customerInfo = new CustomerInfo
+                            {
+                                UserName = model.UserName,
+                                Email = _context.Users.FirstOrDefault(x => x.UserName == model.UserName).Email,
+                            };
+                            _context.Add(customerInfo);
+                            _context.SaveChanges();
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                        }
+                    }
+
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -533,7 +558,6 @@ namespace ShopBanHang.Controllers
             }
         }
 
-
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -561,6 +585,6 @@ namespace ShopBanHang.Controllers
             }
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

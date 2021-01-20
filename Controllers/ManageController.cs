@@ -1,40 +1,44 @@
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using ShopBanHang.Models;
-using ShopBanHang.Models.AccountViewModels;
-//using TTF.Common.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using ShopBanHang.Models;
 using ShopBanHang.Models.ManageViewModels;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IdentitySamples.Controllers
 {
-
     [Authorize]
     public class ManageController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+
         //private readonly IEmailSender _emailSender;
         //private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+
+        private readonly DataShopContext _context;
+        private readonly IMapper _mapper;
 
         public ManageController(
         UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
         //IEmailSender emailSender,
         //ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory, DataShopContext context,
+        IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             //_emailSender = emailSender;
             //_smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _context = context;
+            _mapper = mapper;
         }
 
         //
@@ -350,6 +354,77 @@ namespace IdentitySamples.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
+        [HttpGet]
+        public ActionResult ChangeUserInfo()
+        {
+            var customerInfo = _context.CustomerInfos.SingleOrDefault(p => p.UserName == User.Identity.Name);
+
+            var lstCT_Provinces = _context.CT_Provinces.ToList();
+            var lstCT_Districts = _context.CT_Districts.ToList();
+            var lstWards = _context.CT_Wards.ToList();
+            ViewBag.Provinces = new SelectList(lstCT_Provinces, "ID", "Name", customerInfo.ProvinceID != null ? customerInfo.ProvinceID : 0);
+
+            if (customerInfo.ProvinceID != null)
+            {
+                ViewBag.Districts = new SelectList(lstCT_Districts.Where(m => m.ProvinceID == customerInfo.ProvinceID.ToString()).ToList(), "ID", "Name",
+                            customerInfo.DistrictID != null);
+            }
+            else
+            {
+                ViewBag.Districts = new SelectList(lstCT_Districts.ToList(), "ID", "Name", 0);
+            }
+
+            if (customerInfo.DistrictID != null)
+            {
+                ViewBag.Wards = new SelectList(lstWards.Where(m => m.DistrictID == customerInfo.DistrictID.ToString()).ToList(), "ID", "Name", customerInfo.WardID);
+            }
+            else
+            {
+                ViewBag.Wards = new SelectList(lstWards.Where(m => m.DistrictID == customerInfo.DistrictID.ToString()).ToList(), "ID", "Name", 0);
+            }
+
+            var model = _mapper.Map<CustomerInfoModel>(customerInfo);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ChangeUserInfo(CustomerInfoModel model)
+        {
+            var customerInfor = _mapper.Map<CustomerInfo>(model);
+            var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                _context.Update(customerInfor);
+                _context.SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch (System.Exception)
+            {
+                transaction.Rollback();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        #region Address for responding Ajax request
+
+        public JsonResult AjaxDistrictList(int Id)
+        {
+            var data = _context.CT_Districts.Where(m => m.ProvinceID == Id.ToString()).ToList();
+
+            return Json(data);
+        }
+
+        public JsonResult AjaxWardList(int Id)
+        {
+            var data = _context.CT_Wards.Where(m => m.DistrictID == Id.ToString()).ToList();
+
+            return Json(data);
+        }
+
+        #endregion Address for responding Ajax request
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -377,6 +452,6 @@ namespace IdentitySamples.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

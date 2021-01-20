@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using ShopBanHang.Models;
 using ShopBanHang.Service;
 using ShopBanHang.Settings;
+using System;
 
 namespace ShopBanHang
 {
@@ -41,52 +39,55 @@ namespace ShopBanHang
             );
 
             #region Session configuration
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
-            #endregion
+
+            #endregion Session configuration
 
             #region Configure Identity
-            //Add context dang su dung
+
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<DataShopContext>()
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
+                // Password
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 3;
+                options.Password.RequiredUniqueChars = 1;
 
-                // Thiết lập về Password
-                options.Password.RequireDigit = false; // Không bắt phải có số //default=true
-                options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
-                options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
-                options.Password.RequireUppercase = false; // Không bắt buộc chữ in
-                options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
-                options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
-
-                // Cấu hình Lockout - khóa user
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
-                options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lầ thì khóa
+                // Lockout -  user lock
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
-                // Cấu hình về User.
-                options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+                options.User.AllowedUserNameCharacters =
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;  // Email là duy nhất
 
-                // Cấu hình đăng nhập.
-                options.SignIn.RequireConfirmedEmail = false;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
-                options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
-
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 
-            #endregion
+            #endregion Configure Identity
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddTransient<IMailService, MailService>();
 
             services.AddScoped<IViewRenderService, ViewRenderService>();
+            services.AddMvc().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddControllers().AddNewtonsoftJson(o =>
+            {
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,16 +108,11 @@ namespace ShopBanHang
             app.UseAuthentication();
             app.UseAuthorization();
 
-            #region Configure session 
-            app.UseSession();
-            #endregion
+            #region Configure session
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //});
+            app.UseSession();
+
+            #endregion Configure session
 
             app.UseMvc(routes =>
             {
@@ -140,8 +136,6 @@ namespace ShopBanHang
                   template: "{controller=Home}/{action=Index}/{id?}"
                 );
             });
-
-            
         }
     }
 }

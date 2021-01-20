@@ -1,21 +1,20 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using ShopBanHang.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using ShopBanHang.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Text.Json;
-using Newtonsoft.Json;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class ProductController : Controller
     {
@@ -24,9 +23,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
         private readonly IWebHostEnvironment _env;
         // requires using Microsoft.Extensions.Configuration;
 
-
         private readonly IConfiguration Configuration;
-
 
         public ProductController(IMapper mapper, IWebHostEnvironment env, IConfiguration configuration, DataShopContext dbcontext)
         {
@@ -43,10 +40,6 @@ namespace ShopBanHang.Areas.Admin.Controllers
             var name = Configuration["Position:Name"];
             var defaultLogLevel = Configuration["Logging:LogLevel:Default"];
 
-
-
-
-
             var lstdata = new List<Product>();
 
             lstdata = db.Products.Where(x => x.IsDeleted != true).ToList();
@@ -56,9 +49,8 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
         public IActionResult Create(int id = 0)
         {
-
             var model = new ProductModel();
-            ViewBag.ColorList = db.CT_Colors.Where(x => x.Active == true).ToList();            
+            ViewBag.ColorList = db.CT_Colors.Where(x => x.Active == true).ToList();
             List<Category> lstData = db.Categories.ToList();
             model.DetailImageList = new List<Image>();
 
@@ -69,9 +61,10 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
                 model = _mapper.Map<ProductModel>(dataProduct);
                 model.DetailImageList = db.Images.Where(x => x.ReferenceId == id).ToList();
-                
             }
+
             #region Load category for dropdownlist
+
             List<Category> categoryList = db.Categories.ToList();
             model.CategoryList = new List<SelectListItem>();
 
@@ -82,14 +75,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
             model.CategoryList.Add(temp);
             BindTree(categoryList, null, model.CategoryList);
 
-            #endregion
+            #endregion Load category for dropdownlist
+
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Create(ProductModel model, IFormFile Avatar, List<IFormFile> DetailImages, string PropertyJsonString)
         {
-
             try
             {
                 string wwwPath = _env.WebRootPath;
@@ -101,12 +94,10 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 if (!Directory.Exists(DetailImagePath))
                 {
                     Directory.CreateDirectory(DetailImagePath);
-
                 }
                 if (!Directory.Exists(AvatarPath))
                 {
                     Directory.CreateDirectory(AvatarPath);
-
                 }
                 List<ProductColorSize> PropertyList = JsonConvert.DeserializeObject<List<ProductColorSize>>(PropertyJsonString);
 
@@ -119,16 +110,12 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         using (FileStream stream = new FileStream(Path.Combine(AvatarPath, fileNameAvata), FileMode.Create))
                         {
                             Avatar.CopyTo(stream);
-
                         }
                     }
 
-
                     if (model.ID == 0)
                     {
-
                         #region For Create
-                         
 
                         var product = _mapper.Map<Product>(model);
 
@@ -140,19 +127,21 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         db.SaveChanges();
                         if (PropertyList != null)
                         {
-
-                            foreach(var item in PropertyList)
+                            foreach (var item in PropertyList)
                             {
                                 item.ProductID = product.ID;
                                 item.ProductName = db.Products.Find(product.ID).ProductName;
-                                item.NameColor = db.CT_Colors.SingleOrDefault(x => x.Code == item.CodeColor).Name;
+                                item.NameColor = db.CT_Colors.SingleOrDefault(x => x.ColorId == item.ColorId).Name;
+
                                 db.ProductColorSizes.Add(item);
                             }
                             db.SaveChanges();
                         }
 
-                        #endregion
+                        #endregion For Create
+
                         #region Upload detail image and save to db
+
                         foreach (var item in DetailImages)
                         {
                             var fileNameTemp = Path.GetFileName(item.FileName);
@@ -171,14 +160,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
                                 db.SaveChanges();
                             }
                         }
-                        #endregion
+
+                        #endregion Upload detail image and save to db
                     }
                     else
                     {
-
                         #region for edit
+
                         var product = db.Products.Find(model.ID);
-                  
 
                         product = _mapper.Map(model, product);
 
@@ -195,22 +184,23 @@ namespace ShopBanHang.Areas.Admin.Controllers
                             {
                                 item.ProductID = model.ID;
                                 item.ProductName = db.Products.Find(model.ID).ProductName;
-                                item.NameColor = db.CT_Colors.SingleOrDefault(x => x.Code == item.CodeColor).Name;
+                                item.NameColor = db.CT_Colors.SingleOrDefault(x => x.ColorId == item.ColorId).Name;
                                 if (item.Id == 0)
                                 {
-                                    
                                     db.ProductColorSizes.Add(item);
                                 }
                                 else
                                 {
-                                    
                                     db.ProductColorSizes.Update(item);
-                                }    
+                                }
                             }
                             db.SaveChanges();
                         }
-                        #endregion
+
+                        #endregion for edit
+
                         #region Upload detail image and save to db
+
                         foreach (var item in DetailImages)
                         {
                             var fileNameTemp = Path.GetFileName(item.FileName);
@@ -229,20 +219,19 @@ namespace ShopBanHang.Areas.Admin.Controllers
                                 db.SaveChanges();
                             }
                         }
-                        #endregion
-                    }
 
+                        #endregion Upload detail image and save to db
+                    }
 
                     return RedirectToAction("Index");
                 }
-
-
-
             }
             catch (Exception ex)
             {
                 ViewBag.ColorList = db.CT_Colors.Where(x => x.Active == true).ToList();
+
                 #region Load category for dropdownlist
+
                 List<Category> categoryList = db.Categories.ToList();
                 model.CategoryList = new List<SelectListItem>();
 
@@ -252,24 +241,20 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 temp.Value = "0";
                 model.CategoryList.Add(temp);
                 BindTree(categoryList, null, model.CategoryList);
-                #endregion
+
+                #endregion Load category for dropdownlist
+
                 TempData["StatusMessage"] = ex.Message;
                 return View(model);
             }
 
             return View(model);
-
-
         }
-
-
 
         public IActionResult NOTFOUND()
         {
-
             return View();
         }
-
 
         public IActionResult Delete(int? id)
         {
@@ -283,19 +268,16 @@ namespace ShopBanHang.Areas.Admin.Controllers
             if (product == null)
             {
                 return RedirectToAction("NotFound");
-
             }
 
             return View(product);
         }
-
 
         [HttpPost]
         public IActionResult DeleteCofirm(Product mode)
         {
             try
             {
-
                 var product = db.Products.Find(mode.ID);
 
                 if (product != null)
@@ -310,18 +292,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 else
                 {
                     return View("Delete", mode);
-
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-
         }
+
         [HttpPost]
         public JsonResult ImageDelete(int id)
         {
@@ -352,6 +330,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 message = "Delete failed!"
             });
         }
+
         [HttpPost]
         public JsonResult PropertyDelete(int id)
         {
@@ -382,34 +361,31 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 message = "Delete failed!"
             });
         }
-        public void BindTree(IEnumerable<Category> list, SelectListItem parentItem, List<SelectListItem> listParent)
+
+        public void BindTree(IEnumerable<Category> list, SelectListItem parentItem, List<SelectListItem> listParent, string temp ="")
         {
-            string i = "";
-            i = i + "--";
+            string i = "o--";
+            i = i + temp;
+
             var nodes = list.Where(x => parentItem == null ? x.ParentCategoryID == 0 : x.ParentCategoryID == int.Parse(parentItem.Value)).ToList();
 
             foreach (var node in nodes)
-            {
-                if (node.Equals(nodes[nodes.Count - 1]) && node.ParentCategoryID != 0)
-                {
-                    i = i + "--";
-                }
+            { 
+
                 SelectListItem newNode = new SelectListItem(node.CategoryName, node.ID.ToString());
                 if (parentItem == null)
                 {
+                    i = "";
                     listParent.Add(newNode);
                 }
                 else
                 {
+                    
                     listParent.Add(new SelectListItem($"{i} {newNode.Text}", newNode.Value));
+                    
                 }
-
-                BindTree(list, newNode, listParent);
-
-
+                BindTree(list, newNode, listParent, i );
             }
         }
-
-
     }
 }

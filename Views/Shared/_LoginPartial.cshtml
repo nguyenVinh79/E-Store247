@@ -9,7 +9,7 @@
         <span class="text-muted">Welcome!</span>
         <div>
             <a asp-controller="Manage" asp-action="index" title="Manage"
-                class="btn btn-link text-decoration-none p-0"> @UserManager.GetUserName(User)</a> |
+               class="btn btn-link text-decoration-none p-0"> @UserManager.GetUserName(User)</a> |
             <button type="submit" class="btn-link btn text-decoration-none p-0">Log out</button>
         </div>
     </div>
@@ -24,16 +24,14 @@
 </form> }
 else
 {
-                <div class="text">
-                    
-                    <div>
-                        <a asp-area="" asp-controller="Account" asp-action="Register">Register</a>  |
-                        
-                        <a asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
-                    </div>
-                </div>
-                @*<ul class="nav navbar-nav navbar-right">
-                    <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
-                </ul>*@
-}
+<div class="text">
+
+    <div>
+        <a asp-area="" asp-controller="Account" asp-action="Register">Register</a>  |
+
+        <a asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+    </div>
+</div> @*<ul class="nav navbar-nav navbar-right">
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+                    </ul>*@}

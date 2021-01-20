@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using ShopBanHang.Helper;
 using ShopBanHang.Models;
+using System.Diagnostics;
+using System.Linq;
 
 namespace ShopBanHang.Controllers
 {
@@ -16,7 +12,6 @@ namespace ShopBanHang.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
         private readonly DataShopContext _db;
-
 
         public HomeController(ILogger<HomeController> logger, IConfiguration Configuration, DataShopContext dbcontext)
         {
@@ -27,7 +22,6 @@ namespace ShopBanHang.Controllers
 
         public IActionResult Index()
         {
-
             //var myKeyValue = _configuration["MyKey"];
             //var title = _configuration["Position:Title"];
             //var name = _configuration["Position:Name"];
@@ -42,8 +36,9 @@ namespace ShopBanHang.Controllers
 
             #region GetData Product
 
-            var lstproduct = _db.Products.Where(x => x.IsDeleted != true && x.IsNew == true).Select(m=> 
-            new Product {
+            var lstproduct = _db.Products.Where(x => x.IsDeleted != true && x.IsNew == true).Select(m =>
+            new Product
+            {
                 ID = m.ID,
                 ProductName = m.ProductName,
                 ImagePath = m.ImagePath,
@@ -51,12 +46,9 @@ namespace ShopBanHang.Controllers
                 ShortDecription = m.ShortDecription,
                 UnitPriceNew = m.UnitPriceNew,
                 CT_WarrantyTimeName = m.CT_WarrantyTimeName,
-
-
-
             }).ToList();
 
-            #endregion
+            #endregion GetData Product
 
             return View(lstproduct);
         }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopBanHang.Models;
 
 namespace ShopBanHang.Migrations
 {
     [DbContext(typeof(DataShopContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20210118051319_color_product_Relationship")]
+    partial class color_product_Relationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,8 +251,8 @@ namespace ShopBanHang.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdateBy")
                         .HasColumnType("nvarchar(max)");
@@ -265,7 +267,7 @@ namespace ShopBanHang.Migrations
 
             modelBuilder.Entity("ShopBanHang.Models.CT_Color", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("ColorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -294,9 +296,30 @@ namespace ShopBanHang.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("ColorId");
 
                     b.ToTable("CT_Colors");
+                });
+
+            modelBuilder.Entity("ShopBanHang.Models.CT_District", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProvinceID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CT_Districts");
                 });
 
             modelBuilder.Entity("ShopBanHang.Models.CT_Material", b =>
@@ -332,6 +355,24 @@ namespace ShopBanHang.Migrations
                     b.ToTable("CT_Materials");
                 });
 
+            modelBuilder.Entity("ShopBanHang.Models.CT_Province", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CT_Provinces");
+                });
+
             modelBuilder.Entity("ShopBanHang.Models.CT_Size", b =>
                 {
                     b.Property<int>("ID")
@@ -360,6 +401,27 @@ namespace ShopBanHang.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("CT_Sizes");
+                });
+
+            modelBuilder.Entity("ShopBanHang.Models.CT_Ward", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DistrictID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CT_Wards");
                 });
 
             modelBuilder.Entity("ShopBanHang.Models.CT_WarrantyTime", b =>
@@ -449,6 +511,60 @@ namespace ShopBanHang.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("ShopBanHang.Models.CustomerInfo", b =>
+                {
+                    b.Property<long>("CustomerInfoID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DistrictID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("WardID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CustomerInfoID");
+
+                    b.ToTable("CustomerInfos");
+                });
+
             modelBuilder.Entity("ShopBanHang.Models.Image", b =>
                 {
                     b.Property<long>("Id")
@@ -483,6 +599,103 @@ namespace ShopBanHang.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("ShopBanHang.Models.Order", b =>
+                {
+                    b.Property<long>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DistrictID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("ShipFee")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Total")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("WardID")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ShopBanHang.Models.OrderDetail", b =>
+                {
+                    b.Property<long>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ColorSize")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("UnitPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("ShopBanHang.Models.Product", b =>
@@ -589,6 +802,8 @@ namespace ShopBanHang.Migrations
 
                     b.HasIndex("CategoryID");
 
+                    b.HasIndex("SupplierID");
+
                     b.ToTable("Products");
                 });
 
@@ -604,6 +819,9 @@ namespace ShopBanHang.Migrations
 
                     b.Property<string>("CodeSize")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NameColor")
                         .HasColumnType("nvarchar(max)");
@@ -633,6 +851,10 @@ namespace ShopBanHang.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductID");
 
                     b.ToTable("ProductColorSizes");
                 });
@@ -680,11 +902,8 @@ namespace ShopBanHang.Migrations
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsHTML")
-                        .HasColumnType("bit");
+                    b.Property<int>("SettingType")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdateBy")
                         .HasColumnType("nvarchar(max)");
@@ -799,11 +1018,43 @@ namespace ShopBanHang.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ShopBanHang.Models.OrderDetail", b =>
+                {
+                    b.HasOne("ShopBanHang.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShopBanHang.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ShopBanHang.Models.Product", b =>
                 {
                     b.HasOne("ShopBanHang.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryID");
+
+                    b.HasOne("ShopBanHang.Models.Supplier", null)
+                        .WithMany("Products")
+                        .HasForeignKey("SupplierID");
+                });
+
+            modelBuilder.Entity("ShopBanHang.Models.ProductColorSize", b =>
+                {
+                    b.HasOne("ShopBanHang.Models.CT_Color", "CT_Color")
+                        .WithMany("ProductColorSizes")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShopBanHang.Models.Product", "Product")
+                        .WithMany("ProductColorSizes")
+                        .HasForeignKey("ProductID");
                 });
 #pragma warning restore 612, 618
         }

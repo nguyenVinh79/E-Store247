@@ -4,7 +4,7 @@
 <h1>@ViewData["Title"].</h1>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
-<div>
+<div style="height:200px">
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -12,12 +12,14 @@
         <dd>
             @if (Model.HasPassword)
             {
-                <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ChangePassword">Change</a>&nbsp;&nbsp;]</text> 
-            }
+<text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ChangePassword">Change</a>&nbsp;&nbsp;]</text> }
             else
             {
-                <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="SetPassword">Create</a>&nbsp;&nbsp;]</text>            
-            }
+<text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="SetPassword">Create</a>&nbsp;&nbsp;]</text>            }
+        </dd>
+        <dt>User Infomation:</dt>
+        <dd>
+            [&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ChangeUserInfo">Change</a>&nbsp;&nbsp;]</text>
         </dd>
         <!--<dt>External Logins:</dt>
         <dd>

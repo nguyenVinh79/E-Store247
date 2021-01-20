@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShopBanHang.Models
 {
-    
     public class CustomerInfo
-    {   
-        
+    {
         public long CustomerInfoID { get; set; }
 
         public string FullName { get; set; }
@@ -34,8 +29,5 @@ namespace ShopBanHang.Models
         public DateTime? CreateDate { get; set; }
         public string CreateBy { get; set; }
         public string UpdateBy { get; set; }
-
-
     }
-
 }

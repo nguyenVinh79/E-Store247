@@ -46,64 +46,61 @@
                     <span class="dot" style="background-color: @item.CSS"></span>
                 </td>
                 <td>
-                    <a class="btn btn-info" href="/admin/color/create?id=@item.ID"><i class="fa fa-edit"></i></a>
-                    <a class="btn btn-danger del-color" data-id="@item.ID"><i class="fa fa-recycle"></i></a>
+                    <a class="btn btn-info" href="/admin/color/create?id=@item.ColorId"><i class="fa fa-edit"></i></a>
+                    <a class="btn btn-danger del-color" data-id="@item.ColorId"><i class="fa fa-recycle"></i></a>
                 </td>
-
             </tr>
 
         }
-
     </tbody>
 </table>
 @section Scripts{
     <script>
-    $(document).ready(function () {
-        $('.del-color').click(function () {
-            var deleteBtn = $(this);
-            var id = $(this).data('id');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this color!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: '/admin/color/Delete',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.status == true) {
-                                    debugger;
-                                    $(deleteBtn).parents("tr").remove();
+        $(document).ready(function () {
+            $('.del-color').click(function () {
+                var deleteBtn = $(this);
+                var id = $(this).data('id');
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this color!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                url: '/admin/color/Delete',
+                                data: {
+                                    id: id
+                                },
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status == true) {
+                                        debugger;
+                                        $(deleteBtn).parents("tr").remove();
 
-                                    swal("The color has been deleted!", {
-                                        icon: "success",
-                                    });
-                                }
-                                else {
-                                    swal(response.message, {
-                                        icon: "error",
-                                    });
+                                        swal("The color has been deleted!", {
+                                            icon: "success",
+                                        });
+                                    }
+                                    else {
+                                        swal(response.message, {
+                                            icon: "error",
+                                        });
 
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+            });
+
         });
-
-    });
-
     </script>
 
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Areas.Admin.Models;
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class ColorController : Controller
     {
@@ -43,7 +45,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
             if (id > 0)
             {
-                var colorData = db.CT_Colors.Where(x => x.ID == id).FirstOrDefault();
+                var colorData = db.CT_Colors.Where(x => x.ColorId == id).FirstOrDefault();
                 model = _mapper.Map(colorData, model);
             }
             return View(model);
@@ -89,13 +91,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
         public JsonResult Delete(int id)
         {
             var color = db.CT_Colors.Find(id);
             if (color != null)
             {
-                var productsOwnColor = db.ProductColorSizes.Where(x=>x.CodeColor == color.Code).ToList();
+                var productsOwnColor = db.ProductColorSizes.Where(x => x.CodeColor == color.Code).ToList();
                 if (productsOwnColor.Count > 0)
                 {
                     return Json(new

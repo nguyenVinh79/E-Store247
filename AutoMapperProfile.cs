@@ -4,7 +4,7 @@ using ShopBanHang.Models;
 
 namespace ShopBanHang
 {
-    internal class AutoMapperProfile: Profile
+    internal class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {

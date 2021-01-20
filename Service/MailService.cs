@@ -2,27 +2,21 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using ShopBanHang.Models;
 using ShopBanHang.Settings;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ShopBanHang.Service
 {
-    
     public class MailService : IMailService
     {
-
         private readonly MailSettings _mailSettings;
 
         public MailService(IOptions<MailSettings> mailSettings)
         {
             _mailSettings = mailSettings.Value;
         }
-
 
         public async Task SendEmailAsync(MailRequest mailRequest)
         {

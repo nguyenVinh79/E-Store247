@@ -3,19 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using ShopBanHang.Areas.Admin.Models;
 using ShopBanHang.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using ShopBanHang.Models;
-using ShopBanHang.Areas.Admin.Models;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
-    [Area("Admin")]    
+    [Area("Admin")]
     [Authorize]
     public class SettingController : Controller
     {
@@ -37,46 +33,50 @@ namespace ShopBanHang.Areas.Admin.Controllers
         }
 
         public IActionResult Index()
-        {           
-            var data  = db.Settings.ToList();
+        {
+            var data = db.Settings.ToList();
             return View(data);
-        }       
+        }
 
         public IActionResult Create(int id = 0)
         {
-            var model = new  SettingModel();
+            var model = new SettingModel();
             if (id > 0)
             {
                 var entity = db.Settings.Where(x => x.ID == id).FirstOrDefault();
                 model = _mapper.Map<SettingModel>(entity);
             }
-            
+
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(SettingModel model, IFormFile avata) //setting upload file 
+        public IActionResult Create(SettingModel model, IFormFile avata) //setting upload file
         {
             try
-            {              
+            {
                 if (ModelState.IsValid)
                 {
                     if (model.ID == 0)
                     {
                         #region For Create
-                        var entity = _mapper.Map<Setting>(model);                      
+
+                        var entity = _mapper.Map<Setting>(model);
                         db.Settings.Add(entity);
                         db.SaveChanges();
+
                         #endregion For Create
                     }
                     else
                     {
                         #region for edit
+
                         var entity = db.Settings.Find(model.ID);
                         entity = _mapper.Map(model, entity);
-                                       
+
                         db.Update(entity);
                         db.SaveChanges();
+
                         #endregion for edit
                     }
 
@@ -92,7 +92,6 @@ namespace ShopBanHang.Areas.Admin.Controllers
             return View(model);
         }
 
-      
         public IActionResult Delete(int? id)
         {
             if (id == null)

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShopBanHang.Models
 {
@@ -16,7 +13,5 @@ namespace ShopBanHang.Models
         public Nullable<int> OrderBy { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-
-
     }
 }

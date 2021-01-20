@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace ShopBanHang.Helper
 {
@@ -30,11 +28,12 @@ namespace ShopBanHang.Helper
                 }
                 return myFile.FileName;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return string.Empty;
             }
         }
+
         public static List<T> ConvertDataTable<T>(DataTable dt)
         {
             List<T> data = new List<T>();

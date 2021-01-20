@@ -19,6 +19,8 @@ namespace ShopBanHang.Models
         public DateTime? CreateDate { get; set; }
         public string CreateBy { get; set; }
         public string UpdateBy { get; set; }
+ 
+        
     }
   
     public class CT_Material
@@ -34,8 +36,9 @@ namespace ShopBanHang.Models
     }
    
     public class CT_Color
-    {
-        public int ID { get; set; }     
+    {   
+        [Key]
+        public int ColorId { get; set; }     
         public string Code { get; set; }     
         public string Name { get; set; }
         public bool Active { get; set; }     
@@ -44,6 +47,11 @@ namespace ShopBanHang.Models
         public DateTime? CreateDate { get; set; }
         public string CreateBy { get; set; }
         public string UpdateBy { get; set; }
+        public virtual ICollection<ProductColorSize> ProductColorSizes { get; set; }
+        public CT_Color()
+        {
+            ProductColorSizes = new HashSet<ProductColorSize>();
+        }
     }
   
     public class CT_Size

@@ -4,7 +4,6 @@
 
 @{ ViewData["Title"] = "Check out"; }
 
-
 @{
     var cartData = Context.Session.GetString("cart");
     List<CartModel> listCart = JsonConvert.DeserializeObject<List<CartModel>>(cartData);
@@ -19,218 +18,202 @@
         totalAll += totalItem;
     }
 }
-    <div class="container">
-        <div class="text-center pt-2">
-            <h1>Check out</h1>
-        </div>
-        <div class="row">
-            <aside class="col-md-12">
-                <div class="card mb-1">
-                    <div class="card-body">
-                        <form>
-                            <div class="form-group">
-                                <label>Have coupon?</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="" placeholder="Coupon code">
-                                    <span class="input-group-append">
-                                        <a class="btn btn-primary text-white">Apply</a>
-                                    </span>
+<div class="container">
+    <div class="text-center pt-2">
+        <h1>Check out</h1>
+    </div>
+    <div class="row">
+        <aside class="col-md-12">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Have coupon?</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="" placeholder="Coupon code">
+                                <span class="input-group-append">
+                                    <a class="btn btn-primary text-white">Apply</a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- card-body.// -->
+            </div>  <!-- card .// -->
+            <div class="card">
+                <div class="card-body">
+                    <dl class="dlist-align">
+                        <dt>Total price:</dt>
+                        <dd class="text-right">@totalAll.ToString("#,##0") VND</dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>Discount:</dt>
+                        <dd class="text-right">0</dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>Total:</dt>
+                        <dd class="text-right  h5"><strong>@totalAll.ToString("#,##0") VND</strong></dd>
+                    </dl>
+                    <hr>
+                    <div class="alert alert-success mt-3">
+                        <p class="icontext"><i class="icon text-success fa fa-truck"></i> Free Delivery within 1-2 weeks</p>
+                    </div>
+                </div>
+                <!-- card-body.// -->
+            </div>  <!-- card .// -->
+        </aside> <!-- col.// -->
+    </div>
+    <section class="section-content py-4 bg-white">
+        <div class="container">
+            @using (Html.BeginForm("ToOrder", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="row">
+
+                    <main class="col-md-8">
+                        <div class="card">
+
+                            <table class="table table-borderless table-shopping-cart">
+                                <thead class="text-muted thead-dark">
+                                    <tr class="small text-uppercase">
+                                        <th scope="col" width="400">Product</th>
+                                        <th scope="col" width="150" class="text-center">Quantity</th>
+                                        <th scope="col" width="250">Price</th>
+                                        @*<th scope="col" class="text-right" width="200"> </th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in listCart)
+                                    {
+                                        string txt_class = "quantity_" + item.DetailProduct.Id;
+
+                                        double total = item.DetailProduct.UnitPriceNew * item.Quantity;
+
+                                        <tr>
+                                            <td>
+                                                <figure class="itemside">
+                                                    <div class="aside"><img src="~/Image/Products/@item.Product.ImagePath" class="img-sm"></div>
+                                                    <figcaption class="info">
+                                                        <a href="#" class="title text-dark">@item.Product.ProductName</a>
+                                                        <p class="text-muted small">Color: @item.DetailProduct.NameColor@*, <br> Brand:@item.Product.SupplierName*@</p>
+                                                    </figcaption>
+                                                </figure>
+                                            </td>
+                                            <td class="text-center">
+                                                @item.Quantity
+                                            </td>
+                                            <td>
+                                                <div class="price-wrap">
+                                                    <var class="price" id="txt_class_total">@total.ToString("#,###")</var><br />
+                                                    <small class="text-muted"> @item.DetailProduct.UnitPriceNew.ToString("#,###") <sup>vnd</sup> each </small>
+                                                </div> <!-- price-wrap .// -->
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                            <div class="card-body border-top">
+                                <button type="submit" class="btn btn-primary float-md-right"> Order <i class="fa fa-chevron-right"></i> </button>
+                                <a href="/" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
+                            </div>
+                        </div> <!-- card.// -->
+                    </main> <!-- col.// -->
+                    <div class="col-md-4">
+
+                        <input type="hidden" name="Total" value="@totalAll" />
+                        <input type="hidden" name="ShipFee" value="0" />
+                        @Html.HiddenFor(m => m.UserName)
+                        @Html.HiddenFor(m => m.CustomerInfoID)
+
+                        <div class="row pl-3 pb-1">
+                            <div class="card border-danger">
+                                <div class="card-deck">
+                                    @if (!SignInManager.IsSignedIn(User))
+                                    {
+                                        <div class="col-md-12">
+                                            <ul class="nav navbar-nav navbar-right">
+                                                <li>
+                                                    <a asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+                                                    to automatically fill your delivery infomation
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    }
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <!-- card-body.// -->
-                </div>  <!-- card .// -->
-                <div class="card">
-                    <div class="card-body">
-                        <dl class="dlist-align">
-                            <dt>Total price:</dt>
-                            <dd class="text-right">@totalAll.ToString("#,##0") VND</dd>
-                        </dl>
-                        <dl class="dlist-align">
-                            <dt>Discount:</dt>
-                            <dd class="text-right">0</dd>
-                        </dl>
-                        <dl class="dlist-align">
-                            <dt>Total:</dt>
-                            <dd class="text-right  h5"><strong>@totalAll.ToString("#,##0") VND</strong></dd>
-                        </dl>
-                        <hr>
-                        <div class="alert alert-success mt-3">
-                            <p class="icontext"><i class="icon text-success fa fa-truck"></i> Free Delivery within 1-2 weeks</p>
                         </div>
 
-                    </div>
-                    <!-- card-body.// -->
-                </div>  <!-- card .// -->
-            </aside> <!-- col.// -->
-        </div>
-            <section class="section-content py-4 bg-white">
-                <div class="container">
-                    @using (Html.BeginForm("ToOrder", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        <div class="row">
+                        <div>
 
-                            <main class="col-md-8">
-                                <div class="card">
+                            <div class="form-group">
+                                <label>Full name</label>
+                                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "validate" })
+                            </div>
 
-                                    <table class="table table-borderless table-shopping-cart">
-                                        <thead class="text-muted thead-dark">
-                                            <tr class="small text-uppercase">
-                                                <th scope="col" width="400">Product</th>
-                                                <th scope="col" width="150" class="text-center">Quantity</th>
-                                                <th scope="col" width="250">Price</th>
-                                                @*<th scope="col" class="text-right" width="200"> </th>*@
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in listCart)
-                                            {
-                                                string txt_class = "quantity_" + item.DetailProduct.Id;
-
-                                                double total = item.DetailProduct.UnitPriceNew * item.Quantity;
-
-                                                <tr>
-                                                    <td>
-                                                        <figure class="itemside">
-                                                            <div class="aside"><img src="~/Image/Products/@item.Product.ImagePath" class="img-sm"></div>
-                                                            <figcaption class="info">
-                                                                <a href="#" class="title text-dark">@item.Product.ProductName</a>
-                                                                <p class="text-muted small">Color: @item.DetailProduct.NameColor@*, <br> Brand:@item.Product.SupplierName*@</p>
-                                                            </figcaption>
-                                                        </figure>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        @item.Quantity
-                                                    </td>
-                                                    <td>
-                                                        <div class="price-wrap">
-                                                            <var class="price" id="txt_class_total">@total.ToString("#,###")</var><br />
-                                                            <small class="text-muted"> @item.DetailProduct.UnitPriceNew.ToString("#,###") <sup>vnd</sup> each </small>
-                                                        </div> <!-- price-wrap .// -->
-                                                    </td>
-                                                    <!--<td class="text-right">-->
-                                                    @*<a data-original-title="Update" title="" href="" class="btn btn-light updateCart" data-toggle="tooltip" data-id="@item.DetailProduct.Id">
-                                            <i class="fas fa-sync-alt"></i>
-                                        </a>
-                                        <a class="btn btn-light" asp-controller="Product" asp-action="deleteCart" asp-route-id="@item.DetailProduct.Id"> Remove</a>*@
-                                                    <!--</td>-->
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                    <div class="card-body border-top">
-                                        <button type="submit" class="btn btn-primary float-md-right"> Order <i class="fa fa-chevron-right"></i> </button>
-                                        <a href="/" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
-                                    </div>
-                                </div> <!-- card.// -->
-
-
-
-                            </main> <!-- col.// -->
-                            <div class="col-md-4">
-
-
-
-                                <input type="hidden" name="Total" value="@totalAll" />
-                                <input type="hidden" name="ShipFee" value="0"/>
-                                @Html.HiddenFor(m => m.UserName)
-                                @Html.HiddenFor(m => m.CustomerInfoID)
-
-
-                                <div class="row pl-3 pb-1">
-                                    <div class="card border-danger">
-                                        <div class="card-deck">
-                                            @if (!SignInManager.IsSignedIn(User))
-                                            {
-                                                <div class="col-md-12">
-                                                    <ul class="nav navbar-nav navbar-right">
-                                                        <li>
-                                                            <a asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
-                                                            to automatically fill your delivery infomation
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-
-                                    <div class="form-group">
-                                        <label>Full name</label>
-                                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "validate" })
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Phone Number</label>
-                                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.PhoneNumber, null, new { @class = "validate" })
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Province</label>
-                                        @Html.DropDownListFor(m => m.ProvinceID, ViewBag.Provinces as SelectList, "--Choose your province--", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.ProvinceID, null, new { @class = "validate" })
-                                    </div>
-                                    <div class="form-group">
-                                        <label>District</label>
-                                        @Html.DropDownListFor(m => m.DistrictID, ViewBag.Districts as SelectList, "--Choose your district--", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.DistrictID, null, new { @class = "validate" })
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Ward</label>
-                                        @Html.DropDownListFor(m => m.WardID, ViewBag.Wards as SelectList, "--Choose your ward--", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.WardID, null, new { @class = "validate" })
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address</label>
-                                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.Address, null, new { @class = "validate" })
-                                    </div>
-                                </div>
-
-                            </div> <!-- Order form// -->
-                            
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PhoneNumber, null, new { @class = "validate" })
+                            </div>
+                            <div class="form-group">
+                                <label>Province</label>
+                                @Html.DropDownListFor(m => m.ProvinceID, ViewBag.Provinces as SelectList, "--Choose your province--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ProvinceID, null, new { @class = "validate" })
+                            </div>
+                            <div class="form-group">
+                                <label>District</label>
+                                @Html.DropDownListFor(m => m.DistrictID, ViewBag.Districts as SelectList, "--Choose your district--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DistrictID, null, new { @class = "validate" })
+                            </div>
+                            <div class="form-group">
+                                <label>Ward</label>
+                                @Html.DropDownListFor(m => m.WardID, ViewBag.Wards as SelectList, "--Choose your ward--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WardID, null, new { @class = "validate" })
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Address, null, new { @class = "validate" })
+                            </div>
                         </div>
-                        }
-                    </div> <!-- container .//  -->
-            </section>
-        </div>
+                    </div> <!-- Order form// -->
+                </div>
+            }
+        </div> <!-- container .//  -->
+    </section>
+</div>
 
-        <script>
-            $(document).ready(function () {
+<script>
+    $(document).ready(function () {
 
-                $('#ProvinceID').change(function () {
-                    debugger;
+        $('#ProvinceID').change(function () {
+            debugger;
 
-                    $.getJSON('/Product/AjaxDistrictList/' + $('#ProvinceID').val(), function (data) {
+            $.getJSON('/Product/AjaxDistrictList/' + $('#ProvinceID').val(), function (data) {
 
-                        var items = '<option value=' + 0 + '>--Choose your district--</option>';
-                        $.each(data, function (i, district) {
-                            items += "<option value='" + district.id + "'>" + district.name + "</option>";
-                        });
-                        $('#DistrictID').html(items);
-                        var items2 = '<option value=' + 0 + '>--Choose your ward--</option>';
-                        $('#WardID').html(items2);
-                    });
+                var items = '<option value=' + 0 + '>--Choose your district--</option>';
+                $.each(data, function (i, district) {
+                    items += "<option value='" + district.id + "'>" + district.name + "</option>";
                 });
-
-                $('#DistrictID').change(function () {
-
-                    $.getJSON('/Product/AjaxWardList/' + $('#DistrictID').val(), function (data) {
-
-                        var items = '<option value=' + 0 + '>--Choose your ward--</option>';
-                        $.each(data, function (i, ward) {
-                            items += "<option value='" + ward.id + "'>" + ward.name + "</option>";
-                        });
-                        $('#WardID').html(items);
-                    });
-                });
-
+                $('#DistrictID').html(items);
+                var items2 = '<option value=' + 0 + '>--Choose your ward--</option>';
+                $('#WardID').html(items2);
             });
-        </script>
+        });
+
+        $('#DistrictID').change(function () {
+
+            $.getJSON('/Product/AjaxWardList/' + $('#DistrictID').val(), function (data) {
+
+                var items = '<option value=' + 0 + '>--Choose your ward--</option>';
+                $.each(data, function (i, ward) {
+                    items += "<option value='" + ward.id + "'>" + ward.name + "</option>";
+                });
+                $('#WardID').html(items);
+            });
+        });
+
+    });
+</script>

@@ -28,6 +28,7 @@ namespace ShopBanHang.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _configuration;
         private readonly IViewRenderService _viewRenderService;
+
         public ProductController(DataShopContext dbcontext, IMapper mapper, IMailService mailService, IWebHostEnvironment env,
             IConfiguration conf, IViewRenderService renderService)
         {
@@ -64,15 +65,12 @@ namespace ShopBanHang.Controllers
 
                 return View(model);
             }
-            //gán vào 1 model --> ProductViewModel
 
             return View();
         }
 
-
         #region Cart
 
-       
         public IActionResult ListCart()
         {
             var cart = HttpContext.Session.GetString("cart");
@@ -86,10 +84,8 @@ namespace ShopBanHang.Controllers
                 }
             }
             return View();
-          
         }
 
-        //Khi thêm vào check sp có tồn tại chưa, có thì tăng số lượng, thêm mới
         public IActionResult addCart(int id, int quantity) //id product
         {
             var cart = HttpContext.Session.GetString("cart"); //get key cart
@@ -107,7 +103,7 @@ namespace ShopBanHang.Controllers
                         Quantity = quantity
                     }
                 };
-                //chuyển object sang json
+
                 HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(listCart));
             }
             else
@@ -148,7 +144,6 @@ namespace ShopBanHang.Controllers
             return product;
         }
 
-        //update sản phẩm đã đưa vào giỏ hàng (Ajax request)
         [HttpPost]
         public IActionResult updateCart(int Id, int Quantity)
         {
@@ -168,14 +163,12 @@ namespace ShopBanHang.Controllers
                     //set lại session
                     HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(dataCart));
                 }
-                //dùng ajax trả về status 200
                 return Ok(Quantity);
             }
 
             return BadRequest();
         }
 
-        //xóa sp trong giỏ hàng đi(dùng link)
         public IActionResult deleteCart(int id)
         {
             var cart = HttpContext.Session.GetString("cart");
@@ -197,18 +190,17 @@ namespace ShopBanHang.Controllers
         }
 
         #endregion Cart
+
         [Route("/checkout")]
         public IActionResult Checkout()
         {
-            //Get customer Info tu trong session
-            //CustomerInfo.
             var customerinfor = new CustomerInfo();
             var lstCT_Provinces = _db.CT_Provinces.ToList();
             var lstCT_Districts = _db.CT_Districts.ToList();
             var lstWards = _db.CT_Wards.ToList();
             if (this.User.Identity.IsAuthenticated)
             {
-                customerinfor = _db.CustomerInfos.Where(x => x.UserName == this.User.Identity.Name).First();
+                customerinfor = _db.CustomerInfos.Where(x => x.UserName == this.User.Identity.Name).FirstOrDefault();
 
                 ViewBag.Provinces = new SelectList(lstCT_Provinces, "ID", "Name", customerinfor.ProvinceID != null ? customerinfor.ProvinceID : 0);
 
@@ -233,7 +225,7 @@ namespace ShopBanHang.Controllers
             }
             else
             {
-                ViewBag.Provinces = new SelectList(_db.CT_Provinces.ToList(), "ID", "Name",0);
+                ViewBag.Provinces = new SelectList(_db.CT_Provinces.ToList(), "ID", "Name", 0);
                 ViewBag.Districts = new SelectList(new List<CT_Province>());
                 ViewBag.Wards = new SelectList(new List<CT_Ward>());
             }
@@ -242,7 +234,9 @@ namespace ShopBanHang.Controllers
 
             return View(model);
         }
+
         #region Order section
+
         [HttpPost]
         [Route("Order")]
         public IActionResult ToOrder(CustomerInfoModel model)
@@ -272,19 +266,18 @@ namespace ShopBanHang.Controllers
                     //save modified informations to database
                     _db.SaveChanges();
                 }
-                
 
                 //Create order
                 var OrdersModel = new Order();
                 if (model.UserName == null)
-                { 
-                    OrdersModel.UserName = "None-resident guest"; 
-                }    
+                {
+                    OrdersModel.UserName = "None-resident guest";
+                }
                 else
                 {
                     OrdersModel.UserName = model.UserName;
                 }
-                OrdersModel.FullName = model.FullName; 
+                OrdersModel.FullName = model.FullName;
                 OrdersModel.Address = model.Address;
                 OrdersModel.PhoneNumber = model.PhoneNumber;
                 OrdersModel.ProvinceID = model.ProvinceID;
@@ -304,30 +297,29 @@ namespace ShopBanHang.Controllers
 
                     OrdersDetailModel.OrderId = OrdersModel.OrderId;
                     OrdersDetailModel.ProductId = dataCart[i].Product.ID;
-                    //OrdersDetailModel.ProductName = dataCart[i].Product.ProductName;
+                    OrdersDetailModel.ProductName = dataCart[i].Product.ProductName;
                     OrdersDetailModel.Quantity = dataCart[i].Quantity;
                     OrdersDetailModel.UnitPrice = dataCart[i].DetailProduct.UnitPriceNew;
                     OrdersDetailModel.ColorSize = dataCart[i].DetailProduct.NameColor;
                     _db.OrderDetails.Add(OrdersDetailModel);
-
                 }
 
                 _db.SaveChanges();
 
                 //Send Email if login
+
                 #region Email
 
                 if (customerinfor != null)
                 {
-                    if(!string.IsNullOrEmpty(customerinfor.Email))
+                    if (!string.IsNullOrEmpty(customerinfor.Email))
                     {
                         var mailRequest = new MailRequest();
                         string OrderIDFormat = OrdersModel.OrderId.ToString("#00000000");
                         mailRequest.ToEmail = customerinfor.Email; //get user email
                         mailRequest.Subject = $"Order Confirmation #{OrderIDFormat} - Estore247";
                         mailRequest.Body = "";
-                        
-                    
+
                         var orderDetails = _db.OrderDetails.Where(x => x.OrderId == OrdersModel.OrderId).ToList();
 
                         var bodyorderdetail = CreatOderDetailHTML(orderDetails, OrdersModel.Total.Value, OrdersModel.ShipFee.Value);
@@ -344,7 +336,7 @@ namespace ShopBanHang.Controllers
 
                         string address = OrdersModel.Address + ", " + ward + ", " + district + ", " + province;
 
-                        // Read file template html 
+                        // Read file template html
                         var webRoot = _env.WebRootPath;
 
                         string pathToFile = Path.Combine(this._env.WebRootPath, "Template")
@@ -354,9 +346,7 @@ namespace ShopBanHang.Controllers
                         var builder = new BodyBuilder();
                         using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                         {
-
                             builder.HtmlBody = SourceReader.ReadToEnd();
-
                         }
                         //Render order ID: 10 --> #0000010
                         mailRequest.Body = string.Format(builder.HtmlBody,
@@ -370,7 +360,8 @@ namespace ShopBanHang.Controllers
                         mailService.SendEmailAsync(mailRequest);
                     }
                 }
-                #endregion
+
+                #endregion Email
 
                 //Clear Cart session
                 HttpContext.Session.Remove("cart");
@@ -378,14 +369,15 @@ namespace ShopBanHang.Controllers
             }
             return View("ErrorOrder");
         }
+
         [HttpGet]
         [Route("Order")]
-        public IActionResult ToOrder ()
+        public IActionResult ToOrder()
         {
             return View();
         }
-        #endregion
 
+        #endregion Order section
 
         #region Address for responding Ajax request
 
@@ -403,15 +395,15 @@ namespace ShopBanHang.Controllers
             return Json(data);
         }
 
-        #endregion Address
+        #endregion Address for responding Ajax request
+
         #region Search product
+
         public ActionResult Search(int? CategoryID, string colorId, string sizeId, string giaTu, string giaDen, string ProductName = "", string OrderBy = "ID")
         {
-
             int BlockSize = 3; //pagesize
             ViewBag.ProductName = ProductName;
             ViewBag.OrderBy = OrderBy;
-
 
             //Get data from db
             List<SearchProduct_Result> lstProduct = GetProductSearch(1, BlockSize, CategoryID, ProductName, OrderBy);
@@ -426,7 +418,6 @@ namespace ShopBanHang.Controllers
             {
                 ViewBag.MoreData = lstProduct[0].TotalCount > BlockSize;
             }
-
 
             return View(lstProduct);
         }
@@ -545,8 +536,6 @@ namespace ShopBanHang.Controllers
 
             string listCategoryStr = string.Join(",", lstcateID);
 
-
-
             List<SqlParameter> lstParas = new List<SqlParameter>();
             SqlParameter para1 = new SqlParameter();
             para1.ParameterName = "CategoryID";
@@ -582,8 +571,6 @@ namespace ShopBanHang.Controllers
             return dataResult;
         }
 
-        
-
         public DataTable GetDataTableByStore(string storeName, SqlParameter[] parameters)
         {
             try
@@ -610,14 +597,11 @@ namespace ShopBanHang.Controllers
             }
         }
 
-
         public List<Category> GetListChild(long rootID)
         {
             var result = new List<Category>();
             try
             {
-
-
                 var lstAll = _db.Categories.AsNoTracking().Where(m => m.IsDeleted != true).ToList();
 
                 result.Add(lstAll.Where(x => x.ID == rootID).First());
@@ -638,7 +622,6 @@ namespace ShopBanHang.Controllers
                         }
                     }
                 }
-
             }
             catch (System.Exception ee)
             {
@@ -667,7 +650,6 @@ namespace ShopBanHang.Controllers
             return result;
         }
 
-
         //InfinateScrollSearch
 
         public async Task<IActionResult> InfinateScrollSearch(int BlockNumber, int? CategoryID, string ProductName = "", string OrderBy = "ID")
@@ -687,8 +669,6 @@ namespace ShopBanHang.Controllers
 
             jsonModel.HTMLString = await _viewRenderService.RenderToStringAsync("Product/ProductList", lstProduct);
             return Json(jsonModel);
-
-
         }
 
         public class JsonModel
@@ -697,11 +677,12 @@ namespace ShopBanHang.Controllers
 
             public bool MoreData { get; set; }
         }
+
         #endregion Search product
+
         public string CreatOderDetailHTML(List<OrderDetail> lstorderdetail, double? total, double? ship)
         {
             double sumorder = total.Value + ship.Value;
-
 
             string body = "<table width='650' cellspacing='0' cellpadding='0' border='0' style='border: 1px solid #eaeaea'>";
             body += "<thead>";
@@ -714,9 +695,7 @@ namespace ShopBanHang.Controllers
             body += "</thead>";
             foreach (var item in lstorderdetail)
             {
-
                 var product = _db.Products.Where(x => x.ID == item.ProductId).FirstOrDefault();
-
 
                 body += "<tr>";
                 body += " <td valign='top' align='left' style='font-size: 11px; padding: 3px 9px; border-bottom: 1px dotted #cccccc'>";

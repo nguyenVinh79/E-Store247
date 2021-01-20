@@ -1,29 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Areas.Admin.Models;
 using ShopBanHang.Helper;
 using ShopBanHang.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class SupplierController : Controller
     {
         private readonly IMapper _mapper;
         private DataShopContext db;
         private readonly IConfiguration Configuration;
+
         public SupplierController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext)
         {
             this._mapper = mapper;
             db = dbcontext;
             Configuration = configuration;
         }
+
         public IActionResult Index()
         {
             var supplierList = new List<Supplier>();
@@ -36,21 +39,20 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 TempData["StatusMessage"] = "Error in loanding category list";
             }
             return View(supplierList);
-            
         }
+
         public IActionResult Create(int id = 0)
         {
             var model = new SupplierVM();
-
 
             if (id > 0)
             {
                 var supplierData = db.Suppliers.Where(x => x.ID == id).FirstOrDefault();
                 model = _mapper.Map(supplierData, model);
-                
             }
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Create(SupplierVM model, IFormFile Logo)
         {
@@ -58,13 +60,9 @@ namespace ShopBanHang.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
-
                     if (model.ID == 0)
                     {
-
                         #region For Create
-
 
                         var supplier = _mapper.Map<Supplier>(model);
                         if (Logo != null)
@@ -79,16 +77,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         db.Suppliers.Add(supplier);
                         db.SaveChanges();
 
-                        #endregion
-
+                        #endregion For Create
                     }
                     else
                     {
-
                         #region for edit
-                        
+
                         var supplierEdit = _mapper.Map<Supplier>(model);
-                      
+
                         if (Logo != null)
                         {
                             string urlImage = MyTool.UploadImage(Logo, "wwwroot", "Image", "Suppliers");
@@ -101,22 +97,21 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         db.Update(supplierEdit);
                         db.SaveChanges();
 
-                        #endregion
-
+                        #endregion for edit
                     }
 
                     return RedirectToAction("Index");
                 }
-
             }
             catch (Exception ex)
             {
                 TempData["StatusMessage"] = ex.Message;
-                
+
                 return View(model);
             }
             return View(model);
         }
+
         [HttpPost]
         public JsonResult Delete(int id)
         {

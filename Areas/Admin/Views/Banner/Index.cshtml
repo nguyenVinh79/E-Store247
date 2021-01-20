@@ -27,8 +27,9 @@
 
                 <td><b><img height="50" src="~/Image/Sliders/@item.ImagePath" /></b></td>
                 <td>
-                    @if (item.Type == 1)
+                    @if (item.Type == (int)Enums.BannerType.Slider)
                     {
+                       
                         <text>Slider</text>
                     }
                     else

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Areas.Admin.Models;
 using ShopBanHang.Helper;
@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class BannerController : Controller
     {
@@ -20,12 +21,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
         private DataShopContext db;
         private readonly IConfiguration Configuration;
         private readonly IWebHostEnvironment _env;
+
         public BannerController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext, IWebHostEnvironment env)
         {
             this._mapper = mapper;
             db = dbcontext;
             Configuration = configuration;
         }
+
         public IActionResult Index()
         {
             var BannerList = new List<Banner>();
@@ -39,14 +42,13 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
             return View(BannerList);
         }
+
         public IActionResult Create(int id = 0)
         {
             var model = new BannerModel();
 
-
             if (id > 0)
             {
-
                 var BannerData = db.Banners.Where(x => x.ID == id).FirstOrDefault();
                 if (BannerData == null)
                 {
@@ -54,28 +56,21 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 }
 
                 model = _mapper.Map<BannerModel>(BannerData);
-
             }
-
-
 
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Create(BannerModel model, IFormFile image)
         {
-
             try
             {
                 if (ModelState.IsValid)
                 {
-
-
                     if (model.ID == 0)
                     {
-
                         #region For Create
-
 
                         var banner = _mapper.Map<Banner>(model);
                         if (image != null)
@@ -90,12 +85,10 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         db.Banners.Add(banner);
                         db.SaveChanges();
 
-                        #endregion
-
+                        #endregion For Create
                     }
                     else
                     {
-
                         #region for edit
 
                         var bannerEdit = _mapper.Map<Banner>(model);
@@ -112,13 +105,11 @@ namespace ShopBanHang.Areas.Admin.Controllers
                         db.Update(bannerEdit);
                         db.SaveChanges();
 
-                        #endregion
-
+                        #endregion for edit
                     }
 
                     return RedirectToAction("Index");
                 }
-
             }
             catch (Exception ex)
             {
@@ -129,13 +120,13 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public JsonResult Delete(int id)
         {
             var banner = db.Banners.Find(Convert.ToInt64(id));
             if (banner != null)
             {
-
                 db.Banners.Remove(banner);
                 try
                 {
@@ -161,7 +152,5 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 message = "Delete failed!"
             });
         }
-       
-        
     }
 }

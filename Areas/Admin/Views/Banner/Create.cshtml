@@ -7,11 +7,10 @@
 
     @if (Model.ID > 0)
     {
-        <span> Edit banner infomation  </span> }
-    else
-    {
-        <span> Create a new banner</span>
-    }
+<span> Edit banner infomation  </span> }
+else
+{
+<span> Create a new banner</span>}
 </h1>
 @section CSS{
     <style>
@@ -24,43 +23,40 @@
 }
 @using (Html.BeginForm("Create", "Banner", FormMethod.Post, new { enctype = "multipart/form-data", @id = "form" }))
 {
-    @Html.HiddenFor(m => m.ID)
-    @Html.HiddenFor(m => m.ImagePath)
-    <div class="text-center">
-    <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Submit</button>
-    <a href="/admin/banner/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Return</a>
-    </div>
-    <div class="form-group">
-        <label>Image</label>
-        <input name="image" type="file" class="py-2" />
+@Html.HiddenFor(m => m.ID)
+                @Html.HiddenFor(m => m.ImagePath)
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Submit</button>
+                                    <a href="/admin/banner/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Return</a>
+                                </div>
+                                                <div class="form-group">
+                                                    <label>Image</label>
+                                                    <input name="image" type="file" class="py-2" />
 
-        @if (!string.IsNullOrEmpty(Model.ImagePath))
-        {
-        <div class="text-center">
-            <img height="80px" src="~/Image/Sliders/@Model.ImagePath" />
-        </div>
-        }
-
-    </div>
-    <div class="form-group">
-        <label>Type</label>
-        @Html.DropDownListFor(m => m.Type, Html.GetEnumSelectList<Enums.BannerType>())
-        @Html.ValidationMessageFor(model => model.Type, null, new { @class = "validate" })
-    </div>
-    <div class="form-check form-check-inline my-2">
-        <label class="form-check-label">Show</label>
-        @Html.CheckBoxFor(m => m.IsShow, new { @class = "form-check-input ml-2", @checked = true })
-        @Html.ValidationMessageFor(model => model.IsShow, null, new { @class = "validate" })
-    </div>
-    <div class="form-group">
-        <label>Title</label>
-        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Title, null, new { @class = "validate" })
-    </div>
-    <div class="form-group">
-        <label>Embedded link</label>
-        @Html.TextBoxFor(m => m.LinkTo, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.LinkTo, null, new { @class = "validate" })
-    </div>
-    
-}
+                                                    @if (!string.IsNullOrEmpty(Model.ImagePath))
+                                                    {
+                                                        <div class="text-center">
+                                                            <img height="80px" src="~/Image/Sliders/@Model.ImagePath" />
+                                                        </div>
+                                                    }
+                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Type</label>
+                                                                    @Html.DropDownListFor(m => m.Type, Html.GetEnumSelectList<Enums.BannerType>())
+                                                                    @Html.ValidationMessageFor(model => model.Type, null, new { @class = "validate" })
+                                                                </div>
+                                                                                <div class="form-check form-check-inline my-2">
+                                                                                    <label class="form-check-label">Show</label>
+                                                                                    @Html.CheckBoxFor(m => m.IsShow, new { @class = "form-check-input ml-2", @checked = true })
+                                                                                    @Html.ValidationMessageFor(model => model.IsShow, null, new { @class = "validate" })
+                                                                                </div>
+                                                                                                <div class="form-group">
+                                                                                                    <label>Title</label>
+                                                                                                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                                                                                                    @Html.ValidationMessageFor(model => model.Title, null, new { @class = "validate" })
+                                                                                                </div>
+                                                                                                                <div class="form-group">
+                                                                                                                    <label>Embedded link</label>
+                                                                                                                    @Html.TextBoxFor(m => m.LinkTo, new { @class = "form-control" })
+                                                                                                                    @Html.ValidationMessageFor(model => model.LinkTo, null, new { @class = "validate" })
+                                                                                                                </div>}

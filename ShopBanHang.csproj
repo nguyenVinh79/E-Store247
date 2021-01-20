@@ -16,8 +16,72 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201019153300_CreateSchoolDB.cs" />
+    <Compile Remove="Migrations\20201019153300_CreateSchoolDB.Designer.cs" />
+    <Compile Remove="Migrations\20201021145223_20201021_addprodutTable.cs" />
+    <Compile Remove="Migrations\20201021145223_20201021_addprodutTable.Designer.cs" />
+    <Compile Remove="Migrations\20201023141535_CreateSchoolDB11.cs" />
+    <Compile Remove="Migrations\20201023141535_CreateSchoolDB11.Designer.cs" />
+    <Compile Remove="Migrations\20201106093843_shopdata001.cs" />
+    <Compile Remove="Migrations\20201106093843_shopdata001.Designer.cs" />
+    <Compile Remove="Migrations\20201106094846_shopdata001_2.cs" />
+    <Compile Remove="Migrations\20201106094846_shopdata001_2.Designer.cs" />
+    <Compile Remove="Migrations\20201106095206_shopdata001_3.cs" />
+    <Compile Remove="Migrations\20201106095206_shopdata001_3.Designer.cs" />
+    <Compile Remove="Migrations\20201106095316_shopdata001_4.cs" />
+    <Compile Remove="Migrations\20201106095316_shopdata001_4.Designer.cs" />
+    <Compile Remove="Migrations\20201106095638_shopdata001_5.cs" />
+    <Compile Remove="Migrations\20201106095638_shopdata001_5.Designer.cs" />
+    <Compile Remove="Migrations\20201106100303_shopdata001_6.cs" />
+    <Compile Remove="Migrations\20201106100303_shopdata001_6.Designer.cs" />
+    <Compile Remove="Migrations\20201106100433_shopdata001_7.cs" />
+    <Compile Remove="Migrations\20201106100433_shopdata001_7.Designer.cs" />
+    <Compile Remove="Migrations\20201106100830_shopdata001_8.cs" />
+    <Compile Remove="Migrations\20201106100830_shopdata001_8.Designer.cs" />
+    <Compile Remove="Migrations\20201106101551_shopdata001_9.cs" />
+    <Compile Remove="Migrations\20201106101551_shopdata001_9.Designer.cs" />
+    <Compile Remove="Migrations\20201106141818_20201106.cs" />
+    <Compile Remove="Migrations\20201106141818_20201106.Designer.cs" />
+    <Compile Remove="Migrations\20201106152402_db2020110.cs" />
+    <Compile Remove="Migrations\20201106152402_db2020110.Designer.cs" />
+    <Compile Remove="Migrations\20201118075659_ShopData.cs" />
+    <Compile Remove="Migrations\20201118075659_ShopData.Designer.cs" />
+    <Compile Remove="Migrations\20201118080542_ShopDataContex.cs" />
+    <Compile Remove="Migrations\20201118080542_ShopDataContex.Designer.cs" />
+    <Compile Remove="Migrations\20201118080739_shopdbcontext.cs" />
+    <Compile Remove="Migrations\20201118080739_shopdbcontext.Designer.cs" />
+    <Compile Remove="Migrations\20201118095027_shopdbcontext1.cs" />
+    <Compile Remove="Migrations\20201118095027_shopdbcontext1.Designer.cs" />
+    <Compile Remove="Migrations\20201118140216_shopdbcontext2.cs" />
+    <Compile Remove="Migrations\20201118140216_shopdbcontext2.Designer.cs" />
+    <Compile Remove="Migrations\20201121053001_2111AddUserIdentity.cs" />
+    <Compile Remove="Migrations\20201121053001_2111AddUserIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20210107163630_updateProductPropertyTbl.cs" />
+    <Compile Remove="Migrations\20210107163630_updateProductPropertyTbl.Designer.cs" />
     <Compile Remove="Migrations\20210114043657_updateOrderTable.cs" />
     <Compile Remove="Migrations\20210114043657_updateOrderTable.Designer.cs" />
+    <Compile Remove="Migrations\20210118003026_new_database.cs" />
+    <Compile Remove="Migrations\20210118003026_new_database.Designer.cs" />
+    <Compile Remove="Migrations\20210118013321_modify_producttable.cs" />
+    <Compile Remove="Migrations\20210118013321_modify_producttable.Designer.cs" />
+    <Compile Remove="Migrations\20210118021339_add_relation.cs" />
+    <Compile Remove="Migrations\20210118021339_add_relation.Designer.cs" />
+    <Compile Remove="Migrations\20210118022349_add_relation.cs" />
+    <Compile Remove="Migrations\20210118022349_add_relation.Designer.cs" />
+    <Compile Remove="Migrations\20210118023331_add_relation.cs" />
+    <Compile Remove="Migrations\20210118023331_add_relation.Designer.cs" />
+    <Compile Remove="Migrations\20210118024301_add_relation.cs" />
+    <Compile Remove="Migrations\20210118024301_add_relation.Designer.cs" />
+    <Compile Remove="Migrations\20210118024948_add_relation.cs" />
+    <Compile Remove="Migrations\20210118024948_add_relation.Designer.cs" />
+    <Compile Remove="Migrations\20210118045741_edit_relationship_color.cs" />
+    <Compile Remove="Migrations\20210118045741_edit_relationship_color.Designer.cs" />
+    <Compile Remove="Migrations\20210118045929_addcolumn_propertyTable.cs" />
+    <Compile Remove="Migrations\20210118045929_addcolumn_propertyTable.Designer.cs" />
+    <Compile Remove="Migrations\20210118045954_addcolumn_propertyTable.cs" />
+    <Compile Remove="Migrations\20210118045954_addcolumn_propertyTable.Designer.cs" />
+    <Compile Remove="Migrations\20210118050207_add_color_relationship.cs" />
+    <Compile Remove="Migrations\20210118050207_add_color_relationship.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +129,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="MailKit" Version="2.10.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">

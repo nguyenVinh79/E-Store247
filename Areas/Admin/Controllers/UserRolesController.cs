@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopBanHang.Models;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
@@ -23,7 +21,6 @@ namespace ShopBanHang.Areas.Admin.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
-
 
         public async Task<IActionResult> Index()
         {
@@ -70,7 +67,6 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 else
                 {
                     userRolesViewModel.Selected = false;
-
                 }
 
                 model.Add(userRolesViewModel);
@@ -78,6 +74,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Manage(List<ManageUserRolesViewModel> model, string userId)
         {

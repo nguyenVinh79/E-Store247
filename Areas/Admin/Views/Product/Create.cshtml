@@ -1,466 +1,510 @@
 ﻿@model ProductModel
-@{
-    ViewData["Title"] = "Create";
-}
-@{ 
-    List<ProductColorSize> propertyList = (List<ProductColorSize>)ViewBag.PropertyList;
+@{ ViewData["Title"] = "Create"; }
+@{ List<ProductColorSize> propertyList = (List<ProductColorSize>)ViewBag.PropertyList;
     var colorList = (List<CT_Color>)ViewBag.ColorList;
-    string ColorOption ="<select class='form-control input-md color-option'>";
-    int i = 0;
-    foreach( var item in colorList)
+    string ColorOption = "<select class='form-control input-md color-option color-saved'>";
+    ColorOption += "<option value='0'selected>Choose</option >";
+    foreach (var item in colorList)
     {
-        if(i==0)
-        {
-            ColorOption += "<option value='" + item.Code + "' selected>" + item.Name + "</option >";
-        }
-        else
-        {
-            ColorOption += "<option value='" + item.Code + "'>" + item.Name + "</option >";
-        }
-        i++;
+
+        ColorOption += "<option value='" + item.ColorId + "'>" + item.Name + "</option >";
+
     }
-    ColorOption += "</select>";
-}
-@section CSS{ 
- <style>
-     input.form-check-input {
-         width: 20px;
-         height: 20px;
-         background-color: #4cff00;
-    
-     } 
-    </style> 
+    ColorOption += "</select>"; }
+@section CSS{
+    <style>
+        input.form-check-input {
+            width: 20px;
+            height: 20px;
+            background-color: #4cff00;
+        }
+    </style>
 }
 <h1 class="h3 mb-2 text-gray-800">
-    
+
     @if (Model.ID > 0)
     {
-        <span> Edit product infomation: <i>@Model.ProductName</i>  </span>
-    }
-    else
-    {
-        <span> Create a new product</span>
-    }
+<span> Edit product infomation: <i>@Model.ProductName</i>  </span> }
+else
+{
+<span> Create a new product</span>}
 
 </h1>
 
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" , @id = "form"}))
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data", @id = "form" }))
 {
-    @Html.HiddenFor(m => m.ID)
-    @Html.HiddenFor(m => m.ImagePath)
-    <input type="hidden" id="ColorList" value="@ColorOption"/>
-    <input type="hidden" name="PropertyJsonString" id="PropertyString" value="@ColorOption"/>
+@Html.HiddenFor(m => m.ID)
+@Html.HiddenFor(m => m.ImagePath)
+    <input type="hidden" id="ColorList" value="@ColorOption" />
+    <input type="hidden" name="PropertyJsonString" id="PropertyString" value="@ColorOption" />
     <div class="text-center">
         <button type="submit" class="btn btn-primary" onclick="Save()"><i class="far fa-save"></i> Submit</button>
         <a href="/admin/product/index" class="btn btn-info"><i class="fas fa-angle-double-left"></i> Return</a>
-        <a href="#" class="btn btn-danger" ><i class="fas fa-mouse-pointer"></i>
-         Select related blogs
+        <a href="#" class="btn btn-danger">
+            <i class="fas fa-mouse-pointer"></i>
+            Select related blogs
         </a>
     </div>
-    <hr/>
+    <hr />                                                                           
     <div class="tab" style="text-align:center">
         <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'InfoTab')" id="infoTab">Information</a>
         <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'ImageTab')" id="imageTab">Images</a>
         <a class="btn btn-outline-dark tablinks" onclick="changeTab(event, 'PropertyTab')" id="propertyTab">Property</a>
-    </div>
-    <br />
+    </div>                                                                                           
+     <br />                                                                                                           
 
-    <div id="InfoTab" class="tabcontent">
+     <div id="InfoTab" class="tabcontent">
 
-        <div class="form-group">
-            <label>Name</label>
-            @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "validate" })
+         <div class="form-group">
+             <label>Name</label>
+             @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+             @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "validate" })
 
-        </div>
-        <div class="form-group">
-            <label>Category</label>
-            @Html.DropDownListFor(m => m.CategoryID, Model.CategoryList, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CategoryID, null, new { @class = "validate" })
-            @*@Html.DropDownListFor(m => m.CategoryID, ViewBag.lstcategory as IEnumerable<SelectListItem>, new { @class = "form-control" })*@
+         </div>
+         <div class="form-group">
+             <label>Category</label>
+             @Html.DropDownListFor(m => m.CategoryID, Model.CategoryList, new { @class = "form-control" })
+             @Html.ValidationMessageFor(model => model.CategoryID, null, new { @class = "validate" })
+             @*@Html.DropDownListFor(m => m.CategoryID, ViewBag.lstcategory as IEnumerable<SelectListItem>, new { @class = "form-control" })*@
 
-        </div>
-        <div class="form-group">
-            <label>Product code</label>
-            @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @maxlength = 6 })
-            @Html.ValidationMessageFor(model => model.Code, null, new { @class = "validate" })
+         </div>
+         <div class="form-group">
+             <label>Product code</label>
+             @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @maxlength = 6 })
+             @Html.ValidationMessageFor(model => model.Code, null, new { @class = "validate" })
 
-        </div>
+         </div>
 
-        <div class="form-check form-check-inline my-2">
-            <label class="form-check-label">Publish</label>
-            @Html.CheckBoxFor(m => m.Published, new { @class = "form-check-input ml-2", @checked = true })
-            @Html.ValidationMessageFor(model => model.Published, null, new { @class = "validate" })
-        </div>
+         <div class="form-check form-check-inline my-2">
+             <label class="form-check-label">Publish</label>
+             @Html.CheckBoxFor(m => m.Published, new { @class = "form-check-input ml-2", @checked = true })
+             @Html.ValidationMessageFor(model => model.Published, null, new { @class = "validate" })
+         </div>
 
-        <div class="form-check form-check-inline my-2">
-            <label class="form-check-label">Is New</label>
-            @Html.CheckBoxFor(m => m.IsNew, new { @class = "form-check-input ml-2" })
-            @Html.ValidationMessageFor(model => model.IsNew, null, new { @class = "validate" })
-        </div>
+         <div class="form-check form-check-inline my-2">
+             <label class="form-check-label">Is New</label>
+             @Html.CheckBoxFor(m => m.IsNew, new { @class = "form-check-input ml-2" })
+             @Html.ValidationMessageFor(model => model.IsNew, null, new { @class = "validate" })
+         </div>
+         
+         <div class="form-group">
+             <label>Old Price</label>
+             <input type="text" name="UnitPrice" class="form-control old-price currency" id="UnitPrice" value="@Model.UnitPrice" />
+             @*@Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control old-price" })*@
+             @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validate" })
 
-        <div class="form-group">
-            <label>Old Price</label>
-            @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.UnitPrice, null, new { @class = "validate" })
-
-        </div>
-
-
-        <div class="form-group">
-            <label>New Price</label>
-            @Html.TextBoxFor(m => m.UnitPriceNew, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
-
-        </div>
+         </div>
 
 
-        <div class="form-group">
-            <label>Description</label>
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
-            @Html.ValidationMessageFor(model => model.Description, null, new { @class = "validate" })
-        </div>
-    </div>
+         <div class="form-group">
+             <label>New Price</label>
+             <input type="text" name="UnitPriceNew" class="form-control new-price currency" id="UnitPriceNew" value="@Model.UnitPriceNew" />
+             @*@Html.TextBoxFor(m => m.UnitPriceNew, new { @class = "form-control" })*@
+             @Html.ValidationMessageFor(model => model.UnitPriceNew, null, new { @class = "validate" })
 
-    <div id="ImageTab" class="tabcontent">
-        
+         </div>
 
-        
 
-        <div class="container-fluid">
-            <table class="table table-bordered table-gray">
-                <thead class="thead-light">
-                    <tr class="row m-0">
-                        <th class="d-inline-block col-3">Avatar</th>
-                        <th class="d-inline-block col-9">Detail Images</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="row m-0">
-                        <td class="d-inline-block col-3">
-                            <div class="form-group">
-                                
-                                <input name="Avatar" type="file"  class="py-2"/>
+         <div class="form-group">
+             <label>Description</label>
+             @Html.TextAreaFor(m => m.Description, new { @class = "form-control summernote", })
+             @Html.ValidationMessageFor(model => model.Description, null, new { @class = "validate" })
+         </div>
+     </div>
 
-                                @if (!string.IsNullOrEmpty(Model.ImagePath))
-                                {
-                                    <div class="text-center">
-                                        <img height="200" src="~/Image/Products/@Model.ImagePath" />
-                                    </div>
-                                }
+     <div id="ImageTab" class="tabcontent">
 
-                            </div>
-                        </td>
-                        <td class="d-inline-block col-9">
-                            <div class="form-group">
-                                <input name="DetailImages" type="file" multiple />
+         <div class="container-fluid">
+             <table class="table table-bordered table-gray">
+                 <thead class="thead-light">
+                     <tr class="row m-0">
+                         <th class="d-inline-block col-3">Avatar</th>
+                         <th class="d-inline-block col-9">Detail Images</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr class="row m-0">
+                         <td class="d-inline-block col-3">
+                             <div class="form-group">
 
-                            </div>
-                            <div class="container">
-                            <div class="row pt-2">
-                                @if (Model.DetailImageList != null)
-                                {
-                                
-                                     foreach (var item in Model.DetailImageList)
-                                    {
+                                 <input name="Avatar" type="file" class="py-2" />
+
+                                 @if (!string.IsNullOrEmpty(Model.ImagePath))
+                                 {
+                                <div class="text-center">
+                                <img height="200" src="~/Image/Products/@Model.ImagePath" />
+                                </div>}
+
+                                </div>
+                         </td>
+                         <td class="d-inline-block col-9">
+                             <div class="form-group">
+                                 <input name="DetailImages" type="file" multiple />
+
+                             </div>
+                             <div class="container">
+                                 <div class="row pt-2">
+                                     @if (Model.DetailImageList != null)
+                                     {
+
+                                         foreach (var item in Model.DetailImageList)
+                                         {
                                         <div class="col-md-3 m-4 img-frame">
-                                            <img height="200px" src="~/Image/Products/Details/@item.ImagePath" />
-                                            <div class="text-center mt-2">
-                                                <a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="@item.Id"><i class="fa fa-times"></i></a>
-                                            </div>
+                                        <img height="200px" src="~/Image/Products/Details/@item.ImagePath" />
+                                        <div class="text-center mt-2">
+                                        <a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="@item.Id"><i class="fa fa-times"></i></a>
                                         </div>
-                                       
+                                        </div>
+                                        }
+             }
+                                 </div>
+                             </div>
+                         </td>
+                     </tr>
+                 </tbody>
+             </table>
+
+         </div>
+     </div>
+
+     <div id="PropertyTab" class="tabcontent">
+         <table class="table table-bordered" id="PropertyTable">
+             <thead class="thead-light">
+                 <tr>
+                     <th>#</th>
+                     <th>Color</th>
+                     <th>Old Price</th>
+                     <th>New Price</th>
+                     <th>Quantity</th>
+                     <th>Qty. Sold</th>
+                     <th>Action</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 @{ int PropertyIndex = 1; }
+                 @if (propertyList != null)
+                 {
+
+                     foreach (var item in propertyList)
+                     {
+                     <tr class="rowData">
+                         <td class="index">@PropertyIndex</td>
+                         <td>
+                             <select class="form-control input-md color-option">
+                                 @foreach (var color in colorList)
+                                 {
+                                     if (color.ColorId == item.ColorId)
+                                     {
+                                        <option value="@color.ColorId" selected>@color.Name</option>
                                      }
-                                 }
-                            </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                     else
+                                     {
+                                         <option value="@color.ColorId">@color.Name</option>
+                                    }
+                                    }
+                             </select>
+                         </td>
+                         <td><input class="form-control input-md currency" maxlength="10" value="@item.UnitPrice" /></td>
+                         <td><input class="form-control input-md currency" maxlength="10" value="@item.UnitPriceNew" /></td>
+                         <td><input class="form-control input-md" maxlength="10" value="@item.Quantity" /></td>
+                         <td><input class="form-control input-md" maxlength="10" value="@item.Quantity_Saled" /></td>
+                         <td>
+                             <a class="btn btn-danger btn-circle btn-md text-center del-property" data-id="@item.Id">
+                                 <i class="fa fa-times"></i>
+                             </a>
+                         </td>
+                     </tr>
+                         PropertyIndex++;
+                     }
+                 }
+             </tbody>
+         </table>
+         <a id="AddRow" class="btn btn-success text-white"><i class="fa fa-plus"></i> Add new row</a>
 
-        </div>
-    </div>
+     </div>
+     <input type="hidden" class="price-input" />
+     }
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.1.0/autoNumeric.js"></script>
 
-    <div id="PropertyTab" class="tabcontent">
-        <table class="table table-bordered" id="PropertyTable">
-            <thead class="thead-light">
-                <tr>
-                    <th>#</th>
-                    <th>Color</th>
-                    <th>Old Price</th>
-                    <th>New Price</th>
-                    <th>Quantity</th>
-                    <th>Qty. Sold</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{ int PropertyIndex = 1; } 
-               @if (propertyList != null)
-               {
-                   
-                   foreach(var item in propertyList)
-                   {
-                       <tr class="rowData"> <td class="index">@PropertyIndex</td> 
-                        <td><select class="form-control input-md color-option" >
-                            @foreach( var color in colorList)
-                            {
-                                if (color.Code == item.CodeColor)
-                                {
-                                    <option value="@color.Code" selected>@color.Name</option >
+    <script>
+        
+        $(document).ready(function () {
+            var stringColorList = $('#ColorList').val();
+            $('.del-property').click(function () {
+
+                var deleteBtn = $(this);
+                var id = $(this).data('id');
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this product property!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                url: '/admin/product/PropertyDelete',
+                                data: {
+                                    id: id
+                                },
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status == true) {
+
+                                        $(deleteBtn).parents("tr").remove();
+                                        IndexUpdate();
+                                        swal("The property has been deleted!", {
+                                            icon: "success",
+                                        });
+                                    }
+                                    else {
+                                        swal(response.message, {
+                                            icon: "error",
+                                        });
+
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                                else
-                                {
-                                    <option value="@color.Code">@color.Name</option >
-                                }
-                            }
-                            </select></td>
-                        <td><input class="form-control input-md" maxlength="10" value="@item.UnitPrice"/></td>
-                        <td><input class="form-control input-md" maxlength="10" value="@item.UnitPriceNew"/></td>
-                        <td><input class="form-control input-md" maxlength="10" value="@item.Quantity"/></td>
-                        <td><input class="form-control input-md" maxlength="10" value="@item.Quantity_Saled"/></td>
-                        <td><a class="btn btn-danger btn-circle btn-md text-center del-property" data-id="@item.Id">
-                            <i class="fa fa-times"></i></a></td>
-                        </tr>
-                       PropertyIndex++;
-                   }
-               }
-            </tbody>
-        </table>
-        <a id="AddRow" class="btn btn-success text-white"><i class="fa fa-plus"></i> Add new row</a>
-
-    </div>
-
-}
-@section Scripts{ 
-<script>
-    $(document).ready(function () {
-        var stringColorList = $('#ColorList').val();
-        $('.del-property').click(function () {
-            debugger;
-            var deleteBtn = $(this);
-            var id = $(this).data('id');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this product property!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: '/admin/product/PropertyDelete',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.status == true) {
-                                    debugger;
-                                    $(deleteBtn).parents("tr").remove();
-                                    IndexUpdate();
-                                    swal("The property has been deleted!", {
-                                        icon: "success",
-                                    });
-                                }
-                                else {
-                                    swal(response.message, {
-                                        icon: "error",
-                                    });
-
-                                }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
+                            });
                         }
-                        });
-        });
-        $('.del-img').click(function () {
-            debugger;
-            var deleteBtn = $(this);
-            var id = $(this).data('id');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this image!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: '/admin/product/ImageDelete',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.status == true) {
-                                    deleteBtn.parents('div.col-md-3.m-4.img-frame').remove();
-                                    swal("The image has been deleted!", {
-                                        icon: "success",
-                                    });
-                                }
-                                else {
-                                    swal(response.message, {
-                                        icon: "error",
-                                    });
+                    });
+            });
+            $('.del-img').click(function () {
 
-                                }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
-                    }
-                });
-        });
-        $('#AddRow').click(function () {
-            $('#PropertyTable').append(
-                '<tr class="rowData">' + '<td class="index">' + '</td>' +
-                '<td>' + stringColorList + '</td>' +
-                '<td>' +'<input class="form-control input-md" maxlength="10"/>' +'</td>' +
-                '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
-                '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
-                '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
-                '<td><a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="0" onclick="FieldDelete(this)">'+
-                '<i class="fa fa-times"></i></a></td>' +
-                '</tr>'
+                var deleteBtn = $(this);
+                var id = $(this).data('id');
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this image!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                url: '/admin/product/ImageDelete',
+                                data: {
+                                    id: id
+                                },
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status == true) {
+                                        deleteBtn.parents('div.col-md-3.m-4.img-frame').remove();
+                                        swal("The image has been deleted!", {
+                                            icon: "success",
+                                        });
+                                    }
+                                    else {
+                                        swal(response.message, {
+                                            icon: "error",
+                                        });
 
-            );
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+                    });
+            });
+
+            $('#AddRow').click(function () {
+         
+                $('#PropertyTable').append(
+                   
+                    '<tr class="rowData">' + '<td class="index">' + '</td>' +
+                    '<td>' + stringColorList + '</td>' +
+                    '<td>' + '<input class="form-control input-md" data-new="1" maxlength="10" value="0"/>' + '</td>' +
+                    '<td>' + '<input class="form-control input-md " maxlength="10" value="0"/>' + '</td>' +
+                    '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
+                    '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
+                    '<td><a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="0" onclick="FieldDelete(this)">' +
+                    '<i class="fa fa-times"></i></a></td>' +
+                    '</tr>'
+
+                );
+                
+                IndexUpdate();
+
+            });
+
+        });
+        function IndexUpdate() {
+            $('#PropertyTable .rowData').each(function () {
+                var index = this.rowIndex;
+                $(this).find('.index').html(index);
+            });
+
+        }
+        function FieldDelete(element) {
+            document.getElementById("PropertyTable").deleteRow(element.parentNode.parentNode.rowIndex);
             IndexUpdate();
-        });
-        
+        }
+        function changeTab(evt, targetTab) {
 
-        });
+            var currentTab = $('div.tab').find('.btn.btn-outline-dark.tablinks.active').attr('id');
+            if (currentTab == "infoTab") {
 
-    function IndexUpdate() {
-        $('#PropertyTable .rowData').each(function () {
-            var index = this.rowIndex;
-            $(this).find('.index').html(index);
-        });
+                if ($('#form').valid()) {
+                    openTab(evt, targetTab);
+                    return false;
+                }
+                else {
+                    return false;
+                }
 
-    }
-    function FieldDelete(element) {
-        document.getElementById("PropertyTable").deleteRow(element.parentNode.parentNode.rowIndex);
-        IndexUpdate();
-    }
-    function changeTab(evt, targetTab) {
-        
-        var currentTab = $('div.tab').find('.btn.btn-outline-dark.tablinks.active').attr('id');
-        if (currentTab == "infoTab") {
-
-            if ($('#form').valid()) {
-                openTab(evt, targetTab);
-                return false;
+            }
+            else if (currentTab == 'imageTab') {
+                if ($('#form').valid()) {
+                    openTab(evt, targetTab);
+                    return false;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (currentTab == 'propertyTab') {
+                if ($('#form').valid()) {
+                    openTab(evt, targetTab);
+                    return false;
+                }
+                else {
+                    return false;
+                }
             }
             else {
-                return false;
+                openTab(evt, "InfoTab")
             }
+        }
+        document.getElementById("infoTab").click();
+        function openTab(evt, tabName) {
 
-        }
-        else if (currentTab == 'imageTab') {
-            if ($('#form').valid()) {
-                openTab(evt, targetTab);
-                return false;
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
-            else {
-                return false;
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
         }
-        else if (currentTab == 'propertyTab') {
-            if ($('#form').valid()) {
-                openTab(evt, targetTab);
-                return false;
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            openTab(evt, "InfoTab")
-        }
-    }
-    document.getElementById("infoTab").click();
-    function openTab(evt, tabName) {
-        debugger;
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-    function Save() {
-        debugger;
-        jsonObj = [];
-        count = 0;
-        $('#PropertyTable .rowData').each(function () {
-            item = {};
-            item["CodeColor"] = $(this).find('td select,input:text')[0].value;
-            item["UnitPrice"] = $(this).find('td select,input:text')[1].value;
-            item["UnitPriceNew"] = $(this).find('td select,input:text')[2].value;
-            item["Quantity"] = $(this).find('td select,input:text')[3].value;
-            item["Quantity_Saled"] = $(this).find('td select,input:text')[4].value;
-            item["Id"] = $(this).find('td a').data('id');
-            if (!$(this).find('td select,input:text')[1].value) {
-                swal("Please enter all price field!", {
-                    icon: "warning",
-                });
-                event.preventDefault();
-                $(this).find('td select,input:text')[1].focus();
-                return false;
-            }
-            if (!$(this).find('td select,input:text')[2].value) {
-                swal("Please enter all price field!", {
-                    icon: "warning",
-                });
-                event.preventDefault();
-                $(this).find('td select,input:text')[2].focus();
-                return false;
-            }
-            jsonObj.push(item);
-            count++;
-        });
-        if (count==0) {
-            swal("Please enter all price field!", {
-                icon: "warning",
-            });
-            event.preventDefault();
-            return false;
-        }
-        var PropertyJsonString = JSON.stringify(jsonObj);
-        $('#PropertyString').val(PropertyJsonString);
+        function Save() {
+            jsonObj = [];
+            count = 0;
+            currencyPos = 2;
+            $('#PropertyTable .rowData').each(function () {
+                debugger;
+                item = {};
+               
+                item["ColorId"] = $(this).find('td select,input:text')[0].value;
+                item["UnitPrice"] = $(this).find('td select,input:text')[1].value.replace(/[^\d,-]/g, '');;
+                item["UnitPriceNew"] = $(this).find('td select,input:text')[2].value.replace(/[^\d,-]/g, '');
+                item["Quantity"] = $(this).find('td select,input:text')[3].value;
+                item["Quantity_Saled"] = $(this).find('td select,input:text')[4].value;
+                item["Id"] = $(this).find('td a').data('id');
 
-    }
-    $("select.color-option").change(function () {
-        debugger;
-        var count = 0;
-        var colorItem = $(this).children("option:selected").val();
-        $('#PropertyTable .rowData').each(function () {
-            debugger;
-            if (colorItem == $(this).find("td select.color-option").children("option:selected").val()) {
+                if ($(this).find('td select,input:text')[0].value == '0') {
+                    swal("Please choose color!", {
+                        icon: "warning",
+                    });
+                    event.preventDefault();
+                    $(this).find('td select,input:text')[0].focus();
+                    return false;
+                }
+                if (!$(this).find('td select,input:text')[1].value) {
+                    swal("Please enter all price field!", {
+                        icon: "warning",
+                    });
+                    event.preventDefault();
+                    $(this).find('td select,input:text')[1].focus();
+                    return false;
+                }
+                if (!$(this).find('td select,input:text')[2].value) {
+                    swal("Please enter all price field!", {
+                        icon: "warning",
+                    });
+                    event.preventDefault();
+                    $(this).find('td select,input:text')[2].focus();
+                    return false;
+                }
+                jsonObj.push(item);
                 count++;
+            });
+            if (count == 0) {
+                swal("Please enter all price field!", {
+                    icon: "warning",
+                });
+                event.preventDefault();
+                return false;
+            }
+
+            var PropertyJsonString = JSON.stringify(jsonObj);
+            $('#PropertyString').val(PropertyJsonString);
+
+        }
+
+        //#region check duplicate color
+        var tempSelectedValue = 0;
+        $(document).on("click", "select.color-option", function () {
+
+            tempSelectedValue = $(this).children('option:selected').val();
+        });
+        $(document).on("change", "select.color-option", function () {
+
+            var thisElement = $(this);
+            var count = 0;
+            var colorItem = $(this).children("option:selected").val();
+            $('#PropertyTable .rowData').each(function () {
+
+                if (colorItem == $(this).find("td select.color-option").children("option:selected").val()) {
+                    count++;
+                }
+            });
+            if (count >= 2) {
+
+                swal("Duplicate color!", {
+                    icon: "warning",
+                });
+                thisElement.val(tempSelectedValue);
+                return false;
             }
         });
-        if (count >= 2) {
-            swal("Duplicate color!", {
-                icon: "warning",
-            });
-        }
-    });
+        //#endregion
 
-</script>
+    </script>
+    <script type="text/javascript">
+     
+        // AutoNumeric initialisation
+        const anElement = new AutoNumeric('.price-input ', {
+            currencySymbolPlacement: "s",
+            maximumValue: "100000000",
+            minimumValue: "0",
+            outputFormat: "number",
+            alwaysAllowDecimalCharacter: true,
+            decimalCharacter: ",",
+            symbolWhenUnfocused: "",
+            modifyValueOnWheel: false,
+            decimalPlacesShownOnBlur: 0,
+            digitGroupSeparator: ".",
+            unformatOnSubmit: true
 
+        });
+
+        
+        const anElementsArray = anElement.init('.currency');
+
+        
+
+    </script>
 }

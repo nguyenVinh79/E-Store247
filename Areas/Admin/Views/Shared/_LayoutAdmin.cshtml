@@ -25,7 +25,6 @@
 
 <body id="page-top">
 
-
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -43,8 +42,8 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="/admin">
+            <li class="nav-item  @(ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active" : "")">
+                <a class="nav-link" href="/admin/">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
@@ -55,61 +54,89 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Bán hàng
+
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "product"
+                || ViewContext.RouteData.Values["Controller"].ToString() == "Category"  ? "active" : "")">
+                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "product"
+                || ViewContext.RouteData.Values["Controller"].ToString() == "category"  ? "active" : "collapsed") " href="#" data-toggle="collapse"
+                   data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Product Management</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseTwo" class="collapse @(ViewContext.RouteData.Values["Controller"].ToString() == "product"
+                || ViewContext.RouteData.Values["Controller"].ToString() == "category"  ? "show" : "")" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="/admin/product/index">Products</a>
-                        <a class="collapse-item" href="/admin/category/index">Categories</a>
+                        <a class="collapse-item @(ViewContext.RouteData.Values["Controller"].ToString() == "product" ? "active" : "")" href="/admin/product/index">Products</a>
+                        <a class="collapse-item @(ViewContext.RouteData.Values["Controller"].ToString() == "category" ? "active" : "")" href="/admin/category/index">Categories</a>
                     </div>
                 </div>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="true" aria-controls="collapseUser">
+            <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "RoleManager"
+                || ViewContext.RouteData.Values["Controller"].ToString() == "UserRoles"  ? "active" : "")">
+                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "RoleManager"
+                || ViewContext.RouteData.Values["Controller"].ToString() == "UserRoles"  ? "active" : "collapsed")" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="true" aria-controls="collapseUser">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>User management</span>
                 </a>
-                <div id="collapseUser" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseUser" class="collapse @(ViewContext.RouteData.Values["Controller"].ToString() == "RoleManager"
+                || ViewContext.RouteData.Values["Controller"].ToString() == "UserRoles"  ? "show" : "")" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="/admin/RoleManager/index">Roles</a>
-                        <a class="collapse-item" href="/admin/UserRoles/index">User</a>
+                        <a class="collapse-item @(ViewContext.RouteData.Values["Controller"].ToString() == "RoleManager" ? "active" : "")" href="/admin/RoleManager/index">Roles</a>
+                        <a class="collapse-item @(ViewContext.RouteData.Values["Controller"].ToString() == "UserRoles" ? "active" : "")" href="/admin/UserRoles/index">User</a>
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProperty" aria-expanded="true" aria-controls="collapseProperty">
+            @{ var activeProperty = ViewContext.RouteData.Values["Controller"].ToString() == "color"
+                       || ViewContext.RouteData.Values["Controller"].ToString() == "supplier"
+                       || ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "active" : "";
+                var collapsedProperty = ViewContext.RouteData.Values["Controller"].ToString() == "color"
+                  || ViewContext.RouteData.Values["Controller"].ToString() == "supplier"
+                  || ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "active" : "collapsed";
+                var showProperty = ViewContext.RouteData.Values["Controller"].ToString() == "color"
+                  || ViewContext.RouteData.Values["Controller"].ToString() == "supplier"
+                  || ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "show" : "";
+                var colorTab = ViewContext.RouteData.Values["Controller"].ToString() == "color" ? "active" : "";
+                var supplierTab = ViewContext.RouteData.Values["Controller"].ToString() == "supplier" ? "active" : "";
+                var warrantyTab = ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "active" : ""; }
+            <li class="nav-item @activeProperty">
+                <a class="nav-link @collapsedProperty" href="#" data-toggle="collapse" data-target="#collapseProperty" aria-expanded="true" aria-controls="collapseProperty">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Property Management</span>
                 </a>
-                <div id="collapseProperty" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="collapseProperty" class="collapse @showProperty" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Property:</h6>
-                        <a class="collapse-item" href="/admin/color/index">Colors</a>
-                        <a class="collapse-item" href="/admin/supplier/index">Supplier</a>
-                        <a class="collapse-item" href="/admin/warranty/index">Warranty Time</a>
+                        <a class="collapse-item @colorTab" href="/admin/color/index">Colors</a>
+                        <a class="collapse-item @supplierTab" href="/admin/supplier/index">Supplier</a>
+                        <a class="collapse-item @warrantyTab" href="/admin/warranty/index">Warranty Time</a>
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSettings" aria-expanded="true" aria-controls="collapseSettings">
+            @{ var activeSetting = ViewContext.RouteData.Values["Controller"].ToString() == "setting"
+                        || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "";
+                var collapsedSetting = ViewContext.RouteData.Values["Controller"].ToString() == "setting"
+                  || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "collapsed";
+                var showSetting = ViewContext.RouteData.Values["Controller"].ToString() == "setting"
+                   || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "show" : "";
+                var settingTab = ViewContext.RouteData.Values["Controller"].ToString() == "setting" ? "active" : "";
+                var bannerTab = ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "";
+                }
+            <li class="nav-item @activeSetting">
+                <a class="nav-link @collapsedSetting" href="#" data-toggle="collapse" data-target="#collapseSettings" aria-expanded="true" aria-controls="collapseSettings">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Settings</span>
                 </a>
-                <div id="collapseSettings" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="collapseSettings" class="collapse @showSetting" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        
-                        <a class="collapse-item" href="/admin/setting/index">Footer</a>
-                        <a class="collapse-item" href="/admin/banner/index">Banner</a>
+
+                        <a class="collapse-item @settingTab" href="/admin/setting/index">Footer</a>
+                        <a class="collapse-item @bannerTab" href="/admin/banner/index">Banner</a>
                     </div>
                 </div>
             </li>
@@ -298,20 +325,15 @@
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     @RenderBody()
-
-
                 </div>
                 <!-- /.container-fluid -->
-
             </div>
             <!-- End of Main Content -->
             <!-- Footer -->
@@ -323,12 +345,9 @@
                 </div>
             </footer>
             <!-- End of Footer -->
-
         </div>
         <!-- End of Content Wrapper -->
-
     </div>
-
 
     <!-- Page Wrapper -->
     <!-- Bootstrap core JavaScript-->
@@ -351,7 +370,5 @@
     <script src="~/js/AdminSite.js"></script>
     <script src="~/sweetalert/sweetalert.min.js"></script>
     @RenderSection("Scripts", required: false)
-
 </body>
-
 </html>

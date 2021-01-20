@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopBanHang.Models;
+using System.Threading.Tasks;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
@@ -22,12 +19,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
+
         public async Task<IActionResult> Index()
         {
             var roles = await _roleManager.Roles.ToListAsync();
 
             return View(roles);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddRole(string roleName)
         {
@@ -37,6 +36,5 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
-
     }
 }

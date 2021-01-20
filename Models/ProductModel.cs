@@ -2,14 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShopBanHang.Models
 {
     public class ProductModel
     {
-
         public int ID { get; set; }
 
         [Required(ErrorMessage = "Please enter product name")]
@@ -25,13 +22,13 @@ namespace ShopBanHang.Models
         public string ImagePath { get; set; }
 
         [Range(0, 100000000, ErrorMessage = "Enter number between 0 to 100.000.000")]
+        [DataType(DataType.Text)]
         public double? UnitPrice { get; set; }
-
 
         [Range(0, 100000000, ErrorMessage = "Enter number between 0 to 100.000.000")]
         public double? UnitPriceNew { get; set; }
 
-        [Required(ErrorMessage = "Bắt Buộc Nhập")]
+        [Required]
         public int? CategoryID { get; set; }
 
         public string CategoryName { get; set; }
@@ -82,7 +79,5 @@ namespace ShopBanHang.Models
         public string UpdateLBy { get; set; }
         public List<SelectListItem> CategoryList { get; set; }
         public List<Image> DetailImageList { get; set; }
-
-
     }
 }

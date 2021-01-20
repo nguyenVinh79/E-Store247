@@ -10,6 +10,5 @@ namespace ShopBanHang.Models
         public Nullable<double> UnitPrice { get; set; }
         public Nullable<double> UnitPriceNew { get; set; }
         public int TotalCount { get; set; }
-
     }
 }

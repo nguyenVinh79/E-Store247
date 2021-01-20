@@ -1,10 +1,7 @@
 ﻿@model RegisterViewModel
 @{ ViewData["Title"] = "Register"; }
 
-@{
-    Layout = "_LayoutLogin";
-}
-
+@{ Layout = "_LayoutLogin"; }
 
 <h1>@ViewData["Title"].</h1>
 
@@ -13,8 +10,6 @@
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
 
- 
-
     <div class="form-group">
         <label asp-for="UserName" class="col-md-2 control-label"></label>
         <div class="col-md-10">
@@ -22,7 +17,6 @@
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
     </div>
-
 
     <div class="form-group">
         <label asp-for="Email" class="col-md-2 control-label"></label>

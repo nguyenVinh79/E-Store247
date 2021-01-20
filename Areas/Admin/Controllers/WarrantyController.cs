@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopBanHang.Areas.Admin.Models;
 using ShopBanHang.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class WarrantyController : Controller
     {
@@ -23,6 +24,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
             db = dbcontext;
             Configuration = configuration;
         }
+
         public IActionResult Index()
         {
             var warrantyList = new List<CT_WarrantyTime>();
@@ -36,6 +38,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
             return View(warrantyList);
         }
+
         public IActionResult Create(int id = 0)
         {
             var model = new WarrantyModel();
@@ -88,6 +91,7 @@ namespace ShopBanHang.Areas.Admin.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
         public JsonResult Delete(int id)
         {

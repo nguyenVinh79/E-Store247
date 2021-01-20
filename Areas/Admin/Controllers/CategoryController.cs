@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using System.Linq;
 
 namespace ShopBanHang.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class CategoryController : Controller
     {
@@ -19,12 +21,14 @@ namespace ShopBanHang.Areas.Admin.Controllers
         private DataShopContext db;
         private readonly IConfiguration Configuration;
         private readonly IWebHostEnvironment _env;
+
         public CategoryController(IMapper mapper, IConfiguration configuration, DataShopContext dbcontext, IWebHostEnvironment env)
         {
             this._mapper = mapper;
             db = dbcontext;
             Configuration = configuration;
         }
+
         public IActionResult Index()
         {
             var categoryList = new List<Category>();
@@ -32,56 +36,51 @@ namespace ShopBanHang.Areas.Admin.Controllers
             {
                 categoryList = db.Categories.Where(x => x.IsDeleted != true).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["StatusMessage"] = "Error in loanding category list";
             }
             return View(categoryList);
         }
+
         public IActionResult Create(int id = 0)
         {
             var model = new CategoryModel();
-            
-            
+
             if (id > 0)
             {
-                
                 var CategoryData = db.Categories.Where(x => x.ID == id && x.IsDeleted != true).FirstOrDefault();
 
                 model = _mapper.Map<CategoryModel>(CategoryData);
-
             }
+
             #region Load category for dropdownlist
-                List<Category> categoryList = db.Categories.ToList();
-                model.LstParentCategory = new List<SelectListItem>();
 
-                var temp = new SelectListItem();
+            List<Category> categoryList = db.Categories.ToList();
+            model.LstParentCategory = new List<SelectListItem>();
 
-                temp.Text = "----Assign parent category role----";
-                temp.Value = "0";
-                model.LstParentCategory.Add(temp);
-                BindTree(categoryList, null, model.LstParentCategory);
-            
-            #endregion
+            var temp = new SelectListItem();
 
+            temp.Text = "----Assign parent category role----";
+            temp.Value = "0";
+            model.LstParentCategory.Add(temp);
+            BindTree(categoryList, null, model.LstParentCategory);
+
+            #endregion Load category for dropdownlist
 
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Create(CategoryModel model, IFormFile image)
         {
-           
             try
             {
                 if (ModelState.IsValid)
                 {
-                    
-                    
                     if (model.ID == 0)
                     {
-
                         #region For Create
-
 
                         var category = _mapper.Map<Category>(model);
                         if (image != null)
@@ -92,17 +91,16 @@ namespace ShopBanHang.Areas.Admin.Controllers
                                 category.Image = urlImage;
                             }
                         }
-                        
+
                         db.Categories.Add(category);
                         db.SaveChanges();
 
-                        #endregion
-
+                        #endregion For Create
                     }
                     else
                     {
-
                         #region for edit
+
                         //var categoryEdit = db.Categories.SingleOrDefault(x=> x.ID == model.ID);
                         //Require make a new instane of Category ty
                         var categoryEdit = _mapper.Map<Category>(model);
@@ -118,19 +116,19 @@ namespace ShopBanHang.Areas.Admin.Controllers
 
                         db.Update(categoryEdit);
                         db.SaveChanges();
-                        
-                        #endregion
 
+                        #endregion for edit
                     }
-                    
+
                     return RedirectToAction("Index");
                 }
-            
             }
             catch (Exception ex)
             {
                 TempData["StatusMessage"] = ex.Message;
+
                 #region Load category for dropdownlist
+
                 List<Category> cateList = db.Categories.ToList();
                 model.LstParentCategory = new List<SelectListItem>();
 
@@ -141,10 +139,13 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 model.LstParentCategory.Add(tempItem);
                 BindTree(cateList, null, model.LstParentCategory);
 
-                #endregion
+                #endregion Load category for dropdownlist
+
                 return View(model);
             }
+
             #region Load category for dropdownlist
+
             List<Category> categoryList = db.Categories.ToList();
             model.LstParentCategory = new List<SelectListItem>();
 
@@ -155,9 +156,11 @@ namespace ShopBanHang.Areas.Admin.Controllers
             model.LstParentCategory.Add(temp);
             BindTree(categoryList, null, model.LstParentCategory);
 
-            #endregion
+            #endregion Load category for dropdownlist
+
             return View(model);
         }
+
         [HttpPost]
         public JsonResult Delete(int id)
         {
@@ -200,31 +203,30 @@ namespace ShopBanHang.Areas.Admin.Controllers
                 message = "Delete failed!"
             });
         }
-        public void BindTree(IEnumerable<Category> list, SelectListItem parentItem, List<SelectListItem> listParent)
+
+        public void BindTree(IEnumerable<Category> list, SelectListItem parentItem, List<SelectListItem> listParent, string temp = "")
         {
-            string i = "";
-            i = i + "--";
+            string i = "o--";
+            i = i + temp;
+
             var nodes = list.Where(x => parentItem == null ? x.ParentCategoryID == 0 : x.ParentCategoryID == int.Parse(parentItem.Value)).ToList();
 
             foreach (var node in nodes)
             {
-                if (node.Equals(nodes[nodes.Count - 1]) && node.ParentCategoryID != 0)
-                {
-                    i = i + "--";
-                }
+
                 SelectListItem newNode = new SelectListItem(node.CategoryName, node.ID.ToString());
                 if (parentItem == null)
                 {
+                    i = "";
                     listParent.Add(newNode);
                 }
                 else
                 {
+
                     listParent.Add(new SelectListItem($"{i} {newNode.Text}", newNode.Value));
+
                 }
-
-                BindTree(list, newNode, listParent);
-
-
+                BindTree(list, newNode, listParent, i);
             }
         }
     }
