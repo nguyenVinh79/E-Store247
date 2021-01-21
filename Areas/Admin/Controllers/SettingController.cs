@@ -66,6 +66,7 @@ namespace ECommerce.Project.Areas.Admin.Controllers
                         db.SaveChanges();
 
                         #endregion For Create
+                        TempData["StatusMessage"] = "Successfully created";
                     }
                     else
                     {
@@ -78,6 +79,7 @@ namespace ECommerce.Project.Areas.Admin.Controllers
                         db.SaveChanges();
 
                         #endregion for edit
+                        TempData["StatusMessage"] = "Successfully updated";
                     }
 
                     return RedirectToAction("Index");
@@ -92,48 +94,7 @@ namespace ECommerce.Project.Areas.Admin.Controllers
             return View(model);
         }
 
-        public IActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("NotFound");
-            }
-
-            var mode = db.Settings.Find(Convert.ToInt64(id));
-
-            if (mode == null)
-            {
-                return RedirectToAction("NotFound");
-            }
-
-            return View(mode);
-        }
-
-        [HttpPost]
-        public IActionResult DeleteCofirm(Setting mode)
-        {
-            try
-            {
-                var entity = db.Settings.Find(mode.ID);
-
-                if (entity != null)
-                {
-                    db.Settings.Remove(entity);
-                    db.SaveChanges();
-
-                    @TempData["StatusMessage"] = "Deleted";
-
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View("Delete", mode);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+ 
+        
     }
 }

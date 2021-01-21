@@ -124,6 +124,7 @@
                         <input type="hidden" name="ShipFee" value="0" />
                         @Html.HiddenFor(m => m.UserName)
                         @Html.HiddenFor(m => m.CustomerInfoID)
+                        @Html.HiddenFor(m => m.Email)
 
                         <div class="row pl-3 pb-1">
                             <div class="card border-danger">
@@ -176,6 +177,11 @@
                                 <label>Address</label>
                                 @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.Address, null, new { @class = "validate" })
+                            </div>
+                            <div class="form-group">
+                                <label>Note</label>
+                                @Html.TextBoxFor(m => m.Note, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Note, null, new { @class = "validate" })
                             </div>
                         </div>
                     </div> <!-- Order form// -->

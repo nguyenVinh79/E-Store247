@@ -15,12 +15,17 @@
             <input type="hidden" name="CustomerInfoID" value="@Model.CustomerInfoID"/>
             <input type="hidden" name="UserName" value="@Model.UserName" />
             <input type="hidden" name="Note" value="@Model.Note" />
+
             <div class="form-group">
                 <label asp-for="FullName" class="control-label"></label>
                 <input asp-for="FullName" class="form-control" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
-            
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
@@ -57,7 +62,7 @@
 </div>
 
 
-
+@section scripts{ 
 <script>
             $(document).ready(function () {
 
@@ -90,3 +95,4 @@
 
             });
 </script>
+    }

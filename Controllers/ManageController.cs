@@ -359,7 +359,7 @@ namespace IdentitySamples.Controllers
         {
             var customerInfo = _context.CustomerInfos.SingleOrDefault(p => p.UserName == User.Identity.Name);
 
-            var lstCT_Provinces = _context.CT_Provinces.ToList();
+            var lstCT_Provinces = _context.CT_Provinces.OrderBy(x=>x.Order).ToList();
             var lstCT_Districts = _context.CT_Districts.ToList();
             var lstWards = _context.CT_Wards.ToList();
             ViewBag.Provinces = new SelectList(lstCT_Provinces, "ID", "Name", customerInfo.ProvinceID != null ? customerInfo.ProvinceID : 0);
@@ -396,7 +396,7 @@ namespace IdentitySamples.Controllers
             try
             {
                 _context.Update(customerInfor);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
                 transaction.Commit();
             }
             catch (System.Exception)
@@ -411,14 +411,14 @@ namespace IdentitySamples.Controllers
 
         public JsonResult AjaxDistrictList(int Id)
         {
-            var data = _context.CT_Districts.Where(m => m.ProvinceID == Id.ToString()).ToList();
+            var data = _context.CT_Districts.Where(m => m.ProvinceID == Id.ToString()).OrderBy(x=> x.Order).ToList();
 
             return Json(data);
         }
 
         public JsonResult AjaxWardList(int Id)
         {
-            var data = _context.CT_Wards.Where(m => m.DistrictID == Id.ToString()).ToList();
+            var data = _context.CT_Wards.Where(m => m.DistrictID == Id.ToString()).OrderBy(x => x.Name).ToList();
 
             return Json(data);
         }

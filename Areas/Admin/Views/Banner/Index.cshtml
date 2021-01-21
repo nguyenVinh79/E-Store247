@@ -2,9 +2,7 @@
 @{
     ViewData["Title"] = "Banner section";
 }
-<h3>
-    @TempData["StatusMessage"]
-</h3>
+
 <h1 class="h3 mb-2 text-gray-800">Banner</h1>
 
 <a class="btn btn-success float-md-right my-lg-2" href="/admin/banner/create">  <i class="fa fa-plus"></i> Create</a>
@@ -29,7 +27,7 @@
                 <td>
                     @if (item.Type == (int)Enums.BannerType.Slider)
                     {
-                       
+
                         <text>Slider</text>
                     }
                     else
@@ -41,7 +39,7 @@
                     @item.Title
                 </td>
                 <td>
-                @item.LinkTo
+                    @item.LinkTo
                 </td>
                 <td>
                     @if (item.IsShow == true)
@@ -49,7 +47,7 @@
                         <i class="fa fa-check"></i>
                     }
                 </td>
-                
+
                 <td>
                     <a class="btn btn-info" href="/admin/banner/create?id=@item.ID"><i class="fa fa-edit"></i></a>
                     <a class="btn btn-danger del-banner" data-id="@item.ID"><i class="fa fa-recycle"></i></a>
@@ -61,52 +59,67 @@
 </table>
 @section Scripts{
     <script>
-    $(document).ready(function () {
-        $('.del-banner').click(function () {
-            var deleteBtn = $(this);
-            var id = $(this).data('id');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this banner!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: '/admin/banner/delete',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.status == true) {
-                                    debugger;
-                                    $(deleteBtn).parents("tr").remove();
+        $(document).ready(function () {
+            $('.del-banner').click(function () {
+                var deleteBtn = $(this);
+                var id = $(this).data('id');
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this banner!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                url: '/admin/banner/delete',
+                                data: {
+                                    id: id
+                                },
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status == true) {
+                                        debugger;
+                                        $(deleteBtn).parents("tr").remove();
 
-                                    swal("The banner has been deleted!", {
-                                        icon: "success",
-                                    });
-                                }
-                                else {
-                                    swal(response.message, {
-                                        icon: "error",
-                                    });
+                                        swal("The banner has been deleted!", {
+                                            icon: "success",
+                                        });
+                                    }
+                                    else {
+                                        swal(response.message, {
+                                            icon: "error",
+                                        });
 
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+            });
+
         });
 
-    });
-
     </script>
+    @if (TempData["StatusMessage"] != null)
+    {
+        if (TempData["StatusMessage"].ToString() == "Successfully created")
+        {
+            <script>
+                toastr.success('Successfully created');
+            </script>
+        }
+        else if (TempData["StatusMessage"].ToString() == "Successfully updated")
+        {
+            <script>
+                toastr.success('Successfully updated');
+            </script>
 
+        }
+    }
 }

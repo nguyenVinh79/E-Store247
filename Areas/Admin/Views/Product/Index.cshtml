@@ -1,18 +1,11 @@
 ﻿@model List<ECommerce.Project.Models.Product>
-@{
-    ViewData["Title"] = "Product list";
-}
-<h1>
+@{ ViewData["Title"] = "Product list"; }
+@*<h1>
     @TempData["StatusMessage"]
-</h1>
+</h1>*@
 <h1 class="h3 mb-2 text-gray-800">Product List</h1>
 
-
- 
-    <a class="btn btn-success float-md-right margin-bottom-20"  href="/admin/product/create">  <i class="fa fa-plus"></i> Create</a>
-
- 
-
+<a class="btn btn-success float-md-right margin-bottom-20" href="/admin/product/create">  <i class="fa fa-plus"></i> Create</a>
 
 <table class="table table-bordered table-striped table-light table-hover">
     <thead>
@@ -28,28 +21,45 @@
 
         @for (int i = 0; i < Model.Count; i++)
         {
-            <tr>
-                <td class="center-x">@(i+1)</td>
-                <td>@Model[i].ProductName</td>
-                <td>
-                    <img height="50" src="~/Image/Products/@Model[i].ImagePath" />
-                </td>
-                <td>
-                    @if (Model[i].Published == true)
-                    {
-                        <i class="fa fa-check"></i>
-                    }
-                </td>
-                <td>
-                    <a class="btn btn-info" href="/admin/product/create?id=@Model[i].ID">  <i class="fa fa-edit"></i></a>
-                    <a class="btn btn-danger" href="/admin/product/delete?id=@Model[i].ID">  <i class="fa fa-recycle"></i></a>
-                </td>
+<tr>
+    <td class="center-x">@(i+1)</td>
+    <td>@Model[i].ProductName</td>
+    <td>
+        <img height="50" src="~/Image/Products/@Model[i].ImagePath" />
+    </td>
+    <td>
+        @if (Model[i].Published == true)
+        {
+<i class="fa fa-check"></i>}
+    </td>
+    <td>
+        <a class="btn btn-info" href="/admin/product/create?id=@Model[i].ID">  <i class="fa fa-edit"></i></a>
+        <a class="btn btn-danger" href="/admin/product/delete?id=@Model[i].ID">  <i class="fa fa-recycle"></i></a>
+    </td>
 
-            </tr>
-        }
+</tr>}
 
 
     </tbody>
 </table>
 
+@section Scripts{
 
+    
+    @if (TempData["StatusMessage"] != null)
+    {
+        if (TempData["StatusMessage"].ToString() == "Successfully created")
+        {
+        <script>
+            toastr.success('Successfully created');
+        </script>
+        }
+        else if (TempData["StatusMessage"].ToString() == "Successfully updated")
+        {
+        <script>
+            toastr.success('Successfully updated');
+        </script>
+
+            }
+        }
+    }

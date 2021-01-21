@@ -13,8 +13,9 @@ namespace ECommerce.Project.Models
         [Required(ErrorMessage ="Please enter your fullname.")]
         [MaxLength(100, ErrorMessage ="Full name not exceed 100 characters.")]
         public string FullName { get; set; }
-
         public string UserName { get; set; }
+        [Required]
+        public string Email { get; set; }
         [Required(ErrorMessage = "Please enter your address.")]
         public string Address { get; set; }
         [Required(ErrorMessage = "Please enter your phone number.")]

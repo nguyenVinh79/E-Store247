@@ -162,6 +162,7 @@ namespace ECommerce.Project.Areas.Admin.Controllers
                         }
 
                         #endregion Upload detail image and save to db
+                        TempData["StatusMessage"] = "Successfully created";
                     }
                     else
                     {
@@ -221,8 +222,9 @@ namespace ECommerce.Project.Areas.Admin.Controllers
                         }
 
                         #endregion Upload detail image and save to db
+                        TempData["StatusMessage"] = "Successfully updated";
                     }
-
+                    
                     return RedirectToAction("Index");
                 }
             }

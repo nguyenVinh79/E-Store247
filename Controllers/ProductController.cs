@@ -401,19 +401,19 @@ namespace ECommerce.Project.Controllers
 
         public ActionResult Search(int? CategoryID, string colorId, string sizeId, string giaTu, string giaDen, string ProductName = "", string OrderBy = "ID")
         {
-            int BlockSize = 3; //pagesize
+            int BlockSize = int.Parse(_configuration["BlockSize_Product"]); //pagesize
             ViewBag.ProductName = ProductName;
             ViewBag.OrderBy = OrderBy;
 
             //Get data from db
             List<SearchProduct_Result> lstProduct = GetProductSearch(1, BlockSize, CategoryID, ProductName, OrderBy);
 
-            //Tạo data cho combobox search
+            //get data for combobox search
 
             DropdownCategory(null, null);
 
-            //xử lý data
-            ViewBag.MoreData = false; //Còn data chưa lấy ra hết
+            // data exist bool 
+            ViewBag.MoreData = false; 
             if (lstProduct != null && lstProduct.Count > 0)
             {
                 ViewBag.MoreData = lstProduct[0].TotalCount > BlockSize;

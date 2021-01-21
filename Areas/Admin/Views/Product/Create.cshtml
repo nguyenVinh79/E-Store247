@@ -229,7 +229,7 @@ else
      }
 @section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.1.0/autoNumeric.js"></script>
-
+   
     <script>
         
         $(document).ready(function () {
@@ -325,8 +325,8 @@ else
                    
                     '<tr class="rowData">' + '<td class="index">' + '</td>' +
                     '<td>' + stringColorList + '</td>' +
-                    '<td>' + '<input class="form-control input-md" data-new="1" maxlength="10" value="0"/>' + '</td>' +
-                    '<td>' + '<input class="form-control input-md " maxlength="10" value="0"/>' + '</td>' +
+                    '<td>' + '<input class="form-control input-md money" data-new="1" maxlength="10" value="0"/>' + '</td>' +
+                    '<td>' + '<input class="form-control input-md money" maxlength="10" value="0"/>' + '</td>' +
                     '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
                     '<td>' + '<input class="form-control input-md" maxlength="10" />' + '</td>' +
                     '<td><a class="btn btn-danger btn-circle btn-md text-center del-img" data-id="0" onclick="FieldDelete(this)">' +
@@ -352,7 +352,7 @@ else
             IndexUpdate();
         }
         function changeTab(evt, targetTab) {
-
+            debugger;
             var currentTab = $('div.tab').find('.btn.btn-outline-dark.tablinks.active').attr('id');
             if (currentTab == "infoTab") {
 
@@ -506,7 +506,7 @@ else
 
         
         const anElementsArray = anElement.init('.currency');
-
+        
         
 
     </script>

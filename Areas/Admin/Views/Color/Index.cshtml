@@ -1,8 +1,6 @@
 ﻿@model List<CT_Color>
 @{ ViewData["Title"] = "Color list"; }
-<h1>
-    @TempData["StatusMessage"]
-</h1>
+
 @section CSS{
     <style>
         .dot {
@@ -102,5 +100,20 @@
 
         });
     </script>
+    @if (TempData["StatusMessage"] != null)
+    {
+        if (TempData["StatusMessage"].ToString() == "Successfully created")
+        {
+            <script>
+                toastr.success('Successfully created');
+            </script>
+        }
+        else if (TempData["StatusMessage"].ToString() == "Successfully updated")
+        {
+            <script>
+                toastr.success('Successfully updated');
+            </script>
 
+        }
+    }
 }

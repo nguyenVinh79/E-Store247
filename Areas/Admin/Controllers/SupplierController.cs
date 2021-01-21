@@ -78,6 +78,7 @@ namespace ECommerce.Project.Areas.Admin.Controllers
                         db.SaveChanges();
 
                         #endregion For Create
+                        TempData["StatusMessage"] = "Successfully created";
                     }
                     else
                     {
@@ -98,6 +99,7 @@ namespace ECommerce.Project.Areas.Admin.Controllers
                         db.SaveChanges();
 
                         #endregion for edit
+                        TempData["StatusMessage"] = "Successfully updated";
                     }
 
                     return RedirectToAction("Index");

@@ -1,8 +1,6 @@
 ﻿@model List<Supplier>
 @{ ViewData["Title"] = "supplier list"; }
-<h1>
-    @TempData["StatusMessage"]
-</h1>
+
 <h1 class="h3 mb-2 text-gray-800">Supplier List</h1>
 
 <a class="btn btn-success float-md-right my-lg-2" href="/admin/Supplier/create">  <i class="fa fa-plus"></i> Create</a>
@@ -41,52 +39,67 @@
 </table>
 @section Scripts{
     <script>
-    $(document).ready(function () {
-        $('.del-supplier').click(function () {
-            var deleteBtn = $(this);
-            var id = $(this).data('id');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this supplier!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: '/admin/supplier/Delete',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.status == true) {
-                                    debugger;
-                                    $(deleteBtn).parents("tr").remove();
+        $(document).ready(function () {
+            $('.del-supplier').click(function () {
+                var deleteBtn = $(this);
+                var id = $(this).data('id');
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this supplier!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                url: '/admin/supplier/Delete',
+                                data: {
+                                    id: id
+                                },
+                                type: 'POST',
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.status == true) {
+                                        debugger;
+                                        $(deleteBtn).parents("tr").remove();
 
-                                    swal("The supplier has been deleted!", {
-                                        icon: "success",
-                                    });
-                                }
-                                else {
-                                    swal(response.message, {
-                                        icon: "error",
-                                    });
+                                        swal("The supplier has been deleted!", {
+                                            icon: "success",
+                                        });
+                                    }
+                                    else {
+                                        swal(response.message, {
+                                            icon: "error",
+                                        });
 
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+            });
+
         });
 
-    });
-
     </script>
+    @if (TempData["StatusMessage"] != null)
+    {
+        if (TempData["StatusMessage"].ToString() == "Successfully created")
+        {
+            <script>
+                toastr.success('Successfully created');
+            </script>
+        }
+        else if (TempData["StatusMessage"].ToString() == "Successfully updated")
+        {
+            <script>
+                toastr.success('Successfully updated');
+            </script>
 
+        }
+    }
 }

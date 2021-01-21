@@ -14,7 +14,7 @@ namespace ECommerce.Project.Helper
         public enum BannerType
         {
             [Display(Name = "Slider")] Slider = 1,
-            [Display(Name = "FILE")] Banner = 2
+            [Display(Name = "Banner")] Banner = 2
         }
     }
 }

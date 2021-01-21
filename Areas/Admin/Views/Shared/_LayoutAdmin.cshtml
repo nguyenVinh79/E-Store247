@@ -93,8 +93,8 @@
                 </div>
             </li>
             @{ var activeProperty = ViewContext.RouteData.Values["Controller"].ToString() == "color"
-                       || ViewContext.RouteData.Values["Controller"].ToString() == "supplier"
-                       || ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "active" : "";
+                        || ViewContext.RouteData.Values["Controller"].ToString() == "supplier"
+                        || ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "active" : "";
                 var collapsedProperty = ViewContext.RouteData.Values["Controller"].ToString() == "color"
                   || ViewContext.RouteData.Values["Controller"].ToString() == "supplier"
                   || ViewContext.RouteData.Values["Controller"].ToString() == "warranty" ? "active" : "collapsed";
@@ -119,14 +119,13 @@
                 </div>
             </li>
             @{ var activeSetting = ViewContext.RouteData.Values["Controller"].ToString() == "setting"
-                        || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "";
+                         || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "";
                 var collapsedSetting = ViewContext.RouteData.Values["Controller"].ToString() == "setting"
                   || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "collapsed";
                 var showSetting = ViewContext.RouteData.Values["Controller"].ToString() == "setting"
                    || ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "show" : "";
                 var settingTab = ViewContext.RouteData.Values["Controller"].ToString() == "setting" ? "active" : "";
-                var bannerTab = ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : "";
-                }
+                var bannerTab = ViewContext.RouteData.Values["Controller"].ToString() == "banner" ? "active" : ""; }
             <li class="nav-item @activeSetting">
                 <a class="nav-link @collapsedSetting" href="#" data-toggle="collapse" data-target="#collapseSettings" aria-expanded="true" aria-controls="collapseSettings">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -369,6 +368,27 @@
     <script src="~/lib/summernote/summernote-bs4.js"></script>
     <script src="~/js/AdminSite.js"></script>
     <script src="~/sweetalert/sweetalert.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "3500",
+        "extendedTimeOut": "500",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }</script>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>
