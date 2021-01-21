@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
-    <Compile Remove="Areas\Admin\Models\Custom\**" />
     <Content Remove="Areas\Admin\Data\**" />
-    <Content Remove="Areas\Admin\Models\Custom\**" />
     <EmbeddedResource Remove="Areas\Admin\Data\**" />
-    <EmbeddedResource Remove="Areas\Admin\Models\Custom\**" />
     <None Remove="Areas\Admin\Data\**" />
-    <None Remove="Areas\Admin\Models\Custom\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -87,10 +83,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Areas\Admin\Models\Custom\ProductModel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\Image\Categories\" />
   </ItemGroup>
 
